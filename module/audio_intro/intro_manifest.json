@@ -1,0 +1,117 @@
+{
+  "created": "2026-08-20T05:35:58.235168+00:00",
+  "engine": "openai:gpt-4o-mini-tts:onyx",
+  "strategy": "씬당 한 요청 — 영상 페이지가 씬 경계에서 연출 큐를 쏜다(타임라인 표류 없음)",
+  "instructions": "묵직하고 역사적인 다큐멘터리 성우처럼, 깊고 낮은 저음으로 무게감 있게 내레이션합니다. 서사가 쌓이도록 진중하고 사색적인 어조를 유지하되, 자연스러운 다큐 속도로 또박또박 읽습니다. 에이엠아르 에이치지엔, 씨엔엔, 엔오투, 오존, 지엔엔, 가우시안, 라그랑지안, 오일러리안 같은 전문 용어와 숫자는 또렷하고 정확하게 발음합니다. 영어로 표기된 모델 이름 'Adaptive Multi-Resolution Heterogeneous Graph Network'는 또렷하고 정확한 영어 발음으로, 한 단어씩 차분하게 읽습니다. 다만 이 영상은 60초 도입부이므로, 늘어지지 않게 한 단 빠른 호흡으로 밀도 있게 읽습니다. 문장 사이 쉼은 짧게 두고, 마지막 문장만 또렷하게 눌러 맺습니다.",
+  "loudness_target": {
+    "integrated_lufs": -12.0,
+    "true_peak_dbtp": -1.0,
+    "lra_lu": 6.0,
+    "method": "EBU R128 two-pass loudnorm"
+  },
+  "target_html": "module/globe-intro-film.html",
+  "ai_disclosure": "This audio is AI-generated: OpenAI text-to-speech (gpt-4o-mini-tts, onyx).",
+  "total_audio_s": 101.2,
+  "clips": [
+    {
+      "seg": 0,
+      "text": "전지구 대기오염은 인공위성 관측과 화학수송모델로 표현할 수 있습니다. 화학수송모델은 동아시아의 종관규모 대기오염 현상을 저해상도로 표현합니다.",
+      "chars": 79,
+      "audio_s": 12.21,
+      "rate_chars_per_s": 6.47,
+      "file": "audio_intro/intro0.mp3",
+      "loudness_lufs": null,
+      "true_peak_dbtp": null
+    },
+    {
+      "seg": 1,
+      "text": "동아시아로 들어갑니다. 겨울은 고농도의 계절입니다. 대륙에서 실려 온 미세먼지가 한반도를 덮고, 정체된 공기에 농도가 쌓입니다.",
+      "chars": 71,
+      "audio_s": 10.8,
+      "rate_chars_per_s": 6.57,
+      "file": "audio_intro/intro1.mp3",
+      "loudness_lufs": null,
+      "true_peak_dbtp": null
+    },
+    {
+      "seg": 2,
+      "text": "봄에는 수송이 뚜렷합니다. 미세먼지와 이산화질소가 편서풍을 타고 서해를 건너옵니다.",
+      "chars": 46,
+      "audio_s": 7.15,
+      "rate_chars_per_s": 6.43,
+      "file": "audio_intro/intro2.mp3",
+      "loudness_lufs": null,
+      "true_peak_dbtp": null
+    },
+    {
+      "seg": 3,
+      "text": "여름에는 오존입니다. 햇빛과 전구물질이 만나 만들어진 오존이 내륙에 쌓입니다.",
+      "chars": 43,
+      "audio_s": 7.15,
+      "rate_chars_per_s": 6.01,
+      "file": "audio_intro/intro3.mp3",
+      "loudness_lufs": null,
+      "true_peak_dbtp": null
+    },
+    {
+      "seg": 4,
+      "text": "그런데 이 농도장의 해상도는 수십 킬로미터입니다. 서울 도심과 경기 외곽의 전원 지역이 같은 값 하나로 덮입니다.",
+      "chars": 63,
+      "audio_s": 9.36,
+      "rate_chars_per_s": 6.73,
+      "file": "audio_intro/intro4.mp3",
+      "loudness_lufs": null,
+      "true_peak_dbtp": null
+    },
+    {
+      "seg": 5,
+      "text": "우리가 숨 쉬는 자리의 차이가 지워지는 것입니다. 그 차이를 가려내기 위해 고해상도 대기질 연구가 활발합니다. 특히 최근에는 인공지능으로 고해상도 농도장을 추론하는 연구가 빠르게 늘고 있습니다.",
+      "chars": 108,
+      "audio_s": 17.06,
+      "rate_chars_per_s": 6.33,
+      "file": "audio_intro/intro5.mp3",
+      "loudness_lufs": null,
+      "true_peak_dbtp": null
+    },
+    {
+      "seg": 6,
+      "text": "지금 보시는 한반도 1킬로미터 농도장이, 에이엠아르 에이치지엔 신경망으로 추론한 결과입니다.",
+      "chars": 51,
+      "audio_s": 7.75,
+      "rate_chars_per_s": 6.58,
+      "file": "audio_intro/intro6.mp3",
+      "loudness_lufs": null,
+      "true_peak_dbtp": null
+    },
+    {
+      "seg": 7,
+      "text": "도시와 교외 지역과 산림 지역, 그리고 주거 지역, 도로, 산업 지역의 농도 구배가 뚜렷합니다.",
+      "chars": 53,
+      "audio_s": 8.61,
+      "rate_chars_per_s": 6.16,
+      "file": "audio_intro/intro7.mp3",
+      "loudness_lufs": null,
+      "true_peak_dbtp": null
+    },
+    {
+      "seg": 8,
+      "text": "우리가 숨 쉬는 공간의 대기오염 농도 분포를 뚜렷하게 구별해 냅니다.",
+      "chars": 38,
+      "audio_s": 6.81,
+      "rate_chars_per_s": 5.58,
+      "file": "audio_intro/intro8.mp3",
+      "loudness_lufs": "-13.13",
+      "true_peak_dbtp": "-1.00"
+    },
+    {
+      "seg": 9,
+      "text": "이러한 시공간적 고해상도 농도장은 환경보건, 환경정책, 환경평가, 다양한 대기환경 연구에 과학적 근거를 제공하고 지구과학에 대한 이해를 높일 수 있습니다.",
+      "chars": 86,
+      "audio_s": 14.3,
+      "rate_chars_per_s": 6.01,
+      "file": "audio_intro/intro9.mp3",
+      "loudness_lufs": "-13.49",
+      "true_peak_dbtp": "-1.00"
+    }
+  ]
+}
