@@ -185,7 +185,7 @@
 
 <div id="bottom-bar">
   <div class="cg"><button id="play-btn">▶ 재생</button><button id="stop-btn">■ 종료</button></div>
-  <div class="cg"><button class="speed-btn active" data-s="1">x1.0</button><button class="speed-btn" data-s="1.2">x1.2</button><button class="speed-btn" data-s="1.5">x1.5</button></div>
+  <div class="cg"><button class="speed-btn" data-s="1">x1.0</button><button class="speed-btn active" data-s="1.1">x1.1</button><button class="speed-btn" data-s="1.2">x1.2</button><button class="speed-btn" data-s="1.5">x1.5</button></div>
   <div id="progress-wrap"><div id="track"><div id="fill"></div><div id="handle"></div></div><div id="tip"></div></div>
   <div id="ptime">00:00 / 00:00</div>
   <div id="pinfo">단계: <b id="plabel">0 / 대기 현상</b></div>
@@ -949,7 +949,7 @@ function makeG3() {
 }
 
 // ═════════ 재생 상태 ═════════
-let phase = 0, tau = 0, playing = false, armed = false, speed = 1, preview = false;   // preview = 점검용(재생 중 화면처럼 자막 표시)
+let phase = 0, tau = 0, playing = false, armed = false, speed = 1.1, preview = false;   // 2026-11-15 사용자 지시 — 기본 1.1배(내레이션도 같은 배속)   // preview = 점검용(재생 중 화면처럼 자막 표시)
 // 멈춰 있을 때는 바뀐 것이 있을 때만 그린다 — 덱이 이 편을 숨은 프레임에 미리 받아 두는 동안 뒤에서
 // 매 프레임 그리면 덱과 같은 메인스레드를 잡아먹어 장 전환이 버벅인다(2026-09-25).
 let dirty = true;
@@ -975,15 +975,19 @@ function setPhaseTime(p, t) { const changed = p !== phase; phase = clamp(p, 0, 6
 function play() { armed = true; playing = true; syncAudio(); ui(true); }
 function pause() { playing = false; syncAudio(); ui(true); }
 function toggle() { playing ? pause() : play(); }
-function stopAll() { playing = false; resetView(); AUD.forEach(a => { a.pause(); try { a.currentTime = 0; } catch (e) {} }); bgm.pause(); try { bgm.currentTime = 0; } catch (e) {}
+function stopAll() { playing = false; endAt = 0; resetView(); AUD.forEach(a => { a.pause(); try { a.currentTime = 0; } catch (e) {} }); bgm.pause(); try { bgm.currentTime = 0; } catch (e) {}
   phase = 0; tau = 0; ui(true); }
-let last = performance.now();
+let last = performance.now(), endAt = 0, endSent = false;
+const END_FADE = 1.2;   // 끝난 뒤 배경음악을 내리는 시간(초) — 그다음 덱이 영상 층을 걷는다
 function loop(now) { const dt = Math.min(.1, (now - last) / 1000); last = now;
   if (playing) { const a = AUD[phase];
     if (armed && narrOn && !a.paused && a.currentTime > 0) tau = LEAD + a.currentTime; else tau += dt * speed;
     if (phase < 6 && tau >= DUR[phase]) { phase++; tau = 0; resetView(); }
     if (phase === 6 && tau > 1e5) tau = DUR[6];   // 아주 오래 틀어 둔 경우만 되감는다
-    syncAudio(); }
+    syncAudio();
+    // 2026-11-15 사용자 지시(KSEIA 축약본 14쪽) — 끝나면 저절로 덱 화면으로. 마지막 단계가 끝난 뒤(outro) 배경음악을 END_FADE 초에 걸쳐 내리고 덱에 닫기를 청한다
+    if (outro() && window.parent !== window) { if (!endAt) endAt = now; const k = clamp((now - endAt) / 1000 / END_FADE, 0, 1); bgm.volume = bgm.volume * (1 - k);
+      if (k >= 1 && !endSent) { endSent = true; try { parent.postMessage({ deck: 'film-close' }, '*'); } catch (err) {} } } }
   if (playing || dirty) { dirty = false; render(); ui(false); } requestAnimationFrame(loop); }
 const GLC = $('gl');
 function render() { palette(); const m = mix3(phase, tau);
@@ -1060,9 +1064,11 @@ addEventListener('resize', () => { resize(); dirty = true; });
 addEventListener('keydown', e => {
   if (e.key === 'Escape') { e.preventDefault(); armed = false; stopAll(); if (window.parent !== window) { try { parent.postMessage({ deck: 'film-close' }, '*'); } catch (err) {} } return; }
   if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); toggle(); }
+  // 2026-11-15 사용자 지시 — 재생 중간에 다음 키(리모컨 PageDown · → · ↓)를 받으면 멈추고 덱 화면(그 장)으로 돌아간다. 한 번 더 누르면 덱이 다음 장으로 넘긴다
+  else if (['PageDown', 'ArrowRight', 'ArrowDown'].includes(e.key) && window.parent !== window) { e.preventDefault(); armed = false; stopAll(); try { parent.postMessage({ deck: 'film-close' }, '*'); } catch (err) {} }
 }, true);
 addEventListener('message', e => { const d = e.data; if (!d || typeof d !== 'object') return;
-  if (d.film === 'stop') { armed = false; stopAll(); } else if (d.film === 'play') toggle(); });
+  if (d.film === 'stop') { armed = false; stopAll(); endSent = false; } else if (d.film === 'play') toggle(); });
 window.__latent = { setPhaseTime, Q, get state() { return { phase, tau, playing, armed, TOTAL, DUR, outro: outro(), mix3: mix3(phase, tau), gl: !!G3, narr: AUD.some(a => !a.paused), bgm: !bgm.paused, bgmVol: bgm.volume }; },
   render, set preview(v) { preview = !!v; }, setTau(t) { tau = t; dirty = true; } };   // 점검 스크립트용
 

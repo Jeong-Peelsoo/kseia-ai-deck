@@ -101,15 +101,16 @@
             padding-top: clamp(58px, 11vh, 128px);
             opacity: 0; transition: opacity 0.8s; pointer-events: none;
         }
-        #bigtitle .acr { font-size: clamp(40px, 8.4vw, 104px); font-weight: 800; letter-spacing: 1px;
+        /* 2026-11-15 사용자 지시 — 표제와 아래 세 줄을 키웠다(종전 최대 104 · 20 · 24 · 21px → 148 · 28 · 34 · 30px) */
+        #bigtitle .acr { font-size: clamp(48px, 9.6vw, 148px); line-height: 1.08; font-weight: 800; letter-spacing: 1px;
             background: linear-gradient(100deg, #7dd3fc 0%, #a78bfa 30%, #f0abfc 50%, #7dd3fc 80%, #a78bfa 100%);
             background-size: 240% auto; -webkit-background-clip: text; background-clip: text; color: transparent;
             opacity: 0; }
-        #bigtitle .full { margin-top: 12px; font-size: clamp(12px, 2vw, 20px); color: #bfd4ee; font-weight: 500; letter-spacing: 2.5px; }
-        #bigtitle .ko-full { margin-top: 10px; font-size: clamp(14px, 2.3vw, 24px); font-weight: 700; letter-spacing: 1.5px;
+        #bigtitle .full { margin-top: 12px; font-size: clamp(14px, 1.8vw, 28px); color: #bfd4ee; font-weight: 500; letter-spacing: 2.5px; }
+        #bigtitle .ko-full { margin-top: 12px; font-size: clamp(16px, 2.2vw, 34px); font-weight: 700; letter-spacing: 1.5px;
             background: linear-gradient(90deg, #7dd3fc, #c4b5fd 55%, #f0abfc);
             -webkit-background-clip: text; background-clip: text; color: transparent; opacity: 0; }
-        #bigtitle .ko { margin-top: 22px; font-size: clamp(13px, 2.1vw, 21px); color: var(--ink); font-weight: 500;
+        #bigtitle .ko { margin-top: 22px; font-size: clamp(15px, 1.95vw, 30px); color: var(--ink); font-weight: 500;
             letter-spacing: 0.3px; opacity: 0; }
 
         /* 등장(나레이션 문장 동기 — scene10 stageTitle10 이 라인·단어·글자별 클래스 부여) + 지속 글로우/스윕 */
@@ -662,12 +663,18 @@
            (audio/onyx_short/, scripts/generate_concept_short_tts.py). 여성 채널은 없다.
          · 문장 시작 분수는 scripts/measure_concept_short.py 로 잰 값이다. 나레이션을 다시 구우면 다시 잰다.
        전체본 경로는 SHORT 가 false 라 종전과 같다. */
-    const SHORT = !PANEL && new URLSearchParams(location.search).get('cut') === 'short' ? {
+    /* 기본 재생본(2026-11-15 사용자 지시 — '다큐멘터리가 길다. CNN · ViT 는 빼고 오일러 GNN 만 남겨 AMR-HGN 씬에 잇고 3분 남짓으로').
+         · 쿼리가 없으면 **서론만 전체본**이고 씬 1~10 은 숏버전 그대로다(SHORT.intro = false) — 기본 배속 x1.1 에서 약 3분 20초.
+         · ?cut=short 는 종전 숏버전(서론 두 문장, 약 2분 40초), ?cut=full 은 종전 전체본(씬 4 포함, 약 3분 40초)이다.
+         · 서론(씬 0)은 onyx_full 클립 · 전체본 그림 · 전체본 배경음악 큐를 그대로 쓴다. 씬 1 부터 onyx_short 클립이다. */
+    const CUT = new URLSearchParams(location.search).get('cut');
+    const SHORT = !PANEL && CUT !== 'full' ? {
+        intro: CUT === 'short',   // true = 서론도 두 문장으로 줄인다(종전 숏버전). false = 서론은 전체본
         skip: { 4: true },
         //  씬별 클립 배속 — 원본 발화 속도(5.47~6.32 음절/초, 무음 제외)를 6.0 으로 모은다. 기본 배속 x1.1 을 곱하면
         //  들리는 속도가 약 6.6 음절/초(4장 도입 영상과 같다)다. 0.95~1.09 로 묶어 실제 배속이 1.2 를 넘지 않는다.
         //  씬 10 은 영어 이름(약 17음절)을 더해 5.74 로 셈했다.
-        rate: { 0: 1.09, 1: 1.04, 2: 0.995, 3: 1.09, 5: 0.95, 6: 0.976, 7: 0.954, 8: 1.015, 9: 0.977, 10: 1.04 },
+        rate: { 0: CUT === 'short' ? 1.09 : 1, 1: 1.04, 2: 0.995, 3: 1.09, 5: 0.95, 6: 0.976, 7: 0.954, 8: 1.015, 9: 0.977, 10: 1.04 },
         //  아래는 모두 나레이션 진행률 np(= 초 ÷ 클립 길이) — 클립 배속과 무관하다
         s0: { s2: 0.473, impact: 0.80 },             // 서론 — 둘째 문장 '이 영상은' · '어떻게 설계했는지'(대형 표제)
         s5: { s2: 0.174, fou: 0.353, s3: 0.426, eul: 0.515, s4: 0.644, bol: 0.746, s5: 0.785, ric: 0.904 },   // 씬 5 — 문장 2~5 시작과 '푸리에' · '오일러' · '볼츠만' · '리처드슨'
@@ -894,17 +901,23 @@
     //  씬별 클립 배속 — 숏버전만 쓴다(SHORT.rate). TTS 는 같은 지시문이어도 클립마다 템포가 흔들려, 씬마다 달리 걸어
     //  들리는 속도를 고르게 맞춘다(4장 도입 영상의 RATE 표와 같은 생각). 실제 재생 배속은 speed × clipAdj 다.
     const clipAdj = i => (SHORT && SHORT.rate[i]) || 1;
+    //  클립 앞머리 건너뛰기(파일 초) — 씬 8 첫 문장 '맨땅에서 시작하지 않습니다.' 를 뺐다(2026-11-15 사용자 지시).
+    //  음원은 그대로 두고 둘째 문장 바로 앞(무음 끝 0.18초 전)에서 틀기 시작한다 — 값은 ffmpeg silencedetect 실측이다.
+    const CLIP_START = { 8: { onyx_short: 3.30, onyx_full: 2.60, gemini_female_full: 3.07 } };
+    const clipDir = (v, i) => SHORT && !SHORT.intro && i === 0 ? 'onyx_full' : AUDIO_DIR[v];
+    const clipStart = (v, i) => (CLIP_START[i] && CLIP_START[i][clipDir(v, i)]) || 0;
     //  숏버전은 남성 채널 하나뿐이고(여성 채널 없음), 뺀 씬은 클립을 만들지 않는다 — clips[v] 에 구멍이 남는다.
     (SHORT ? ['onyxfull'] : ['onyxfull', 'female']).forEach(v => {
         for (let i = 0; i < N; i++) {
             if (SHORT && SHORT.skip[i]) continue;
-            const el = new Audio(`audio/${AUDIO_DIR[v]}/concept${i}.mp3`);
+            //  기본 재생본은 서론(씬 0)만 전체본 클립(onyx_full)을 쓴다 — SHORT.intro 가 false 일 때
+            const el = new Audio(`audio/${clipDir(v, i)}/concept${i}.mp3`);
             //  패널 모드는 나레이션을 틀지 않지만 요소를 없애면 안 된다 — 아래 loadedmetadata 가 채우는
             //  audioLen 이 rebuildTimelinePreserving 을 거쳐 dur[] 이 되고, 그 dur[] 이 씬 진행도(np)의
             //  축이다(덱 ⑦ 이 도는 씬6 은 나레이션 11.31초 축, t1=8.6 이 np≈0.73). 헤더만 받게 낮춘다.
             el.preload = PANEL ? 'metadata' : 'auto';
             //  audioLen 은 **타임라인 초**다 — 숏버전은 씬마다 클립 배속(clipAdj)이 달라 파일 길이를 그 배속으로 나눈다(전체본은 1)
-            el.addEventListener('loadedmetadata', () => { if (isFinite(el.duration)) { audioLen[v][i] = el.duration / clipAdj(i); rebuildTimelinePreserving(); } });
+            el.addEventListener('loadedmetadata', () => { if (isFinite(el.duration)) { audioLen[v][i] = (el.duration - clipStart(v, i)) / clipAdj(i); rebuildTimelinePreserving(); } });
             el.addEventListener('error', () => {/* 무음 degrade */ });
             clips[v][i] = el;
         }
@@ -915,7 +928,7 @@
         stopClip();
         if (!narrationOn || i < 0 || i >= N) return;
         const el = clips[voice][i]; if (!el) return;
-        try { el.currentTime = (offset || 0) * clipAdj(i); } catch (e) {}
+        try { el.currentTime = clipStart(voice, i) + (offset || 0) * clipAdj(i); } catch (e) {}
         el.playbackRate = speed * clipAdj(i);
         curClip = el; curClipIdx = i; musicDuck(true);
         el.onended = () => musicDuck(false);
@@ -945,7 +958,7 @@
     ];
     //  숏버전 — 서론이 약 14초라 0:31 의 00_피날레(30초 빌드업)가 들어설 자리가 없다. 서론은 지구의밤 그대로 두고,
     //  씬 1 부터 끝까지 1편 곡 하나로 간다. 씬 닻이라 나레이션을 다시 구워도 함께 움직인다.
-    if (SHORT) BGM_CUES.splice(1, 2, { scene: 1, src: 'audio/배경음악/01_1편배경음악.mp4', outSec: 1.5 });
+    if (SHORT && SHORT.intro) BGM_CUES.splice(1, 2, { scene: 1, src: 'audio/배경음악/01_1편배경음악.mp4', outSec: 1.5 });
     const BGM_XFADE_S = 5;   // outFrom/outTo 가 없는 전환의 기본 페이드아웃 길이(초)
     // 데크 2개 — 크로스페이드 구간에서는 이전 곡이 전환 지점을 넘겨 계속 울려야 하므로 요소를 갈아끼우지 않는다.
     // 페이드 타이머는 요소마다 el._ft 에 붙여 두 데크가 서로 간섭하지 않게 한다. bgm 은 항상 현재 곡 데크.
@@ -1070,7 +1083,7 @@
         { nm: 'AMR-HGN', lead: 500, pad: 5500, visMin: 9000 },
     ];
     if (SHORT) {   // 숏버전 — 서론은 두 문장, 씬 4 는 건너뛰고 씬 5 가 그 몫까지 말한다
-        META[0] = { nm: '서론 — 다중 규모 중첩을 인공지능 모델로', lead: 1200, pad: 3000, visMin: 9000 };   // pad 끝 2.4초 = 타이틀만 남기는 디밍(scene0Short DIM_S)
+        if (SHORT.intro) META[0] = { nm: '서론 — 다중 규모 중첩을 인공지능 모델로', lead: 1200, pad: 3000, visMin: 9000 };   // pad 끝 2.4초 = 타이틀만 남기는 디밍(scene0Short DIM_S)
         META[4].skip = true;
         META[5].nm = 'AMR-HGN — 다중 규모 중첩 · 그래프 어텐션';
     }
@@ -1089,7 +1102,7 @@
         '',   // 씬5 — CAP5
         '관측소는 희소하고 공간적으로 불균질하게 흩어져 있습니다.\n이 측정망을 끌어안기 위해, 다중 규모 그래프와 이종 그래프 신경망을 융합했습니다.',
         '스케일을 한 잠재공간에서 학습하는 End-to-End와, 배경장과 국지장을 나누어 학습하는 Two-Stage.\n두 아키텍처가 태어났습니다.',
-        '맨땅에서 시작하지 않습니다.\n전지구 화학수송모델을 길잡이 삼아, 그래프 신경망이 1km 격자의 농도를 추정합니다.\n적응형 편향 보정이 거친 배경장에 고해상도 국지 정보를 결합합니다.',
+        '전지구 화학수송모델을 길잡이 삼아, 그래프 신경망이 1km 격자의 농도를 추정합니다.\n적응형 편향 보정이 거친 배경장에 고해상도 국지 정보를 결합합니다.',
         '이 추정을 어떻게 믿는가. 측정망이 희소한 곳에서는 독립 위성 자료로 살펴봅니다.\n위성의 이산화질소 연직 칼럼과 모델의 지표 농도장은 서로 다른 물리량이지만, 그 공간적 일관성을 평가합니다.',
         '',   // 씬10 — CAP10
     ];
@@ -1336,7 +1349,7 @@
             const pos = (elapsed - start[si] - META[si].lead) / 1000;
             if (pos >= 0 && pos < (audioLen[voice][si] || 0)) {
                 if (!paused) playClip(si, pos);
-                else { const el = clips[voice][si]; if (el) { try { el.currentTime = pos * clipAdj(si); } catch (e2) {} el.playbackRate = speed * clipAdj(si); curClip = el; curClipIdx = si; } }
+                else { const el = clips[voice][si]; if (el) { try { el.currentTime = clipStart(voice, si) + pos * clipAdj(si); } catch (e2) {} el.playbackRate = speed * clipAdj(si); curClip = el; curClipIdx = si; } }
             }
         }
         // 스크럽 — 크로스페이드 중이던 퇴장 데크는 즉시 정리하고 현재 데크만 되살린다
@@ -1811,7 +1824,7 @@
     // 텍스처는 equirect(위도 등간격)인데 EA 는 메르카토르(위도 비선형)라, 위도 스트립으로 잘라
     // EA 좌표계로 리샘플한 오프스크린을 화면 크기당 1회 만들어 둔다. 매 프레임은 drawImage 1회.
     //  숏버전은 서론이 약 17초뿐이라 야경을 짧게 두고 곧 농도장으로 넘긴다
-    const NL_HOLD_S = SHORT ? 1.0 : 3.0, NL_FADE_S = SHORT ? 2.5 : 5.0;   // 야경 단독 유지(초) → 농도장 크로스페이드 길이(초)
+    const NL_HOLD_S = SHORT && SHORT.intro ? 1.0 : 3.0, NL_FADE_S = SHORT && SHORT.intro ? 2.5 : 5.0;   // 야경 단독 유지(초) → 농도장 크로스페이드 길이(초)
     let EAnight = null, EAnightKey = '';
     function buildEANight() {
         EAnight = null; EAnightKey = W + 'x' + H;
@@ -7220,12 +7233,16 @@
 
     const SCENES = [scene0, scene1, scene2, scene3, scene4, scene5, scene6, scene7, scene8, scene9, scene10];
     if (SHORT) {   // 숏버전 — 서론과 씬 5 만 전용 그림이다. 씬 4 는 길이 0 이라 불리지 않는다
-        SCENES[0] = scene0Short; SCENES[5] = scene5Short;
+        SCENES[5] = scene5Short;
         //  시작 화면 · 조작부 — 길이 안내를 고치고 음성 고르기(남성 · 여성)를 걷는다(숏버전은 남성 채널 하나다)
-        document.title = 'AMR-HGN 설계 철학 — 숏버전';
-        document.querySelector('#start-ov h1').textContent = 'AMR-HGN 설계 철학 · 숏버전';
-        document.querySelector('#start-ov .sub').innerHTML = '대기의 다중 규모 중첩 현상을 인공지능 모델로 어떻게 설계했는지,<br>'
-            + '물리 모델의 관점에서 검증까지 약 2분 45초로 줄여 설명합니다.';
+        //  기본 재생본(SHORT.intro = false)은 서론 그림 · 표제 · 시작 화면 문구가 전체본 그대로다
+        if (SHORT.intro) {
+            SCENES[0] = scene0Short;
+            document.title = 'AMR-HGN 설계 철학 — 숏버전';
+            document.querySelector('#start-ov h1').textContent = 'AMR-HGN 설계 철학 · 숏버전';
+            document.querySelector('#start-ov .sub').innerHTML = '대기의 다중 규모 중첩 현상을 인공지능 모델로 어떻게 설계했는지,<br>'
+                + '물리 모델의 관점에서 검증까지 약 2분 45초로 줄여 설명합니다.';
+        }
         document.getElementById('v-female').closest('.cgrp').style.display = 'none';
     }
 
@@ -7480,6 +7497,36 @@
             try { window.parent.postMessage({ deck: 'film-close' }, '*'); } catch (err) {}
         }, true);
     }
+    /* 끝난 뒤 '다음' 으로 덱에 돌아가기(2026-11-15 사용자 지시 — '마지막 씬 뒤에 다음을 누르면 자연스럽게 그 장으로 나가도록').
+         · 마지막 씬이 끝나 앰비언트 홀드('감사합니다' 화면)에 들어선 뒤에만 듣는다 — 재생 중 · 시작 전 화면에서는 종전 그대로다.
+         · 다음 키(PageDown · → · ↓ · Space — 덱 · 발표 리모컨과 같은 키)나 화면 클릭을 받으면 0.6초 동안 검게 덮고 음악을 줄인 뒤
+           Esc 와 같은 { deck:'film-close' } 를 보낸다. 덱은 프레임을 걷고 그 장 화면으로 돌아간다(덱은 고치지 않았다).
+         · 조작부(다시 재생 · 배속 · 음량 …) 클릭은 나가기로 치지 않는다. Enter 는 종전대로 다시 재생이다.
+         · 포커스가 덱에 남아 키가 프레임에 닿지 않는 때를 위해 { film:'next' } 명령도 받는다(아래 수신부 — 덱 쪽 배선은 아직 없다). */
+    const showEnded = () => !playing && total > 0 && elapsed >= total;
+    let leaving = false;
+    function leaveToDeck() {
+        if (leaving) return;
+        leaving = true;
+        const veil = document.createElement('div');
+        veil.style.cssText = 'position:fixed;inset:0;z-index:9999;background:#000;opacity:0;transition:opacity 0.6s ease;pointer-events:none';
+        document.body.appendChild(veil);
+        requestAnimationFrame(() => { veil.style.opacity = '1'; });
+        try { fadeEl(bgm, 0, 600, true); } catch (err) {}
+        setTimeout(() => { try { window.parent.postMessage({ deck: 'film-close' }, '*'); } catch (err) {} }, 650);
+    }
+    if (window.parent !== window) {
+        const NEXT_KEYS = ['PageDown', 'ArrowRight', 'ArrowDown', ' ', 'Spacebar'];
+        window.addEventListener('keydown', e => {
+            if (!showEnded() || !NEXT_KEYS.includes(e.key)) return;
+            e.preventDefault(); e.stopImmediatePropagation();
+            leaveToDeck();
+        }, true);
+        window.addEventListener('click', e => {
+            if (!showEnded() || (e.target.closest && e.target.closest('#controls, button, input'))) return;
+            leaveToDeck();
+        });
+    }
     // ⚠ 위 두 핸들러는 **프레임이 포커스를 쥐고 있을 때만** 키를 받는다. 덱이 `contentWindow.focus()`
     //   를 부르지만 file:// 에서는 포커스가 부모에 남는 일이 있고, 그러면 Enter·Esc 가 프레임에
     //   닿지 않아 '재생도 닫기도 안 된다'가 된다(실제로 그랬다).
@@ -7494,6 +7541,7 @@
         if (d.film === 'play') { if (!playing) togglePlay(); }
         else if (d.film === 'stop') { try { if (playing) togglePlay(); } catch (err) {} }
         else if (d.film === 'wake') { uiShow(); }
+        else if (d.film === 'next') { if (showEnded() && window.parent !== window) leaveToDeck(); }
     });
     // (UI 자동 숨김 블록은 startIdle() 호출 **앞**으로 옮겼다 — 그 자리의 ⚠ 주석 참조. 2026-08-17)
     </script>

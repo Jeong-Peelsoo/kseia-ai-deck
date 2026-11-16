@@ -54,6 +54,9 @@
        ?cx=0.3  (패널 모드) 구 · 확대 중심의 가로 자리를 폭 비율로 정한다 — 화면 전체 배경으로 깔고 왼쪽에 둘 때(2026-10-17). 기본 0.5.
        ?graph=0  그래프망·섬광·빛 입자를 끈다.  ?sat=0  위성 2기를 끈다.  ?sdg=1  SDG 5 상징 궤도를 켠다.
        ?assets=min  청한 사례 하나만·정밀 배경 없이 읽는다(표지 장식용 — 확대·사례 전환을 하지 않을 때).
+       ?assets=bare  (2026-11-15, KSEIA 축약본 1쪽) min 보다 더 덜어 낸다 — 지구 텍스처와 청한 사례의 광역 농도장만 읽는다.
+                     1 km 층(kr_field*.js) · 측정망(kr_stations*.js) · 해안선(boundaries.js)을 읽지도 그리지도 않는다. 전지구 화면에 머무는 표지용이다.
+       ?fps=30  (2026-11-15) 그리는 횟수의 상한(초당). 없으면 화면 주사율 그대로다. 천천히 도는 표지 장식에서 GPU 일을 줄인다.
        ?view=globe|ea|kr|sudo|gangwon|chung|honam|yeong|jeju|seoul  확대 단계·지역을 미리 정한다(패널 모드용).
        ?stations=1  측정망 표시를 켠 상태로 시작한다.  ?arch=e2e|2stage  한반도 1km 층의 아키텍처.
        ?case=winter|spring|ozone  사례(72시간 창). 겨울 고농도 정체 · 봄 수송(기본) · 오존 고농도.
@@ -302,13 +305,17 @@
   if (q.get('field') !== '0'){
     // ?assets=min — **청한 사례 하나만, 정밀 배경 없이**. 확대도 사례 전환도 하지 않는
     // 표지 장식용이다(덱 ①장). 기본은 예전 그대로 전 사례 + 정밀 배경을 읽는다.
-    var min = q.get('assets') === 'min';
+    // ?assets=bare (2026-11-15) — min 에서 측정망 · 해안선까지 뺀다(1 km 층은 아래 krfCur 가 막는다). 이 인자가 없으면 예전 그대로다
+    var bare = q.get('assets') === 'bare';
+    var min = bare || q.get('assets') === 'min';
     if (!min) need.push('basemap.js');             // 정밀 배경(확대 단계)
     var c = q.get('case') || 'spring';
-    var keys = (min && CASE[c]) ? [c] : Object.keys(CASE);
-    for (var j = 0; j < keys.length; j++) need = need.concat(CASE[keys[j]]);
+    // ?lite=1 (2026-11-12, 건화 덱 8쪽) — 청한 사례 하나만 읽되 정밀 배경은 그대로 읽는다(확대는 한다, 사례 전환은 없다)
+    var one = min || q.get('lite') === '1';
+    var keys = (one && CASE[c]) ? [c] : Object.keys(CASE);
+    for (var j = 0; j < keys.length; j++) need = need.concat(bare ? CASE[keys[j]].slice(0, 1) : CASE[keys[j]]);   // bare — 광역 농도장만(측정망은 뺀다)
   }
-  need.push('boundaries.js');                      // 해안선 — 전지구 단계에서도 쓴다
+  if (q.get('assets') !== 'bare') need.push('boundaries.js');   // 해안선 — 전지구 단계에서도 쓴다(bare 는 뺀다)
   for (var i = 0; i < need.length; i++)
     document.write('<scr' + 'ipt src="' + need[i] + '"></scr' + 'ipt>');
 })();
@@ -323,6 +330,17 @@ const Q = new URLSearchParams(location.search);
 const PANEL = Q.get('panel') === '1';
 const CXF   = PANEL ? +(Q.get('cx') ?? 0) : 0;    // ?cx=0.3 — 패널 모드에서 구 · 확대 중심의 가로 자리(폭 비율). 없으면 가운데(0.5)
 const DPR_MAX = Math.max(1, +(Q.get('dpr') ?? 2) || 2);   // ?dpr=1 — 캔버스 화소 배율 상한. 고배율 노트북에서 화면 전체를 2배로 그려 버벅이는 장에서 낮춘다(2026-10-18)
+// ?lite=1 — 가벼운 경로(2026-11-12, 건화 덱 8쪽 "노트북에서 버벅거린다"). **그림은 그대로 두고 비용만 걷는다.**
+//   이 인자가 없으면 아래 갈래는 하나도 타지 않는다 — 도입 영상(globe-intro-film.html)과 다른 덱은 예전 그대로다.
+//   1 자산 — 청한 사례 하나만 읽는다(위 자산 주입부). 권역 상세지도는 큐 warmMap 으로 청한 권역만 읽는다(ensureDetail).
+//   2 지구 — 정밀 타일 겹치기 · 탈색 · 음영(renderEarth 의 화소 루프)을 WebGL2 조각 셰이더가 같은 식 · 같은 해상도로 그린다(LGL.earth).
+//   3 광역 농도장 — FIELD.layer 의 화소 루프도 셰이더가 그린다(LGL.field). 통째로 가려진 동안(칸 그대로 · 1 km 가 덮은 뒤)은 그리지 않는다.
+//   4 캔버스 화소 — 부모가 { pxr } 로 무대 축소 배율을 알려 주면 캔버스를 실제 화면 화소 수로 잡는다(resize).
+//   WebGL2 가 없거나 문맥을 잃으면 예전 CPU 경로로 돌아간다(같은 그림, 느릴 뿐이다).
+const LITE = Q.get('lite') === '1';
+// ?assets=bare · ?fps= (2026-11-15, KSEIA 축약본 1쪽 "지구가 너무 무겁다") — 머리 주석 '조작·매개변수' 참조. 두 인자가 없으면 아래 갈래는 타지 않는다
+const BARE = Q.get('assets') === 'bare';
+const FPS_MS = +(Q.get('fps') ?? 0) > 0 ? 1000 / +Q.get('fps') : 0;   // 프레임 사이 최소 간격(ms). 0 = 상한 없음
 const LON0  = +(Q.get('lon') ?? 127.5);          // 시선 중심 경도 — 한반도
 const TILT  = +(Q.get('lat') ?? 30);             // 시선 중심 위도 — 한·일이 구의 위쪽 절반 가운데 온다
 // 기본은 동아시아를 벗어나지 않는 좌우 진자다(±15°, 주기 39초). 연속 자전(5.4°/s, 한 바퀴 67초)은
@@ -976,14 +994,25 @@ function makeFIELD(ASSET){
   //    농도장은 매 프레임 시각·노출이 바뀐다. 대신 해상도를 절반쯤으로 낮춘다 — 부드러운 장이라
   //    확대해도 계단이 보이지 않는다. 1km 층(KRF)이 덮는 화소는 그쪽에 양보한다(가중 kmW).
   const foff = document.createElement('canvas'), fctx = foff.getContext('2d');
+  // ?lite=1 의 셰이더가 읽는 자료 — 칸마다 (pm25 · no2 · o3 · 노출), 그리고 물질 세 줄 × 256단 LUT
+  const gbuf = LITE ? new Float32Array(NC * 4) : null, glut = LITE ? new Float32Array(3 * 256 * 4) : null;
+  if (glut) SP_KEYS.forEach((sp, k) => glut.set(LUT[sp], k * 1024));
   function layer(dpr, kmW){
     if (!ready || !vr) return null;
+    // ?lite=1 — 이 층이 통째로 가려진 동안은 화소 루프를 돌지 않는다. 칸 그대로(BLK → 1)이거나 1 km 가 다 덮었으면(kmW → 1, 와이프 끝)
+    //   아래 식에서 모든 화소의 av 가 0.004 아래라 알파가 0 이다 — 그리지 않아도 같은 그림이다
+    if (LITE && (BLK > 0.996 || (kmW > 0.996 && !WIPE))) return null;
     const [u0, u1, v0, v1] = vr;
     // 해상도 상한 — 자료가 0.5° 격자이므로 한 칸에 2.6 px 이상 찍는 것은 낭비다.
     // 확대할 때 화면 해상도를 따라가면(초기 구현) 한 칸에 50 px 을 찍어 13 fps 까지 떨어졌다.
     const scr = R * Math.PI / 180, ppd = Math.min(scr * clamp(dpr * 0.55, 0.42, 1.0), 2.6 / dl);
     const Nx = clamp(Math.round((u1 - u0) * R / scr * ppd), 40, 900);
     const Ny = clamp(Math.round((v1 - v0) * R / scr * ppd), 40, 900);
+    if (LITE && LGL.ok){                                 // ?lite=1 — 같은 식을 셰이더가 같은 해상도로 그린다(LGL.field)
+      for (let c = 0, q = 0; c < NC; c++, q += 4){ gbuf[q] = cur.pm25[c]; gbuf[q + 1] = cur.no2[c]; gbuf[q + 2] = cur.o3[c]; gbuf[q + 3] = rev[c]; }
+      const g = LGL.field({ Nx, Ny, nx, ny, dl, lonA, latB, fe: FEATH, kmW, mix, cells: gbuf, lut: glut });
+      if (g) return g;
+    }
     if (foff.width !== Nx || foff.height !== Ny){ foff.width = Nx; foff.height = Ny; }
     const im = fctx.createImageData(Nx, Ny), o = im.data;
     const ca = Math.cos(-view.lon * D), sa = Math.sin(-view.lon * D), ct = view.ct, st = view.st;
@@ -1140,12 +1169,261 @@ function makeFIELD(ASSET){
 // 텍스처는 여러 장이 겹친다 — 전지구 1장(항상) + 확대용 정밀 타일(basemap.js, 있으면).
 // 화소마다 '그 화소를 덮는 가장 정밀한 타일'을 골라 쓰고, 타일 경계에서는 feather 도만큼 상위 타일과 섞는다.
 // 배율에 따라 통째로 갈아 끼우지 않는 이유는 그러면 전환 순간 화면이 툭 튀기 때문이다.
+// ── ?lite=1 의 GPU 경로(2026-11-12) ─────────────────────────────────────────────
+//  renderEarth · FIELD.layer 의 화소 루프를 조각 셰이더로 옮긴 것이다. **식 · 출력 해상도 · 타일 순서는 CPU 경로와 같다** —
+//  같은 화소 격자에서 같은 값을 셈하므로 그림이 같고, 걷히는 것은 프레임마다 100만 화소를 자바스크립트로 도는 비용뿐이다.
+//  (서울 배율로 다가서는 동안 CPU 경로는 프레임 하나에 200–400 ms 가 들었다 — 실측, 건화 덱 context-notes 2026-11-12.)
+//   · 텍스처는 해독한 그림을 그대로 올린다(getImageData 로 RGBA 를 따로 쥐지 않는다 — 타일 하나에 28–43 MB 였다).
+//     CPU 로 돌아가야 하면 그때 화소를 푼다(unstub).
+//   · 화소 → 경위도는 **시선 중심 기준의 차**만 셰이더에서 푼다. 절대 경위도를 float32 로 풀면 서울 배율(화소 하나 3e-4°)에서
+//     자리가 흔들린다. 타일 · 격자 안의 절대 자리는 CPU 가 배정밀도로 셈해 uniform 으로 준다.
+//   · 전지구 텍스처만 밉맵을 쓴다(기존 EGL 과 같다). 정밀 타일은 CPU 와 같은 이중선형 한 번이다.
+//  ⚠ 음영 · 탈색 식은 shadeEarth · renderEarth · EGL 셰이더와 같아야 한다 — 고치면 네 곳을 함께 고친다.
+const LGL = LITE ? (() => {
+  const STUB = new Uint8ClampedArray(0);             // '화소는 GPU 에만 있다' 는 표시 — t.data 가 참이어야 하는 자리(문지기 · 서명)를 그대로 통과한다
+  const VS = `#version 300 es
+in vec2 aP; uniform vec4 uRect; out vec2 vP;
+void main(){ vP = vec2(mix(uRect.x, uRect.y, aP.x * .5 + .5), mix(uRect.z, uRect.w, .5 - aP.y * .5)); gl_Position = vec4(aP, 0., 1.); }`;
+  const GEO = `
+  float r2 = dot(vP, vP), X = sqrt(max(0., 1. - r2)), Y = vP.x, Z = -vP.y;
+  float x1 = X * uTilt.x - Z * uTilt.y, sl = Z * uTilt.x + X * uTilt.y, cl = sqrt(x1 * x1 + Y * Y);
+  vec2 dl = vec2(atan(Y, x1), atan(sl * uTilt.x - cl * uTilt.y, cl * uTilt.x + sl * uTilt.y)) * 57.29577951308232;`;
+  const EFS = `#version 300 es
+precision highp float; precision highp sampler2D;
+in vec2 vP; out vec4 o;
+uniform sampler2D uTex, uT0, uT1, uT2, uT3, uT4;
+uniform vec2 uTilt, uG; uniform float uLook, uNx, uDesat; uniform vec3 uSun, uLt, uLh;
+uniform vec4 uD[5], uP[5];
+void tile(sampler2D T, vec4 d, vec4 p, vec2 dl, inout vec3 c, inout float dw, inout float cw){
+  if (p.x <= 0.) return;
+  float dx = min(d.x + dl.x, d.y - dl.x), dy = min(d.z + dl.y, d.w - dl.y);
+  if (dx <= 0. || dy <= 0.) return;
+  float a = clamp(dx / p.y, 0., 1.) * clamp(dy / p.y, 0., 1.), w = a * a * (3. - 2. * a) * p.x;
+  if (w <= .004) return;
+  vec3 s = textureLod(T, vec2((d.x + dl.x) / (d.x + d.y), (d.w - dl.y) / (d.z + d.w)), 0.).rgb;
+  c = mix(c, s, w); dw += (1. - dw) * w * p.z; cw += (1. - cw) * w * p.w;
+}
+void main(){${GEO}
+  vec2 uv = vec2(uG.x + dl.x / 360., uG.y - dl.y / 180.);
+  vec2 gx = dFdx(uv), gy = dFdy(uv); gx.x -= floor(gx.x + .5); gy.x -= floor(gy.x + .5);
+  vec3 c = textureGrad(uTex, uv, gx, gy).rgb;
+  float dw = 0., cw = 0.;
+  tile(uT0, uD[0], uP[0], dl, c, dw, cw); tile(uT1, uD[1], uP[1], dl, c, dw, cw); tile(uT2, uD[2], uP[2], dl, c, dw, cw);
+  tile(uT3, uD[3], uP[3], dl, c, dw, cw); tile(uT4, uD[4], uP[4], dl, c, dw, cw);
+  float ds = uDesat * (1. - dw * .92);
+  if (ds > .002){
+    float L = dot(c, vec3(.299, .587, .114));
+    bool water = c.b > c.r + 10. / 255. && c.b > c.g + 7. / 255.;
+    float g = water ? 232. / 255. : pow(max(L, 0.), .52) * .62 + .36, cwl = water ? 0. : cw;
+    vec3 t = vec3(g) + (c - L) * cwl + (water ? vec3(0., 2., 6.) / 255. : vec3(0.));
+    c = mix(c, t, ds);
+  }
+  float lam = max(0., dot(vec3(X, Y, Z), uSun)), sh = .74 + .42 * pow(lam, .8);
+  float e = 1. - X, atm = clamp(e * e * e * .62, 0., .62);
+  vec3 old = c * sh * (1. - atm) + vec3(176., 220., 240.) / 255. * atm, col = old;
+  if (uLook > .002){
+    float sea = smoothstep(.02, .12, c.b - max(c.r, c.g)), L = dot(c, vec3(.3, .59, .11));
+    vec3 land = mix(vec3(L), c, 1.3); land.g *= 1.07;
+    vec3 m = mix(land, c * vec3(.9, 1., 1.05), sea);
+    float k = (.36 + .82 * max(0., dot(vec3(X, Y, Z), uLt))) * 1.04;
+    float sp = pow(max(0., dot(vec3(X, Y, Z), uLh)), 46.) * sea * .5;
+    col = mix(old, m * k + sp + vec3(.36, .9, .66) * pow(max(0., e), 3.2) * .33, uLook);
+  }
+  col = clamp(col, 0., 1.);
+  float a = r2 < 1. ? clamp((1. - r2) * uNx * .5, 0., 1.) : 0.;
+  o = vec4(col * a, a);
+}`;
+  const FFS = `#version 300 es
+precision highp float; precision highp sampler2D;
+in vec2 vP; out vec4 o;
+uniform sampler2D uCur, uLut;
+uniform vec2 uTilt, uG0, uN; uniform float uDl, uKm, uBlk, uFe, uWcl, uWon; uniform vec3 uMix; uniform vec4 uW;
+vec4 samp(vec2 g){
+  vec2 g0 = floor(clamp(g, vec2(0.), uN - 1.001)), f = clamp(g - g0, 0., 1.); ivec2 i = ivec2(g0);
+  return mix(mix(texelFetch(uCur, i, 0), texelFetch(uCur, i + ivec2(1, 0), 0), f.x),
+             mix(texelFetch(uCur, i + ivec2(0, 1), 0), texelFetch(uCur, i + ivec2(1, 1), 0), f.x), f.y);
+}
+float edgeW(vec2 g){
+  vec2 u = abs(g / (uN - 1.) * 2. - 1.); u *= u;
+  float r = pow(u.x * u.x + u.y * u.y, .25), e = clamp((1. - r) / .22, 0., 1.);
+  vec2 q = clamp(min(g, uN - 1. - g) / uFe, 0., 1.); float eg = q.x * q.y;
+  return e * e * (3. - 2. * e) * eg * eg * (3. - 2. * eg);
+}
+void main(){${GEO}
+  o = vec4(0.);
+  if (r2 >= 1.) return;
+  vec2 g = vec2(uG0.x + dl.x / uDl, uG0.y - dl.y / uDl);
+  if (g.x < 0. || g.x > uN.x - 1. || g.y < 0. || g.y > uN.y - 1.) return;
+  vec4 s = samp(g);
+  float av = edgeW(g) * s.a * clamp(X * 2.2, 0., 1.);
+  if (uKm > .002){
+    float m = 1.;
+    if (uWon > .5){ float dx = (uW.x + dl.x) * uWcl, dy = uW.y + dl.y; m = clamp((uW.z - sqrt(dx * dx + dy * dy)) / uW.w + .5, 0., 1.); m = m * m * (3. - 2. * m); }
+    av *= 1. - uKm * m;
+  }
+  if (uBlk > .002) av *= 1. - uBlk;
+  if (av < .004) return;
+  vec3 pr = vec3(0.); float pa = 0.;
+  for (int k = 0; k < 3; k++){
+    float w = uMix[k]; if (w <= .002) continue;
+    vec4 L = texelFetch(uLut, ivec2(int(floor(s[k] + .5)), k), 0); float a = L.a * w;
+    pr += L.rgb * a; pa += a;
+  }
+  if (pa < 1e-4) return;
+  float al = clamp(pa * av, 0., 1.);
+  o = vec4(pr / pa / 255. * al, al);
+}`;
+  function mk(FS, names){
+    const cvs = document.createElement('canvas'); let gl = null;
+    try { gl = cvs.getContext('webgl2', { premultipliedAlpha: true, antialias: false, preserveDrawingBuffer: true, alpha: true }); } catch (e) { gl = null; }
+    if (!gl) return null;
+    const sh = (type, src) => { const s = gl.createShader(type); gl.shaderSource(s, src); gl.compileShader(s);
+      if (!gl.getShaderParameter(s, gl.COMPILE_STATUS)) throw new Error(gl.getShaderInfoLog(s)); return s; };
+    const prog = gl.createProgram();
+    try {
+      gl.attachShader(prog, sh(gl.VERTEX_SHADER, VS)); gl.attachShader(prog, sh(gl.FRAGMENT_SHADER, FS));
+      gl.linkProgram(prog); if (!gl.getProgramParameter(prog, gl.LINK_STATUS)) throw new Error(gl.getProgramInfoLog(prog));
+    } catch (e) { console.warn('lite GPU 경로 끔:', e.message); return null; }
+    gl.useProgram(prog);
+    const b = gl.createBuffer(); gl.bindBuffer(gl.ARRAY_BUFFER, b);
+    gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([-1, -1, 1, -1, -1, 1, 1, 1]), gl.STATIC_DRAW);
+    const ap = gl.getAttribLocation(prog, 'aP'); gl.enableVertexAttribArray(ap); gl.vertexAttribPointer(ap, 2, gl.FLOAT, false, 0, 0);
+    gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, false); gl.pixelStorei(gl.UNPACK_PREMULTIPLY_ALPHA_WEBGL, false);
+    gl.pixelStorei(gl.UNPACK_COLORSPACE_CONVERSION_WEBGL, gl.NONE); gl.pixelStorei(gl.UNPACK_ALIGNMENT, 1);
+    const loc = {}; for (const n of names) loc[n] = gl.getUniformLocation(prog, n);
+    const o = { cvs, gl, loc, dead: false };
+    cvs.addEventListener('webglcontextlost', () => { o.dead = true; });
+    return o;
+  }
+  const E = mk(EFS, ['uRect', 'uTilt', 'uG', 'uLook', 'uNx', 'uDesat', 'uSun', 'uLt', 'uLh', 'uD', 'uP', 'uTex', 'uT0', 'uT1', 'uT2', 'uT3', 'uT4']);
+  const F = E && mk(FFS, ['uRect', 'uTilt', 'uG0', 'uN', 'uDl', 'uKm', 'uBlk', 'uFe', 'uWcl', 'uWon', 'uMix', 'uW', 'uCur', 'uLut']);
+  const ok = !!(E && F);
+  let maxTex = 0, eSigL = '', init = false;
+  if (ok){
+    maxTex = E.gl.getParameter(E.gl.MAX_TEXTURE_SIZE);
+    E.gl.uniform1i(E.loc.uTex, 0); for (let i = 0; i < 5; i++) E.gl.uniform1i(E.loc['uT' + i], 1 + i);
+    F.gl.uniform1i(F.loc.uCur, 0); F.gl.uniform1i(F.loc.uLut, 1);
+  }
+  const live = o => !o.dead && !o.gl.isContextLost();
+  function pixels(img){
+    const oc = document.createElement('canvas'); oc.width = img.width; oc.height = img.height;
+    const c = oc.getContext('2d', { willReadFrequently: true }); c.drawImage(img, 0, 0);
+    return c.getImageData(0, 0, img.width, img.height).data;
+  }
+  // 그림을 받아 텍스처로 올린다. 해독은 createImageBitmap 이 주 스레드 밖에서 한다(3480×3120 JPEG 를 주 스레드에서 풀면 그 프레임이 멎는다)
+  function adopt(t, img, done){
+    const fin = src => {
+      t.img = img; t.w = img.width; t.h = img.height;
+      try {
+        if (!live(E) || Math.max(img.width, img.height) > maxTex) throw 0;
+        const gl = E.gl, tex = gl.createTexture(), wrap = (t.bbox[2] - t.bbox[0]) >= 359.9;
+        gl.activeTexture(gl.TEXTURE0 + 7); gl.bindTexture(gl.TEXTURE_2D, tex);
+        gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA8, gl.RGBA, gl.UNSIGNED_BYTE, src);
+        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
+        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
+        if (wrap){                                     // 전지구 — 기존 EGL 과 같은 표본(밉맵 · 이방성 · 경도 감기)
+          gl.generateMipmap(gl.TEXTURE_2D);
+          gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR_MIPMAP_LINEAR);
+          gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.REPEAT);
+          const af = gl.getExtension('EXT_texture_filter_anisotropic');
+          if (af) gl.texParameterf(gl.TEXTURE_2D, af.TEXTURE_MAX_ANISOTROPY_EXT, Math.min(8, gl.getParameter(af.MAX_TEXTURE_MAX_ANISOTROPY_EXT)));
+        } else {                                       // 정밀 타일 — CPU sampleTex 와 같은 이중선형 한 번 · 가장자리 고정
+          gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
+          gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
+        }
+        t.tex = tex; t.data = STUB;
+      } catch (e) { t.tex = null; t.data = pixels(img); }
+      if (src !== img && src.close) src.close();
+      eSigL = ''; done();
+    };
+    if (typeof createImageBitmap === 'function')
+      createImageBitmap(img, { premultiplyAlpha: 'none', colorSpaceConversion: 'none' }).then(fin, () => fin(img));
+    else fin(img);
+  }
+  function unstub(){                                   // CPU 경로로 돌아갈 때 — GPU 에만 둔 화소를 푼다
+    for (const t of [TEX, ...FINE]) if (t && t.data === STUB) t.data = pixels(t.img);
+  }
+  const _d = new Float32Array(20), _q = new Float32Array(20);
+  function earth(dprRaw, dprEff){
+    if (!ok || !live(E) || !TEX.tex) return null;
+    const bb = TEX.bbox; if (bb[2] - bb[0] < 359.9 || bb[3] - bb[1] < 179.9) return null;
+    const gl = E.gl, loc = E.loc, use = [];
+    for (const t of FINE){
+      if (!t.data){ if (t.tex){ gl.deleteTexture(t.tex); t.tex = null; } continue; }   // 놓은 타일(다른 권역)은 텍스처도 놓는다
+      if (t.zw > 0.004){ if (!t.tex) return null; use.push(t); }
+    }
+    if (use.length > 5) return null;
+    const [u0, u1, v0, v1] = vr; let Nx, Ny;
+    if (DESAT <= 0.002 && !use.length){                // 전지구 — 기존 EGL 과 같은 해상도(화면 화소 그대로)
+      Nx = clamp(Math.round((u1 - u0) * R * dprEff), 48, 2400); Ny = clamp(Math.round((v1 - v0) * R * dprEff), 48, 2400);
+    } else {                                           // 확대 — CPU renderEarth 와 같은 해상도(같은 화소 격자에서 같은 표본을 뜬다)
+      const scr = R * Math.PI / 180;
+      let natPpd = TEX.w / (bb[2] - bb[0]);
+      for (const t of FINE) if (t.data && t.zw > 0.5) natPpd = Math.max(natPpd, t.w / (t.bbox[2] - t.bbox[0]));
+      const rf = lerp(0.62, 1.0, ss(300, 1500, CAM.z));
+      const ppd = Math.min(scr * clamp(dprRaw * rf, 0.5, 1.15), natPpd * 1.15);
+      Nx = clamp(Math.round((u1 - u0) * R / scr * ppd), 48, 1500); Ny = clamp(Math.round((v1 - v0) * R / scr * ppd), 48, 1500);
+    }
+    const lon = view.lon, lat = CAM.lat;
+    _d.fill(0); _q.fill(0);
+    let s = `${Nx}_${Ny}_${lon}_${lat}_${u0}_${u1}_${v0}_${v1}_${DESAT}_${LOOK}`;
+    use.forEach((t, i) => { const b = t.bbox;
+      _d[i * 4] = lon - b[0]; _d[i * 4 + 1] = b[2] - lon; _d[i * 4 + 2] = lat - b[1]; _d[i * 4 + 3] = b[3] - lat;
+      _q[i * 4] = t.zw; _q[i * 4 + 1] = t.feather; _q[i * 4 + 2] = (t.tier === 'detail' || t.tier === 'city') ? 1 : 0; _q[i * 4 + 3] = t.sat > 0 ? t.sat : 0;
+      s += `_${t.id || t.key}:${t.zw}`; });
+    window.GLOBE_GPU = true;                           // 점검 창구 — 이 프레임을 GPU 경로가 그렸다
+    if (s === eSigL) return E.cvs;
+    eSigL = s;
+    if (!init){ init = true; gl.uniform3fv(loc.uSun, SUN); gl.uniform3fv(loc.uLt, LT); gl.uniform3fv(loc.uLh, LH); }
+    if (E.cvs.width !== Nx || E.cvs.height !== Ny){ E.cvs.width = Nx; E.cvs.height = Ny; }
+    gl.viewport(0, 0, Nx, Ny);
+    gl.activeTexture(gl.TEXTURE0); gl.bindTexture(gl.TEXTURE_2D, TEX.tex);
+    for (let i = 0; i < 5; i++){ gl.activeTexture(gl.TEXTURE1 + i); gl.bindTexture(gl.TEXTURE_2D, (use[i] || TEX).tex); }   // 빈 자리는 전지구 텍스처로 메운다(안 읽는다)
+    gl.uniform4f(loc.uRect, u0, u1, v0, v1); gl.uniform2f(loc.uTilt, view.ct, view.st);
+    gl.uniform2f(loc.uG, (((lon + 180) / 360) % 1 + 1) % 1, (90 - lat) / 180);
+    gl.uniform1f(loc.uLook, LOOK); gl.uniform1f(loc.uNx, Nx); gl.uniform1f(loc.uDesat, DESAT);
+    gl.uniform4fv(loc.uD, _d); gl.uniform4fv(loc.uP, _q);
+    gl.clearColor(0, 0, 0, 0); gl.clear(gl.COLOR_BUFFER_BIT);
+    gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
+    return E.cvs;
+  }
+  // 광역 농도장 층 — p = { Nx, Ny, nx, ny, dl, lonA, latB, fe, kmW, mix, cells(Float32 nx·ny·4 = pm25 · no2 · o3 · 노출), lut(Float32 3·256·4) }
+  let curTex = null, lutTex = null, lutOf = null;
+  function field(p){
+    if (!ok || !live(F)) return null;
+    const gl = F.gl, loc = F.loc;
+    if (!curTex){
+      curTex = gl.createTexture(); lutTex = gl.createTexture();
+      for (const [u, t] of [[0, curTex], [1, lutTex]]){
+        gl.activeTexture(gl.TEXTURE0 + u); gl.bindTexture(gl.TEXTURE_2D, t);
+        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.NEAREST); gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.NEAREST);
+        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE); gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
+      }
+    }
+    if (lutOf !== p.lut){ lutOf = p.lut; gl.activeTexture(gl.TEXTURE1); gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA32F, 256, 3, 0, gl.RGBA, gl.FLOAT, p.lut); }
+    gl.activeTexture(gl.TEXTURE0); gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA32F, p.nx, p.ny, 0, gl.RGBA, gl.FLOAT, p.cells);
+    if (F.cvs.width !== p.Nx || F.cvs.height !== p.Ny){ F.cvs.width = p.Nx; F.cvs.height = p.Ny; }
+    gl.viewport(0, 0, p.Nx, p.Ny);
+    gl.uniform4f(loc.uRect, vr[0], vr[1], vr[2], vr[3]); gl.uniform2f(loc.uTilt, view.ct, view.st);
+    gl.uniform2f(loc.uG0, (view.lon - p.lonA) / p.dl, (p.latB - CAM.lat) / p.dl); gl.uniform2f(loc.uN, p.nx, p.ny);
+    gl.uniform1f(loc.uDl, p.dl); gl.uniform1f(loc.uKm, p.kmW); gl.uniform1f(loc.uBlk, BLK); gl.uniform1f(loc.uFe, p.fe);
+    gl.uniform3f(loc.uMix, p.mix[0], p.mix[1], p.mix[2]);
+    gl.uniform1f(loc.uWon, WIPE ? 1 : 0); gl.uniform1f(loc.uWcl, WIPE ? WIPE.cl : 1);
+    gl.uniform4f(loc.uW, WIPE ? view.lon - WIPE.lon : 0, WIPE ? CAM.lat - WIPE.lat : 0, WIPE ? WIPE.r : 0, WIPE ? WIPE.f : 1);
+    gl.clearColor(0, 0, 0, 0); gl.clear(gl.COLOR_BUFFER_BIT);
+    gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
+    return F.cvs;
+  }
+  return { ok, adopt, unstub, earth, field };
+})() : null;
+
 function loadTex(src, extra, lazy){
   const t = Object.assign({ data: null, w: 0, h: 0, zw: 0, primed: false }, extra);
   t.prime = () => {                                  // 필요해질 때 비로소 내려 읽는다(지연 로딩)
     if (t.primed) return; t.primed = true;
     const img = new Image(); INFLIGHT++;               // 화소 해독까지가 '읽는 중'이다(고정 신호 checkSettle)
     img.onload = () => {
+      if (LITE && LGL.ok){ LGL.adopt(t, img, () => { INFLIGHT--; eSig = ''; }); return; }   // ?lite=1 — 텍스처로 올린다(화소를 따로 쥐지 않는다)
       INFLIGHT--;
       const oc = document.createElement('canvas'); oc.width = img.width; oc.height = img.height;
       const c = oc.getContext('2d', { willReadFrequently: true });
@@ -1185,6 +1463,7 @@ const FINE = (typeof BASEMAP !== 'undefined' ? BASEMAP.tiles : [])
 // 그 표시가 아래 두 곳에서 쓰인다 — 배율 문지기(updateTexZoomW)와 탈색 되돌림(cw).
 const DETAIL_PAD = 0.30;                              // build_stylemap.py 의 PAD 와 같아야 한다
 const detailAsked = new Set();
+const liteMaps = new Set();                           // ?lite=1 — 큐 warmMap 이 청한 권역(ensureDetail 이 이 안에서만 고른다)
 // ⚠ **읽는 때와 보이는 때는 다르다.** 자산은 z 8(한반도로 들어서는 무렵)에 미리 읽고,
 //   화면에는 z 60 부터 배어 나온다(updateTexZoomW 의 문지기). 둘을 한 배율로 묶었더니
 //   3480x3120 base64 를 내려 디코드하는 사이에 카메라가 이미 최대 배율에 닿아 있었다
@@ -1245,7 +1524,7 @@ function addDetailTile(d){
 function askAsset(src, id, apply){
   // ⚠ `?field=0`·`?assets=min` 은 표지 장식용이라 정밀 배경을 아예 읽지 않는다(자산 주입부 주석).
   //   배경지도도 같은 규약을 따라야 한다 — 안 그러면 덱 ①장이 쓰지도 않을 2.4 MB 를 내려받는다.
-  if (!FIELD_ON || Q.get('assets') === 'min') return;
+  if (!FIELD_ON || BARE || Q.get('assets') === 'min') return;
   if (detailAsked.has(id)) return;
   detailAsked.add(id);
   const s = document.createElement('script');
@@ -1278,6 +1557,9 @@ function ensureDetail(){
     const d = Math.max(dx, dy);                        // 상자 안이면 1 이하
     if (d <= 1 && d < bestD){ best = r; bestD = d; }
   }
+  // ?lite=1 — 권역 상세지도는 큐 warmMap 으로 청한 권역만 읽는다. 지나가는 권역(한반도 단계의 충청, 전지구로 물러날 때의 호남 · 영남)을
+  //   그때그때 읽으면 2 MB 대 자산 · 3480×3120 해독이 확대 도중에 걸리고, 그 권역은 z 60 아래에서는 보이지도 않는다
+  if (best && LITE && !liteMaps.has(best.key)) best = null;
   if (best) legacy ? askDetailAsset(best.key) : askStyleAsset(mapStyle, best.key);
 }
 // 배경지도 교체 — 이전 종류의 타일을 FINE 에서 걷고(화소까지 놓는다) 지금 배율에 필요한 것을 청한다.
@@ -1385,6 +1667,8 @@ function visRect(){
 // 반환 — 보이는 사각형에 맞춘 오프스크린(구 밖은 알파 0). 시선이 거의 그대로면 직전 결과를 재사용한다.
 function renderEarth(dpr){
   if (!TEX || !TEX.data || !vr) return null;            // 텍스처는 비동기로 들어온다 — 그 전에는 대체 원을 쓴다
+  // ?lite=1 — 정밀 타일 · 탈색까지 셰이더가 그린다(LGL.earth). 못 그리면(null) 화소를 풀어 아래 예전 경로로 간다
+  if (LITE){ const g = LGL.earth(DPR_RAW, dpr); if (g) return g; LGL.unstub(); }
   // GPU 경로 — 정밀 타일도 탈색도 없는 배율(전지구~동아시아)이면 WebGL2 가 그린다. 못 그리면(null) 아래 CPU 경로
   if (DESAT <= 0.002 && !FINE.some(t => t.data && t.zw > 0.004)){ const g = EGL.render(dpr); if (g) return g; }
   window.GLOBE_GPU = false;
@@ -1595,6 +1879,9 @@ const scaleRule = document.getElementById('scaleRule');
 // Rb·cxB·cyB 는 배율 1(지구본 전체)의 기준값이고, R·cx·cy 는 카메라가 매 프레임 정한다.
 // S(선폭·글자 배율)는 Rb 로 잡는다 — 확대해도 선과 활자가 함께 부풀면 안 된다.
 let W = 0, H = 0, DPR = 1, cx = 0, cy = 0, R = 0, S = 1, Rb = 0, cxB = 0, cyB = 0;
+// DPR_RAW — 기기 화소 배율 그대로(1 ~ DPR_MAX). 층의 해상도 식은 이 값을 쓴다(무대 축소와 무관하게 예전과 같은 해상도).
+// PXR — 부모가 알려 준 무대 축소 배율(0 = 모름). DPR 은 캔버스 화소 수에만 쓴다(resize)
+let DPR_RAW = 1, PXR = 0;
 let scaleSig = '';
 function updateScaleBar(){
   if (!scaleEl || !scaleLabel || !scaleRule) return;
@@ -1623,7 +1910,10 @@ function updateScaleBar(){
   scaleEl.classList.add('on');
 }
 function resize(){
-  DPR = clamp(devicePixelRatio || 1, 1, DPR_MAX);
+  DPR_RAW = clamp(devicePixelRatio || 1, 1, DPR_MAX);
+  // 부모가 무대 축소 배율을 알려 왔으면({ pxr }) 캔버스를 **실제 화면 화소 수**로 잡는다. 덱은 1920×1080 무대를 창에 맞춰 줄이므로
+  // 150 % 배율 노트북(창 1280×720)에서는 2880×1620 을 그려 놓고 1920×1080 으로 줄여 보이고 있었다. 화면에 닿는 화소는 그대로다.
+  DPR = PXR > 0 ? clamp((devicePixelRatio || 1) * PXR, 0.5, DPR_RAW) : DPR_RAW;
   W = innerWidth; H = innerHeight;
   cv.width = Math.round(W * DPR); cv.height = Math.round(H * DPR);
   ctx.setTransform(DPR, 0, 0, DPR, 0, 0);
@@ -2203,6 +2493,7 @@ let arch = ARCH0;
 // 인자 k 는 **미리 읽어 둘 사례**다(기본값은 지금 사례). 영상 큐가 `warm:['winter','ozone']` 으로
 // 다음에 쓸 사례의 1km 자산을 앞당겨 읽는 데 쓴다 — 전환 순간에 9 MB 를 읽으면 그 자리가 빈다.
 function krfCur(k = caseKey){
+  if (BARE) return null;                              // ?assets=bare — 1 km 층을 읽지 않는다(전지구 화면에서는 쓰이지 않는데도 8 MB 를 읽고 풀었다)
   const spec = ((CASE_BY[k] || {}).km1 || {})[arch];
   if (!spec) return null;
   const id = k + ':' + arch;
@@ -2523,8 +2814,11 @@ if (!PANEL){
   cv.addEventListener('dblclick', () => goStage('globe'));    // 두 번 누르면 전지구로 되돌린다
 }
 
-let tPrev = 0;
+let tPrev = 0, fPrev = -1e9;
 function frame(now){
+  // ?fps= — 상한보다 이른 프레임은 그리지 않고 다음을 기다린다(주사율의 약수에 맞게 2 ms 여유)
+  if (FPS_MS && now - fPrev < FPS_MS - 2){ if (running) raf = requestAnimationFrame(frame); return; }
+  fPrev = now;
   const t = now / 1000 + TOFF;
   const dt = clamp(t - tPrev, 0, 0.1); tPrev = t;       // 탭 복귀 시 한 번에 튀지 않게 상한을 둔다
   stepPan();                                           // 연출 큐의 느린 밀기 — 카메라보다 먼저 usr 을 옮긴다
@@ -2561,8 +2855,8 @@ function frame(now){
   if (!covers){ ctx.beginPath(); ctx.arc(cx, cy, R * 0.998, 0, TAU); ctx.clip(); }
   // 농도장 두 층(광역 0.5° · 1km) — 화면 크기 합성은 소프트웨어 래스터에서 층마다 15 ms 쯤 든다.
   // 그래서 1km 층이 있을 때는 두 층을 작은 오프스크린에서 먼저 겹쳐 놓고 화면에는 한 번만 확대한다.
-  const fl = w.field > 0.01 && FIELD && FIELD.layer(DPR, w.km1);
-  const kl = w.field > 0.01 && krf && FIELD && krf.layer(DPR, w.km1, FIELD.lut, FIELD.mix);
+  const fl = w.field > 0.01 && FIELD && FIELD.layer(DPR_RAW, w.km1);   // 층 해상도는 기기 배율 기준(pxr 을 받아도 예전과 같은 해상도) — pxr 이 없으면 DPR 과 같은 값이다
+  const kl = w.field > 0.01 && krf && FIELD && krf.layer(DPR_RAW, w.km1, FIELD.lut, FIELD.mix);
   ctx.globalAlpha = w.field * (1 - oa);                // 농도장 배율 가중치(weights) — 덧층이 켜지면 그만큼 물러난다
   if (fl && kl){
     if (moff.width !== kl.width || moff.height !== kl.height){ moff.width = kl.width; moff.height = kl.height; }
@@ -2859,8 +3153,11 @@ function applyCue(c){
   if (c.warm) for (const k of (Array.isArray(c.warm) ? c.warm : [caseKey])) krfCur(k);
   // 권역 상세지도를 미리 읽는다(권역 키 배열, 2026-09-11) — 흐르는 카메라가 권역 경계를 넘는 순간 ensureDetail 이
   // 청하면 해독(수천 px 정사각 · RGBA 40 MB 대)이 밀기와 겹쳐 프레임이 늘어진다. 카메라가 멎어 있는 자리에서 부른다.
-  if (c.warmMap) for (const k of c.warmMap)
-    if (REGION_BY[k]) MAPSTYLE_BY[mapStyle].legacy ? askDetailAsset(k) : askStyleAsset(mapStyle, k);
+  if (c.warmMap) for (const k of c.warmMap){
+    if (REGION_BY[k]){ liteMaps.add(k); MAPSTYLE_BY[mapStyle].legacy ? askDetailAsset(k) : askStyleAsset(mapStyle, k); }
+    // ?lite=1 — 도시 상세지도(seoul)도 미리 읽을 수 있다. 예전에는 서울 배율로 다가서는 도중(z 110)에 청해 확대와 해독이 겹쳤다
+    else if (LITE && CITY.some(t => t.key === k)) askDetailAsset(k);
+  }
   // 멈춤 — 자료 시계(PAUSED)와 연출 밀기(panAnim)를 함께 세운다. 둘 중 하나만 세우면
   // 다시 재생할 때 그림이 훌쩍 건너뛴다(밀기는 절대 시각 기준이라 멈춘 만큼 t0 를 밀어 준다).
   if (typeof c.paused === 'boolean' && c.paused !== PAUSED){
@@ -2898,6 +3195,7 @@ addEventListener('keydown', e => {
 addEventListener('message', e => {
   const d = e.data; if (!d || typeof d !== 'object') return;
   if (typeof d.on === 'boolean') setRunning(d.on);
+  if (typeof d.pxr === 'number' && d.pxr > 0 && d.pxr !== PXR){ PXR = d.pxr; resize(); }   // 무대 축소 배율(1 이하) — 캔버스를 실제 화면 화소 수로(resize)
   if (d.cue) applyCue(d.cue);
   if (d.cue && d.cue.seq != null && e.source) SETTLE = { seq: d.cue.seq, src: e.source, calm: 0 };   // 고정 신호를 기다리는 쪽(checkSettle)
   // 영상 페이지가 배율을 재 눈금을 잡을 때 쓴다(연출 좌표를 손으로 추측하지 않게)
