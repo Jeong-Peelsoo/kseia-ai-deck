@@ -69,7 +69,7 @@
     // 2026-11-15 사용자 지시("페이지 열면 순서대로 한번에 표시") — 들어서면 네 단계를 GAP 간격으로 저절로 켠다. 켜지는 도중의 다음 키는 남은 단계를 한꺼번에 켜고,
     //   다 켜진 뒤의 다음 · 이전 키는 장을 넘긴다. 뒤 장에서 돌아오면 다 켠 채로 선다
     step(d) { if (d > 0 && step < N - 1) { auto(false); show(N - 1); return true; } return false; },
-    enter(now, was) { if (now !== idx) { auto(false); return; } if (was > now) { auto(false); show(N - 1); } else auto(true); },
+    enter(now, was) { auto(false); if (now === idx) show(N - 1); },   // 2026-11-16 사용자 지시 — 순차 표시를 걷고 들어서면 네 줄 · 그래프를 한 번에 켠다(종전에는 1.1초 간격으로 하나씩)
   };
   show(0);
 })();

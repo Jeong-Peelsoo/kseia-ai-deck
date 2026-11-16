@@ -49,6 +49,16 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>AI 기반 환경영향평가 기술개발 사례와 전망</title>
+<!-- 2026-11-16 사용자 지시("1페이지 지구 로딩시간 많이 걸린다 — 시각화는 그대로 두고 더 가볍게") — 표지 지구(module/globe-sdgs-day.html)가 쓰는 자산을 덱을 열자마자 먼저 받는다.
+     종전에는 지구 모듈이 제 문서를 읽은 뒤에야 이 파일들을 청했고(느린 회선에서 덱의 다른 그림 · 영상 30 MB 와 대역을 나눠 20 Mbps 에서 약 9초, 5 Mbps 에서 약 27초 뒤에야 다 받았다 — 실측),
+     이제는 먼저 · 높은 순위로 받고, 표지 밖의 그림(fetchpriority=low) · 영상(preload=none) · 장 스크립트(fetchpriority=low)는 뒤로 미룬다. 지구의 모습 · 인자는 그대로다. -->
+<link rel="preload" as="script" href="module/earth_day.js" fetchpriority="high">
+<link rel="preload" as="script" href="module/aq_field.js" fetchpriority="high">
+<link rel="preload" as="image" href="module/image/gems.png" fetchpriority="high">
+<link rel="preload" as="image" href="module/image/sentinet5p.png" fetchpriority="high">
+<link rel="preload" as="style" href="module/vendor/fonts.css">
+<!-- 지구 모듈 문서도 미리 받아 둔다 — 표지의 iframe 은 머리의 스크립트들이 다 받아진 뒤에야 만들어져 그 문서를 늦게 청한다. 주소는 #hero-globe 의 src 와 글자까지 같아야 한다(다르면 두 번 받는다). file:// 에서는 하지 않는다 -->
+<script>if (/^https?:/.test(location.protocol)) { try { fetch('module/globe-sdgs-day.html?panel=1&view=globe&assets=bare&case=spring&sp=cycle&graph=0&lite=1&dpr=1&labels=off&fps=30', { priority: 'high' }).catch(function () {}); } catch (e) {} }</script>
 <link href="graph/vendor/fonts.css" rel="stylesheet">
 <script src="graph/survey_limits_2023.js?v=20261116"></script>
 <script src="graph/design_cases_refs.js?v=20261116"></script>
@@ -2154,41 +2164,41 @@
   <div class="head"><span class="rh"><i><b></b><b></b><b></b></i>목차</span>
     <span class="r">6개 챕터 · 영상 3편</span></div>
   <div class="body">
-  <h2 class="htop">오늘 <em>여섯 가지</em>를 말씀드립니다<span class="sub">사례는 AMR-HGN, 전망은 환경 물리모델 에뮬레이터 — 3편의 영상과 함께</span></h2>
+  <h2 class="htop">오늘 <em>여섯 가지</em>를 말씀드립니다<span class="sub">사례는 AMR-HGN, 전망은 AI 에뮬레이터와 통합 환경 디지털 트윈 — 3편의 영상과 함께</span></h2>
     <div class="agenda five six">
       <div class="ag">
         <span class="n">1</span>
-        <span class="th"><img src="image/film_thumb_01.png" alt="도입 영상 대표 화면 — 동아시아 겨울 고농도 PM₂.₅"><i aria-hidden="true">▶</i></span>
+        <span class="th"><img fetchpriority="low" decoding="async" src="image/film_thumb_01.png" alt="동아시아 겨울 고농도 PM₂.₅ 농도장"></span>
         <h3>숨쉬는 공간의<br>대기오염 해상도<span class="en">"왜 이 연구가 필요한가"</span></h3>
-        <p>국제 연구 흐름과 측정 공백을 짚고 <b>측정하지 않은 공간의 농도</b>를 어떻게 알지 묻는다.</p>
+        <p>국제 연구 흐름과 전지구 모델의 해상도 한계를 짚고 <b>측정하지 않은 공간의 농도</b>를 묻는다.</p>
       </div>
       <div class="ag a2">
         <span class="n">2</span>
-        <span class="th"><img src="image/concept_still_4_scale.png" alt="설계 철학 다큐 대표 화면 — 다중 규모의 중첩"><i aria-hidden="true">▶</i></span>
+        <span class="th"><img fetchpriority="low" decoding="async" src="image/concept_still_4_scale.png" alt="설계 철학 다큐 대표 화면 — 다중 규모의 중첩"><i aria-hidden="true">▶</i></span>
         <h3>설계 철학<span class="en">"자연을 바라보는 관점으로 설계하다."</span></h3>
-        <p>설계 철학 다큐와 GraphCast · Aurora 등 네 사례로, <b>대기를 바라보는 관점</b>이 구조를 정함을 본다.</p>
+        <p>설계 철학 다큐 · 지구과학 AI 네 사례 · 연산자원 비교로 <b>관점이 구조를 정함</b>을 본다.</p>
       </div>
       <div class="ag a3">
         <span class="n">3</span>
-        <span class="th"><img src="image/arch_thumb_1.jpg" alt="두 아키텍처 비교 영상 대표 화면 — 1 km 격자 · 5 km 광역 · 측정소 세 층의 이종 그래프"><i aria-hidden="true">▶</i></span>
+        <span class="th"><img fetchpriority="low" decoding="async" src="image/arch_thumb_1.jpg" alt="두 아키텍처 비교 영상 대표 화면 — 1 km 격자 · 5 km 광역 · 측정소 세 층의 이종 그래프"><i aria-hidden="true">▶</i></span>
         <h3>AMR-HGN 물리유도<br>잠재공간 융합학습</h3>
         <p>공개 자료를 하나의 잠재공간에 융합해 <b>전국 1km 시간별 농도장</b>을 만들고, 화학 법칙으로 검증한다.</p>
       </div>
       <div class="ag a4">
         <span class="n">4</span>
-        <span class="th"><img src="image/ch4_thumb_era.png" alt="31장 시각화 마지막 장면 — 대기환경 · 생활환경 · 수환경 세 칸(2026-10-19 사용자 지시로 1 km 지도에서 바꿈, scripts/build_ch4_thumb.py)"></span>
+        <span class="th"><img fetchpriority="low" decoding="async" src="image/ch4_thumb_era.png" alt="31장 시각화 마지막 장면 — 대기환경 · 생활환경 · 수환경 세 칸(2026-10-19 사용자 지시로 1 km 지도에서 바꿈, scripts/build_ch4_thumb.py)"></span>
         <h3>기후변화 및<br>환경영향평가 적용<span class="en">"12일에서 8,760시간으로"</span></h3>
-        <p>표본조사를 <b>시공간 정합형 평가</b>로 넘어서고, CMAQ 에뮬레이터와 기후&nbsp;· 전략&nbsp;· 사후조사로 넓힌다.</p>
+        <p>표본조사를 <b>시공간 정합형 평가</b>로 넘어서고, CMAQ 에뮬레이터 · 환경보건 · 전략평가로 넓힌다.</p>
       </div>
       <div class="ag a5">
         <span class="n">5</span>
-        <span class="th"><img src="image/agenda_thumb_5.jpg" alt="30쪽 통합 환경 디지털 트윈 화면"></span>
-        <h3>전망<span class="en">환경 물리모델<br>에뮬레이터</span></h3>
-        <p>에뮬레이터의 <b>흐름 · 현주소 · 한계</b>와 영향평가의 전망을 문헌으로 짚는다.</p>
+        <span class="th"><img fetchpriority="low" decoding="async" src="image/agenda_thumb_5.jpg" alt="30쪽 통합 환경 디지털 트윈 화면"><i aria-hidden="true">▶</i></span>
+        <h3>전망<span class="en">AI 에뮬레이터 ·<br>통합 환경 디지털 트윈</span></h3>
+        <p>에뮬레이터의 흐름 · 현주소 · 한계와 <b>디지털 트윈 · AI 전수 시뮬레이션</b> 의사결정을 그린다.</p>
       </div>
       <div class="ag a6">
         <span class="n">6</span>
-        <span class="th"><img src="image/agenda_thumb_6.jpg" alt="33쪽 세 원 도안 — 데이터 · 환경과학 · 데이터 과학이 맞물린 곳이 AI 성능"></span>
+        <span class="th"><img fetchpriority="low" decoding="async" src="image/agenda_thumb_6.jpg" alt="33쪽 세 원 도안 — 데이터 · 환경과학 · 데이터 과학이 맞물린 곳이 AI 성능"></span>
         <h3>현업화 연구 제안<span class="en">기초연구 → 실증연구 →<br>제도화 → 실무 활용</span></h3>
         <p>평가용 AI의 <b>현업화 실증</b>과 성공 요인 · 협업을 제안한다.</p>
       </div>
@@ -2505,8 +2515,8 @@
         <div class="bsky"></div>
         <div class="bsun"></div>
         <div class="bswath"></div>
-        <div class="ov btro"><img src="module/image/sentinet5p.png" alt=""><span>TROPOMI<small>저궤도 · 하루 한 번 13:30 무렵</small></span></div>
-        <div class="ov bsat"><img src="module/image/gems.png" alt=""><span>GEMS<small>정지궤도 환경위성 · 자외선·가시광 분광계</small></span></div>
+        <div class="ov btro"><img fetchpriority="low" decoding="async" src="module/image/sentinet5p.png" alt=""><span>TROPOMI<small>저궤도 · 하루 한 번 13:30 무렵</small></span></div>
+        <div class="ov bsat"><img fetchpriority="low" decoding="async" src="module/image/gems.png" alt=""><span>GEMS<small>정지궤도 환경위성 · 자외선·가시광 분광계</small></span></div>
         <p class="ov bcap"></p>
       </div>
       <div class="bside">
@@ -2583,23 +2593,23 @@
       </div>
       <!-- 대표 화면 9컷 — 다큐의 씬을 그대로 편다. 검은 판 자체가 액자다(CSS .shots 주석 참조). -->
       <div class="shots">
-        <figure><img src="image/concept_still_1_gauss.png" alt="다큐 씬1 — 가우시안 플룸 확산">
+        <figure><img fetchpriority="low" decoding="async" src="image/concept_still_1_gauss.png" alt="다큐 씬1 — 가우시안 플룸 확산">
           <figcaption><b>가우시안</b><span>풍하측 플룸</span></figcaption></figure>
-        <figure><img src="image/concept_still_2_lagrange.png" alt="다큐 씬2 — 라그랑지안 퍼프 궤적">
+        <figure><img fetchpriority="low" decoding="async" src="image/concept_still_2_lagrange.png" alt="다큐 씬2 — 라그랑지안 퍼프 궤적">
           <figcaption><b>라그랑지안</b><span>이동 좌표계</span></figcaption></figure>
-        <figure><img src="image/concept_still_3_euler.png" alt="다큐 씬3 — 오일러리안 삼차원 고정 격자">
+        <figure><img fetchpriority="low" decoding="async" src="image/concept_still_3_euler.png" alt="다큐 씬3 — 오일러리안 삼차원 고정 격자">
           <figcaption><b>오일러리안</b><span>삼차원 고정 격자</span></figcaption></figure>
-        <figure><img src="image/concept_still_4_scale.png" alt="다큐 씬5 — 종관·중규모·국지가 겹친 다중 규모 중첩">
+        <figure><img fetchpriority="low" decoding="async" src="image/concept_still_4_scale.png" alt="다큐 씬5 — 종관·중규모·국지가 겹친 다중 규모 중첩">
           <figcaption><b>다중규모 중첩</b><span>종관·중규모·국지의 중첩</span></figcaption></figure>
-        <figure><img src="image/concept_still_5_hetero.png" alt="다큐 씬6 — 불균질 측정망과 다중 스케일 이종 그래프">
+        <figure><img fetchpriority="low" decoding="async" src="image/concept_still_5_hetero.png" alt="다큐 씬6 — 불균질 측정망과 다중 스케일 이종 그래프">
           <figcaption><b>이종 그래프</b><span>희소·불균질 측정망</span></figcaption></figure>
-        <figure><img src="image/concept_still_6_arch.png" alt="다큐 씬7 — E2E 와 Two-Stage 두 아키텍처">
+        <figure><img fetchpriority="low" decoding="async" src="image/concept_still_6_arch.png" alt="다큐 씬7 — E2E 와 Two-Stage 두 아키텍처">
           <figcaption><b>두 아키텍처</b><span>E2E · Two-Stage</span></figcaption></figure>
-        <figure><img src="image/concept_still_7_bias.png" alt="다큐 — 전지구 배경장에 적응형 편향 보정을 걸어 1km 격자 농도를 추정하는 장면">
+        <figure><img fetchpriority="low" decoding="async" src="image/concept_still_7_bias.png" alt="다큐 — 전지구 배경장에 적응형 편향 보정을 걸어 1km 격자 농도를 추정하는 장면">
           <figcaption><b>편향 보정</b><span>전지구 배경장 → 1km</span></figcaption></figure>
-        <figure><img src="image/concept_still_8_satellite.png" alt="다큐 — GEMS·TROPOMI 연직 칼럼과 추론 농도장의 공간 일관성 평가 장면">
+        <figure><img fetchpriority="low" decoding="async" src="image/concept_still_8_satellite.png" alt="다큐 — GEMS·TROPOMI 연직 칼럼과 추론 농도장의 공간 일관성 평가 장면">
           <figcaption><b>위성 교차검증</b><span>GEMS · TROPOMI</span></figcaption></figure>
-        <figure><img src="image/concept_still_9_amrhgn.png" alt="다큐 마지막 — AMR-HGN 설계 철학 표제 화면">
+        <figure><img fetchpriority="low" decoding="async" src="image/concept_still_9_amrhgn.png" alt="다큐 마지막 — AMR-HGN 설계 철학 표제 화면">
           <figcaption><b>AMR-HGN</b><span>다중 규모 · 이종 그래프</span></figcaption></figure>
       </div>
     </div>
@@ -2640,7 +2650,7 @@
           <text x="226" y="96" font-size="19" fill="#00A040">중간</text>
           <text x="226" y="126" font-size="19" fill="#9FB0BC">짧은 간선</text>
         </svg>
-        <div class="org"><img src="image/logo/google_deepmind.svg" alt="Google DeepMind"></div>
+        <div class="org"><img fetchpriority="low" decoding="async" src="image/logo/google_deepmind.svg" alt="Google DeepMind"></div>
         <h3>GraphCast<small data-au="graphcast"></small></h3>
         <div class="ref" data-ref="graphcast"></div>
         <div class="pov">"지구는 크고 작은 연결이 겹친 그물"</div>
@@ -2667,7 +2677,7 @@
           <text x="244" y="95" font-size="19" fill="#9FB0BC">파도</text>
           <text x="244" y="129" font-size="19" fill="#9FB0BC">날씨</text>
         </svg>
-        <div class="org"><img src="image/logo/microsoft.svg" alt="Microsoft Research"><span>Research</span></div>
+        <div class="org"><img fetchpriority="low" decoding="async" src="image/logo/microsoft.svg" alt="Microsoft Research"><span>Research</span></div>
         <h3>Aurora<small data-au="aurora"></small></h3>
         <div class="ref" data-ref="aurora"></div>
         <div class="pov">"제각각인 지구 자료도 하나의 표현으로"</div>
@@ -2694,7 +2704,7 @@
           <text x="258" y="75" font-size="19" fill="#E6EDF3">다음</text>
           <text x="258" y="98" font-size="19" fill="#E6EDF3">상태</text>
         </svg>
-        <div class="org"><img src="image/logo/google.svg" alt="Google Research"><span>Research</span></div>
+        <div class="org"><img fetchpriority="low" decoding="async" src="image/logo/google.svg" alt="Google Research"><span>Research</span></div>
         <h3>NeuralGCM<small data-au="neuralgcm"></small></h3>
         <div class="ref" data-ref="neuralgcm"></div>
         <div class="pov">"큰 흐름은 방정식, 작은 과정은 학습"</div>
@@ -2726,7 +2736,7 @@
           <rect x="222" y="30" width="86" height="86" fill="url(#dc-mean)"/><rect x="222" y="30" width="86" height="86" filter="url(#dc-res)" opacity=".75"/>
           <text x="265" y="144" font-size="19" fill="#E6EDF3" text-anchor="middle">2 km</text>
         </svg>
-        <div class="org"><img src="image/logo/nvidia.svg" alt="NVIDIA"></div>
+        <div class="org"><img fetchpriority="low" decoding="async" src="image/logo/nvidia.svg" alt="NVIDIA"></div>
         <h3>CorrDiff<small data-au="corrdiff"></small></h3>
         <div class="ref" data-ref="corrdiff"></div>
         <div class="pov">"규모마다 작동하는 물리가 다르다"</div>
@@ -2818,7 +2828,7 @@
     <h2 class="htop">지구를 <em>크고 작은 그물의 겹침</em>으로 본다</h2>
     <div class="vz">
       <div class="vzt">
-        <div class="org"><img src="image/logo/google_deepmind.svg" alt="Google DeepMind"><b>GraphCast</b><span data-ref="graphcast"></span></div>
+        <div class="org"><img fetchpriority="low" decoding="async" src="image/logo/google_deepmind.svg" alt="Google DeepMind"><b>GraphCast</b><span data-ref="graphcast"></span></div>
         <ol class="rl">
           <li data-k="0"><b>쪼갠다</b><span>정이십면체(노드 12)를 여섯 번 쪼개 노드 40,962개의 메쉬를 만든다</span></li>
           <li data-k="1"><b>겹친다</b><span>쪼갤 때마다 생긴 간선을 지우지 않고 한 그래프에 모두 남긴다 — 긴 간선과 짧은 간선이 함께 있다</span></li>
@@ -2941,10 +2951,10 @@
         <p class="sci">개념 시각화 — 농도장 · 배경장 · 잔차 · 학습 곡선은 모델 출력이 아님</p>
       </div>
       <div class="thumbs">
-        <figure><img src="image/arch_thumb_1.jpg" alt="영상 장면 — 1 km 격자 · 5 km 광역 · 측정소 세 층의 이종 그래프"><figcaption><b>1</b>이종 그래프 — 두 구조의 공통 골격</figcaption></figure>
-        <figure><img src="image/arch_thumb_2.jpg" alt="영상 장면 — E2E 메시지 패싱이 단일 잠재 공간에서 융합"><figcaption><b>2</b>E2E — 단일 잠재 공간 내 융합</figcaption></figure>
-        <figure><img src="image/arch_thumb_3.jpg" alt="영상 장면 — Two-Stage 배경장에 1 km 잔차를 더한 최종 농도장"><figcaption><b>3</b>Two-Stage — 배경장 + 1 km 잔차</figcaption></figure>
-        <figure><img src="image/arch_thumb_4.jpg" alt="영상 장면 — 두 구조 병렬 비교"><figcaption><b>4</b>두 구조 비교 — 결합 위치의 차이</figcaption></figure>
+        <figure><img fetchpriority="low" decoding="async" src="image/arch_thumb_1.jpg" alt="영상 장면 — 1 km 격자 · 5 km 광역 · 측정소 세 층의 이종 그래프"><figcaption><b>1</b>이종 그래프 — 두 구조의 공통 골격</figcaption></figure>
+        <figure><img fetchpriority="low" decoding="async" src="image/arch_thumb_2.jpg" alt="영상 장면 — E2E 메시지 패싱이 단일 잠재 공간에서 융합"><figcaption><b>2</b>E2E — 단일 잠재 공간 내 융합</figcaption></figure>
+        <figure><img fetchpriority="low" decoding="async" src="image/arch_thumb_3.jpg" alt="영상 장면 — Two-Stage 배경장에 1 km 잔차를 더한 최종 농도장"><figcaption><b>3</b>Two-Stage — 배경장 + 1 km 잔차</figcaption></figure>
+        <figure><img fetchpriority="low" decoding="async" src="image/arch_thumb_4.jpg" alt="영상 장면 — 두 구조 병렬 비교"><figcaption><b>4</b>두 구조 비교 — 결합 위치의 차이</figcaption></figure>
       </div>
     </div>
   </div>
@@ -2966,19 +2976,19 @@
         <div class="phead">복잡한 공개 입력 · 이질적 소스</div>
         <div class="psrc">
           <figure class="pcard">
-            <div class="frame"><img src="image/pipe_src_global.png" alt="GEOS-CF NO₂ 5km 한반도 분포"></div>
+            <div class="frame"><img fetchpriority="low" decoding="async" src="image/pipe_src_global.png" alt="GEOS-CF NO₂ 5km 한반도 분포"></div>
             <figcaption><b>글로벌 데이터</b><span>GEOS-CF NO₂ · 5km</span></figcaption>
           </figure>
           <figure class="pcard">
-            <div class="frame"><img src="image/pipe_src_static.png" alt="IGBP 토지피복 1km 한반도 분포"></div>
+            <div class="frame"><img fetchpriority="low" decoding="async" src="image/pipe_src_static.png" alt="IGBP 토지피복 1km 한반도 분포"></div>
             <figcaption><b>정적 지표</b><span>IGBP 토지피복 · 1km</span></figcaption>
           </figure>
           <figure class="pcard">
-            <div class="frame"><img src="image/pipe_src_emission.png" alt="CAPSS NOx 배출량 1km 한반도 분포"></div>
+            <div class="frame"><img fetchpriority="low" decoding="async" src="image/pipe_src_emission.png" alt="CAPSS NOx 배출량 1km 한반도 분포"></div>
             <figcaption><b>배출량</b><span>CAPSS NOx · 1km</span></figcaption>
           </figure>
           <figure class="pcard">
-            <div class="frame"><img src="image/pipe_src_station.png" alt="AirKorea 측정소 분포"></div>
+            <div class="frame"><img fetchpriority="low" decoding="async" src="image/pipe_src_station.png" alt="AirKorea 측정소 분포"></div>
             <figcaption><b>측정망</b><span>AirKorea 671 측정소(2019–2024 누적)</span></figcaption>
           </figure>
         </div>
@@ -3007,7 +3017,7 @@
       <div class="pcol">
         <div class="phead">다중 스케일 이종 그래프</div>
         <div class="pgraph">
-          <img src="image/hgn_3layer_graph.png"
+          <img fetchpriority="low" decoding="async" src="image/hgn_3layer_graph.png"
                alt="배경장(Region)·국지(Grid 1km)·불균질 측정망(Station) 세 층으로 분리한 다중 스케일 이종 그래프">
           <!-- ⚠ 이 세 색은 옆 그림에 구워진 색이다 — 브랜드색으로 바꾸면 범례와 그림이 어긋난다 -->
           <ul class="glay">
@@ -3048,12 +3058,12 @@
         <div class="stat">
           <div class="v">0.886 / 0.931</div>
           <div class="k">R² — NO₂ / O₃</div>
-          <div class="d">2022년 학습 · 2023년 664개 측정소 시간 독립 검증. 5종 평균 R² 0.884 — 박사논문(2026).</div>
+          <div class="d">2022년 학습 · 2023년 664개 측정소 시간 독립 검증. 5종 평균 R² 0.884.</div>
         </div>
       </div>
       <div class="vidcol">
         <div class="frame vidframe">
-          <video src="video/NO2.mp4" data-autoplay muted loop playsinline preload="metadata"></video>
+          <video src="video/NO2.mp4" data-autoplay muted loop playsinline preload="none"></video>
         </div>
         <p class="cap">5km 입력 · 1km 산출 · 측정소 NO₂ 비교</p>
       </div>
@@ -3098,16 +3108,16 @@
            ⚠ 문구를 늘리면 셋째 줄이 생겨 넘친다. -->
       <div class="hfig">
         <figure class="hplate">
-          <div class="frame"><img src="image/kosae_fig07_regime_map.png"
+          <div class="frame"><img fetchpriority="low" decoding="async" src="image/kosae_fig07_regime_map.png"
             alt="딥러닝 산화제 분배비 r = NO2/Ox 공간분포와 3구간 분류"></div>
           <p class="cap">추론장이 스스로 그린 산화제 분배비 <i>r</i> = NO₂/Ox —<br>수도권 도심만
             전이 구간, 그 밖은 O₃ 우세</p>
         </figure>
         <figure class="hplate">
-          <div class="frame"><img src="image/kosae_fig08_ab_satellite_fnr.png"
+          <div class="frame"><img fetchpriority="low" decoding="async" src="image/kosae_fig08_ab_satellite_fnr.png"
             alt="GEMS·TROPOMI 위성 FNR 공간분포">
             <!-- 두 칸 제목 옆을 오가는 위성 — 왼쪽 GEMS(정지궤도) · 오른쪽 TROPOMI(Sentinel-5P, 극궤도). CSS .satfly -->
-            <div class="satfly" aria-hidden="true"><img class="g" src="module/image/gems.png" alt=""><img class="t" src="module/image/sentinet5p.png" alt=""></div></div>
+            <div class="satfly" aria-hidden="true"><img fetchpriority="low" decoding="async" class="g" src="module/image/gems.png" alt=""><img fetchpriority="low" decoding="async" class="t" src="module/image/sentinet5p.png" alt=""></div></div>
           <p class="cap">독립 관측인 위성 FNR(HCHO/NO₂) — GEMS · TROPOMI<br>둘 다 수도권에서
             낮다(NOx 포화) — 위 <i>r</i> 의 구조와 겹친다</p>
         </figure>
@@ -3456,9 +3466,9 @@
         <button type="button" class="on" data-k="pm25">PM₂.₅</button><button type="button" data-k="no2">NO₂</button><button type="button" data-k="o3">O₃</button></div></div>
     <div class="emu">
       <div class="emuv" id="emuv" title="화면 가득 보기">
-        <video class="on" data-k="pm25" src="video/emu_pm25.mp4" poster="image/emu_pm25_poster.jpg" muted playsinline preload="metadata"></video>
-        <video data-k="no2" src="video/emu_no2.mp4" poster="image/emu_no2_poster.jpg" muted playsinline preload="metadata"></video>
-        <video data-k="o3" src="video/emu_o3.mp4" poster="image/emu_o3_poster.jpg" muted playsinline preload="metadata"></video>
+        <video class="on" data-k="pm25" src="video/emu_pm25.mp4" poster="image/emu_pm25_poster.jpg" muted playsinline preload="none"></video>
+        <video data-k="no2" src="video/emu_no2.mp4" poster="image/emu_no2_poster.jpg" muted playsinline preload="none"></video>
+        <video data-k="o3" src="video/emu_o3.mp4" poster="image/emu_o3_poster.jpg" muted playsinline preload="none"></video>
       </div>
       <p class="emucap"><b>좌부터 GEOS-CF · CAMS 예보 · CMAQ-DA · CMAQ 딥러닝 에뮬레이터(a21)</b> — 시간별 5km 농도.
         두 전지구 모델과 CMAQ-DA 는 5km 로 보간한 자료다. PM₂.₅ · NO₂ 는 제곱근형 색 척도. 에뮬레이터는 개발 단계 결과다.</p>
@@ -3485,7 +3495,7 @@
         <p>도로 · 도심 · 산단의 <b>국지 핫스팟</b>이 1km 단위로 갈린다.</p>
         <p class="c4n">고농도 지도가 정책 효과를 입증하지는 않는다.</p></div>
       <figure class="c4fig">
-        <img src="image/ch4_hotspot_1km.png" alt="AMR-HGN 추론 2023 — PM2.5 일평균 35 초과 일수, NO2 연평균, O3 여름 8시간 60 ppb 초과 일수 지도">
+        <img fetchpriority="low" decoding="async" src="image/ch4_hotspot_1km.png" alt="AMR-HGN 추론 2023 — PM2.5 일평균 35 초과 일수, NO2 연평균, O3 여름 8시간 60 ppb 초과 일수 지도">
         <figcaption><b>AMR-HGN 추론 · 2023</b> — PM₂.₅ 일평균이 환경기준 35 µg/m³ 를 넘은 날수 · NO₂ 연평균 · O₃ 6~8월 일 최고 8시간 평균이 60 ppb 를 넘은 날수 (1km 추론 · 0.015° 격자)</figcaption>
       </figure>
     </div>
@@ -3578,7 +3588,7 @@
           <li><b>대안 비교</b> — 입지와 배출 시나리오마다 지도를 만들어 나란히 놓고 고른다</li>
         </ul>
         <figure class="safig">
-          <img src="image/ch4_site_alternatives.png" alt="예시 — 충남 북부 NO₂ 연평균 배경 위에 입지 1 · 입지 2 · 입지 2 저감 세 대안의 가상 사업 기여 등치선">
+          <img fetchpriority="low" decoding="async" src="image/ch4_site_alternatives.png" alt="예시 — 충남 북부 NO₂ 연평균 배경 위에 입지 1 · 입지 2 · 입지 2 저감 세 대안의 가상 사업 기여 등치선">
           <figcaption>예시 — 배경 = AMR-HGN 2023 NO₂ 연평균 추론 · 주황선 = 가상 사업 기여(설명용) · 충남 북부</figcaption>
         </figure>
       </div>
@@ -3619,7 +3629,7 @@
         <div class="cjh"><i>1</i><div><b>과거 농도장 재현</b><small>지나간 매시간을 5 km 장으로</small></div></div>
         <div class="cjv">
           <div class="cjm">
-            <img data-cj="t0" alt="CMAQ-DA PM2.5 5 km 지도 — 2023-03-11 14시">
+            <img fetchpriority="low" decoding="async" data-cj="t0" alt="CMAQ-DA PM2.5 5 km 지도 — 2023-03-11 14시">
             <div class="cjk">
               <p class="cjt">PM₂.₅ · 3월 11일 14시</p>
               <div class="cjcb"><span></span><em><i data-cjs="0"></i><i data-cjs=".5"></i><i data-cjs="1"></i></em><small>µg/m³</small></div>
@@ -3634,9 +3644,9 @@
         <div class="cjh"><i>2</i><div><b>미래 예보</b><small>지금의 입력으로 며칠 뒤를</small></div></div>
         <div class="cjv">
           <div class="cjrow">
-            <figure><img data-cj="t0" alt=""><figcaption>지금</figcaption></figure>
-            <figure><img data-cj="d1" alt=""><figcaption>D+1</figcaption></figure>
-            <figure><img data-cj="d2" alt=""><figcaption>D+2</figcaption></figure>
+            <figure><img fetchpriority="low" decoding="async" data-cj="t0" alt=""><figcaption>지금</figcaption></figure>
+            <figure><img fetchpriority="low" decoding="async" data-cj="d1" alt=""><figcaption>D+1</figcaption></figure>
+            <figure><img fetchpriority="low" decoding="async" data-cj="d2" alt=""><figcaption>D+2</figcaption></figure>
             <div class="cjcb v"><span></span><em><i data-cjs="1"></i><i data-cjs=".5"></i><i data-cjs="0"></i></em></div>
           </div>
           <svg class="cjts" data-cjts="fcst" viewBox="0 0 400 132" role="img" aria-label="서울 PM2.5 — 지금을 기준으로 과거와 예보 구간"></svg>
@@ -3655,7 +3665,7 @@
             <p class="cjd" data-cjd></p>
           </div>
           <div class="cjflow">
-            <figure><img data-emu="demis" alt=""><figcaption>배출 변화 Δ</figcaption></figure>
+            <figure><img fetchpriority="low" decoding="async" data-emu="demis" alt=""><figcaption>배출 변화 Δ</figcaption></figure>
             <div class="cjrun"><b>CMAQ</b><small>섭동 런</small></div>
             <figure><div class="cjq">ΔC<br><small>대안별 농도 변화</small></div><figcaption>대안 비교</figcaption></figure>
           </div>
@@ -3744,13 +3754,13 @@
       <div class="evh"></div><div class="evh"><i>1</i>학습 자료</div><div class="evh"><i>2</i>아키텍처</div><div class="evh"><i>3</i>추론</div><div class="evh kk">핵심</div>
 
       <div class="exl"><i>1</i><b>실시간 재현</b><small>개발 중</small></div>
-      <div class="evd"><div class="stk"><img data-emu="ctm" alt="" style="--i:0"><img data-emu="met" alt="" style="--i:1"><img data-emu="emis" alt="" style="--i:2"><img data-emu="dem" alt="" style="--i:3"><b style="--i:0">전지구 CTM</b><b style="--i:1">기상장</b><b style="--i:2">CAPSS 배출</b><b style="--i:3">지형</b></div><span class="tch"><img data-emu="cmaq" alt="">정답 CMAQ-DA</span></div>
+      <div class="evd"><div class="stk"><img fetchpriority="low" decoding="async" data-emu="ctm" alt="" style="--i:0"><img fetchpriority="low" decoding="async" data-emu="met" alt="" style="--i:1"><img fetchpriority="low" decoding="async" data-emu="emis" alt="" style="--i:2"><img fetchpriority="low" decoding="async" data-emu="dem" alt="" style="--i:3"><b style="--i:0">전지구 CTM</b><b style="--i:1">기상장</b><b style="--i:2">CAPSS 배출</b><b style="--i:3">지형</b></div><span class="tch"><img fetchpriority="low" decoding="async" data-emu="cmaq" alt="">정답 CMAQ-DA</span></div>
       <div class="eva two"><figure><svg viewBox="0 0 200 84" role="img" aria-label="U-Net 모식도"><use href="#ev-unet"/></svg><p><b>U-Net</b></p></figure><figure><svg viewBox="0 0 140 84" role="img" aria-label="FNO 모식도 — 푸리에 변환 뒤 낮은 모드만 학습하고 되돌린다"><rect x="0" y="16" width="36" height="52" fill="#1565C0"/><text x="18" y="47" fill="#fff" font-size="14" font-weight="700" text-anchor="middle">FFT</text><path d="M44 26q7-10 14 0t14 0t14 0t14 0M44 42q14-12 28 0t28 0M44 58q28-10 56 0" fill="none" stroke="#3f7fcc" stroke-width="3"/><path d="M44 76q2-5 4 0t4 0t4 0t4 0t4 0t4 0t4 0t4 0t4 0t4 0t4 0t4 0t4 0t4 0" fill="none" stroke="#b9c3c9" stroke-width="1.8"/><path d="M58 70l28 12M58 82l28-12" stroke="#c2410c" stroke-width="2.2"/><rect x="104" y="16" width="36" height="52" fill="#1565C0"/><text x="122" y="47" fill="#fff" font-size="13" font-weight="700" text-anchor="middle">iFFT</text></svg><p><b>FNO</b> <small>푸리에</small></p></figure></div>
       <div class="evo"><svg viewBox="0 0 120 80" role="img" aria-label="지금 시각 농도장"><rect x="15" y="4" width="90" height="70" rx="3" fill="url(#ev-hot)" stroke="#9aa9a4"/></svg><p><b>지금 시각</b> CMAQ 급 장</p></div>
       <div class="evk"><p><b>수 분</b> 만에 CMAQ 급 장</p><small>U-Net 2023 재현 R² 약 0.59 [개발]<br>FNO 의 CMAQ 증류는 계획 단계</small></div>
 
       <div class="exl"><i>2</i><b>미래 예보</b><small>확장 계획</small></div>
-      <div class="evd"><div class="stk"><img data-emu="cmaq" alt="" style="--i:0"><img data-emu="met" alt="" style="--i:1"><img data-emu="emis" alt="" style="--i:2"><img data-emu="dem" alt="" style="--i:3"><b style="--i:0">과거 CMAQ-DA</b><b style="--i:1">기상 예보</b><b style="--i:2">CAPSS 배출</b><b style="--i:3">지형</b></div><span class="tch"><img data-emu="cmaq_next" alt="">정답 다음 시각</span></div>
+      <div class="evd"><div class="stk"><img fetchpriority="low" decoding="async" data-emu="cmaq" alt="" style="--i:0"><img fetchpriority="low" decoding="async" data-emu="met" alt="" style="--i:1"><img fetchpriority="low" decoding="async" data-emu="emis" alt="" style="--i:2"><img fetchpriority="low" decoding="async" data-emu="dem" alt="" style="--i:3"><b style="--i:0">과거 CMAQ-DA</b><b style="--i:1">기상 예보</b><b style="--i:2">CAPSS 배출</b><b style="--i:3">지형</b></div><span class="tch"><img fetchpriority="low" decoding="async" data-emu="cmaq_next" alt="">정답 다음 시각</span></div>
       <div class="eva"><svg viewBox="0 0 200 84" role="img" aria-label="자기회귀 모식도 — t 에서 t+1, t+2 로 굴린다">
           <g font-size="13" font-weight="700" text-anchor="middle">
             <rect x="6" y="34" width="44" height="34" fill="#1565C0"/><text x="28" y="56" fill="#fff">t</text>
@@ -3768,7 +3778,7 @@
       <div class="evk"><p>운영 입력은 <b>예보장</b></p><small>예보 선행시간별로 평가</small></div>
 
       <div class="exl hl"><i>3</i><b>배출량 섭동</b><small>전략환경영향평가 활용</small></div>
-      <div class="evd hl"><div class="stk"><img data-emu="demis" alt="" style="--i:0"><img data-emu="met" alt="" style="--i:1"><img data-emu="cmaq" alt="" style="--i:2"><img data-emu="dem" alt="" style="--i:3"><b style="--i:0" class=dl>배출 변화 Δ</b><b style="--i:1">기상장</b><b style="--i:2">기준 농도장</b><b style="--i:3">지형</b></div><span class="tch">정답 섭동 − 기준</span></div>
+      <div class="evd hl"><div class="stk"><img fetchpriority="low" decoding="async" data-emu="demis" alt="" style="--i:0"><img fetchpriority="low" decoding="async" data-emu="met" alt="" style="--i:1"><img fetchpriority="low" decoding="async" data-emu="cmaq" alt="" style="--i:2"><img fetchpriority="low" decoding="async" data-emu="dem" alt="" style="--i:3"><b style="--i:0" class=dl>배출 변화 Δ</b><b style="--i:1">기상장</b><b style="--i:2">기준 농도장</b><b style="--i:3">지형</b></div><span class="tch">정답 섭동 − 기준</span></div>
       <div class="eva hl"><svg viewBox="0 0 200 112" role="img" aria-label="조건부 U-Net 모식도 — 배출 변화가 병목에 들어간다"><use href="#ev-unet"/>
           <rect x="70" y="91" width="61" height="21" rx="2" fill="#c2410c"/><text x="100.5" y="106.5" fill="#fff" font-size="15" font-weight="700" text-anchor="middle">Δ배출</text>
           <path d="M100.5 91V86" stroke="#c2410c" stroke-width="2.5"/><path d="M95.5 86.5H105.5L100.5 81Z" fill="#c2410c"/></svg><p><b>조건부 U-Net</b> · Δ 학습</p></div>
@@ -3975,7 +3985,7 @@
     <h2 class="htop">구글 딥마인드 <em>전지구 기상 예보 AI</em> 발전과정<span class="sub">관측을 배우고 여러 해상도로 낸다 — 결정론 그래프에서 확률 생성으로, 재분석 격자에서 위성 · 관측소로</span></h2>
     <div class="vz">
       <div class="vzt">
-        <div class="org"><img src="image/logo/google_deepmind.svg" alt="Google DeepMind"><b>WeatherNext</b><span data-ref="weathernext3"></span></div>
+        <div class="org"><img fetchpriority="low" decoding="async" src="image/logo/google_deepmind.svg" alt="Google DeepMind"><b>WeatherNext</b><span data-ref="weathernext3"></span></div>
         <ol class="rl">
           <li><b>GraphCast · 2023</b><span>그래프 신경망 · 결정론 예보 하나 — 0.25° · 6시간 걸음</span></li>
           <li><b>GenCast · 2024</b><span>확산모델 · 잡음을 거듭 다듬어 50개 앙상블 — 0.25° · 12시간 걸음</span></li>
@@ -4285,24 +4295,24 @@
   .ff-top span { position: absolute; left: 130px; top: 60px; font-weight: 500; font-size: 20px; color: #8fa9cf; }
   .ff-top em { position: absolute; right: 40px; top: 38px; font-style: normal; font-weight: 600; font-size: 17px; color: #8fa9cf; }
   .ff-col { position: absolute; top: 132px; padding-left: 16px; border-left: 4px solid #6f9fd8; font-weight: 700; color: #6f9fd8; }   /* 2026-11-15 사용자 지시 — 단 제목답게 크게 */
-  .ff-col span { display: block; font-size: 15px; letter-spacing: 4px; line-height: 1.2; }
+  .ff-col span { display: block; font-size: 21px; letter-spacing: 3px; line-height: 1.2; white-space: nowrap; }
   .ff-col b { display: block; margin-top: 4px; font-size: 32px; line-height: 1.15; letter-spacing: -.5px; color: #fff; }
   .ff-card { position: absolute; border-radius: 4px; background: rgba(12,26,54,.72); border: 1px solid rgba(127,190,255,.26); }
   .ff-card b { display: block; font-family: var(--f-display); font-weight: 800; letter-spacing: -.6px; color: #fff; }
   .ff-card span { display: block; font-weight: 500; line-height: 1.32; color: #8fa9cf; letter-spacing: -.3px; }
   /* 입력 셋 */
   .ff-in { left: 60px; width: 300px; height: 132px; display: grid; grid-template-columns: 44px 1fr; align-items: center; column-gap: 18px; padding: 0 22px; }
-  .ff-in .ico { width: 42px; height: 42px; color: #9fd0ff; } .ff-in b { font-size: 27px; } .ff-in span { margin-top: 5px; font-size: 18px; }
+  .ff-in .ico { width: 42px; height: 42px; color: #9fd0ff; } .ff-in b { font-size: 27px; } .ff-in span { margin-top: 5px; font-size: 22px; letter-spacing: -.5px; }
   /* 매체 넷 — 가운데 네트워크 둘레. 왼쪽 84px 은 캔버스가 그리는 기술 그림말 자리(kh-futflow.js 의 MED 와 같은 자리 · 크기) */
-  .ff-med { width: 330px; height: 150px; padding: 0 16px 0 124px; display: flex; flex-direction: column; justify-content: center; border-top: 3px solid var(--fc); background: rgba(12,26,54,.22); }   /* 바탕을 옅게 — 뒤 캔버스의 그림말이 비친다 */
-  .ff-med b { font-size: 27px; } .ff-med span { margin-top: 5px; font-size: 18px; }
-  .ff-med .tech { margin-top: 0; margin-bottom: 4px; font-weight: 700; font-size: 14px; letter-spacing: 1.5px; color: var(--fc); }
+  .ff-med { width: 384px; height: 150px; padding: 0 16px 0 124px; display: flex; flex-direction: column; justify-content: center; border-top: 3px solid var(--fc); background: rgba(12,26,54,.22); }   /* 바탕을 옅게 — 뒤 캔버스의 그림말이 비친다 */
+  .ff-med b { font-size: 27px; } .ff-med span { margin-top: 4px; font-size: 22px; line-height: 1.26; letter-spacing: -.6px; }
+  .ff-med .tech { margin-top: 0; margin-bottom: 4px; font-weight: 700; font-size: 19px; letter-spacing: -.2px; line-height: 1.22; color: var(--fc); }
   .ff-med em { align-self: flex-start; margin-top: 7px; padding: 2px 10px; border-radius: 3px; border: 1px solid var(--fc); font-style: normal; font-weight: 700; font-size: 16px; color: #fff; white-space: nowrap; }
   /* 대기 · 건강영향 — 키워 세운다(2026-11-12 사용자 지시 — "조금 더 강조하여 크기 확대 · AI 현황 추론, 서로게이트 가속 예측 - 1000개 대안"). 자리 · 크기는 kh-futflow.js 의 MED 첫 줄과 같다 */
   .ff-med.ff-air { width: 366px; height: 196px; padding-left: 146px; border: 1.5px solid var(--fc); border-top-width: 4px; background: rgba(20,48,92,.34); }
   .ff-med.ff-air b { font-size: 32px; }
   .ff-med.ff-air ul { margin: 9px 0 0; padding: 0; list-style: none; display: flex; flex-direction: column; gap: 4px; }
-  .ff-med.ff-air li { position: relative; padding-left: 15px; font-weight: 700; font-size: 18px; letter-spacing: -.3px; color: #dfeaff; white-space: nowrap; }
+  .ff-med.ff-air li { position: relative; padding-left: 15px; font-weight: 700; font-size: 22px; letter-spacing: -.6px; color: #dfeaff; white-space: nowrap; }
   .ff-med.ff-air li::before { content: ""; position: absolute; left: 0; top: .5em; width: 7px; height: 7px; background: var(--fc); }
   .ff-med.ff-air em { margin-top: 9px; background: var(--fc); border-color: var(--fc); color: #04142e; font-size: 17px; }
   .ff-net { position: absolute; left: 650px; width: 400px; top: 380px; text-align: center; font-weight: 700; font-size: 15px; letter-spacing: 4px; color: #7fbfff; }
@@ -4372,7 +4382,7 @@
 <section class="slide kfut fut-flow" id="kfut-flow" data-title="미래 · AI 기반 전수 시뮬레이션 의사결정">
 <div class="k19">
     <canvas class="ffcv" width="1920" height="1080" aria-hidden="true"></canvas>
-    <div class="ff-top"><div class="no">5</div><b>환경영향평가의 미래 · 디지털 트윈과 AI 기반 전수 시뮬레이션 의사결정</b><span>구역 하나로 대기 · 수질 · 소음진동 · 생태를 동시에 검토하고 최적안을 찾는다</span></div>
+    <div class="ff-top"><div class="no">5</div><b>환경영향평가의 미래 · 디지털 트윈과 AI 기반 전수 시뮬레이션 의사결정</b></div>
     <div class="ff-col" style="left:60px"><span>INPUT</span><b>입력</b></div><div class="ff-col" style="left:404px"><span>AI MODELS</span><b>매체별 AI</b></div><div class="ff-col" style="left:1350px"><span>SCORING</span><b>점수</b></div>
     <div data-stagger="130" data-stagger-start="200" data-stagger-anim="fade-right">
       <div class="ff-card ff-in" style="top:250px"><i data-icon="map-pin"></i><div><b>구역 설정</b><span>사업지구 경계 입력</span></div></div>
@@ -4383,8 +4393,8 @@
     <div data-stagger="130" data-stagger-start="700" data-stagger-anim="fade-up">
       <div class="ff-card ff-med ff-air" style="left:404px;top:204px;--fc:#7fd0ff"><b>대기 · 건강영향</b><ul><li>AI 현황 추론</li><li>서로게이트 가속 예측</li></ul><em>1,000개 대안</em></div>
       <div class="ff-card ff-med" style="left:930px;top:220px;--fc:#3fd0d3"><span class="tech">수리 · 수질 모델 에뮬레이터</span><b>수질</b><span>AI 시나리오 예측 · BOD · TOC · SS · 목표수질</span></div>
-      <div class="ff-card ff-med" style="left:440px;top:690px;--fc:#f0b050"><span class="tech">GPU 실시간 전파</span><b>소음 · 진동</b><span>CUDA 기반 실시간 모델링</span></div>
-      <div class="ff-card ff-med" style="left:930px;top:690px;--fc:#7fe0a8"><span class="tech">랜덤포레스트 · SHAP</span><b>생태</b><span>트리 기반 종분포 · 크리깅</span></div>
+      <div class="ff-card ff-med" style="left:440px;top:690px;--fc:#f0b050"><span class="tech">GPU 고속 추론</span><b>소음 · 진동</b><span>CUDA 기반 실시간 모델링</span></div>
+      <div class="ff-card ff-med" style="left:930px;top:690px;--fc:#7fe0a8"><span class="tech">머신러닝 · SHAP</span><b>생태</b><span>트리 기반 종분포 · 크리깅</span></div>
     </div>
     <div class="ff-card ff-score" data-anim="fade-left" style="--d:1200ms"><b>대안별 점수 산출</b><span>환경기준 충족 선별 · 가중합 순위</span>
       <ol><li class="top"><i style="--w:100%"></i>80.1</li><li><i style="--w:89%"></i>71.5</li><li><i style="--w:84%"></i>67.0</li><li><i style="--w:69%"></i>55.6</li><li><i style="--w:44%"></i>35.2</li></ol></div>
@@ -4467,12 +4477,12 @@
        성능 = 학습 자료의 질과 양 × 환경과학 도메인 지식 × 데이터 과학 아키텍처 설계가 맞물림 · 데이터 처리부터 설계까지 전문가 협업.
      더한 성공 요인(사용자 지시 '내가 파악하지 못한 요인') — 이 덱 · 정본에서 이미 강조한 원칙에서 골랐다:
        관측 없는 곳 · 다른 해 검증(정본 시간 독립 · 공간 제외 검증), 불확실성 정량화(43장 예측구간 교정), 물리 · 화학 일관성(22장 'R² 가 아니라 화학 법칙'),
-       재현 · 운영 체계(자료 · 모델 버전, 갱신), 설명 · 제도 수용성(표준 · 지침). -->
+       재현 · 운영 체계(자료 · 모델 버전, 갱신), 설명 · 제도 수용성(표준 · 지침).  2026-11-16 사용자 지시 — 오른쪽 두 칸을 대기질 고해상도 추론에 국한하지 않고 29 · 30쪽 디지털 트윈 · AI 전수 시뮬레이션 의사결정 시스템까지 아우르게 다시 썼다(흐름 = 데이터 통합 → 매체별 AI → 전수 시뮬레이션 → 의사결정 · 제도, 29쪽 흐름과 같은 차례. 문안은 개조식 · 수치 없음 · 연구 결과가 아니라 갖춰야 할 요건). -->
 <section class="slide" id="okslide">
   <div class="head"><span class="rh"><span class="n c6">6</span>현업화 연구 제안</span>
-    <span class="r">성공 요인 — 자료 · 도메인 · 설계 · 협업</span></div>
+    <span class="r">성공 요인 — 데이터 · 도메인 · 데이터 과학 · 협업</span></div>
   <div class="body">
-    <h2 class="htop">꿈꾸기 어려웠던 평가를 <em>인공지능으로</em><span class="sub">지금의 제안은 고해상도 농도장 기술의 응용 예시일 뿐이다 — 더 많은 평가 분야를 더 과학적으로 바꾸려면 기초연구부터 현업화 연구까지 이어져야 한다</span></h2>
+    <h2 class="htop">꿈꾸기 어려웠던 평가를 <em>인공지능으로</em><span class="sub">고해상도 농도장은 응용 예시의 하나다 — 디지털 트윈 · AI 전수 시뮬레이션 의사결정으로 넓히려면 기초연구부터 현업화 연구까지 이어져야 한다</span></h2>
     <div class="okg">
       <div class="okv">
         <svg viewBox="0 0 560 470" role="img" aria-label="세 원의 교집합 — 학습 자료 · 환경과학 도메인 지식 · 아키텍처 설계가 맞물린 곳이 인공지능 성능">
@@ -4495,28 +4505,28 @@
       </div>
       <div class="okr">
         <div class="okb">
-          <div class="okt"><b>현업화는 협업이다</b><span>분야별 전문가가 한 흐름으로</span></div>
+          <div class="okt"><b>현업화는 협업이다</b><span>데이터에서 의사결정까지 분야별 전문가가 한 흐름으로</span></div>
           <ol class="okflow">
-            <li><b>자료 처리</b><span>수집 · 정합 · 품질관리</span></li>
-            <li><b>도메인 설계</b><span>물리 · 화학 · 평가 기준</span></li>
-            <li><b>아키텍처</b><span>모델 구조 · 학습</span></li>
-            <li><b>검증 · 적용</b><span>평가 실무 · 제도</span></li>
+            <li><b>데이터 통합</b><span>측정망 · 국가 DB 연계</span></li>
+            <li><b>매체별 AI</b><span>대기 · 수질 · 소음 · 생태</span></li>
+            <li><b>전수 시뮬레이션</b><span>대안별 예측 · 점수화</span></li>
+            <li><b>의사결정 · 제도</b><span>최적안 · 평가 실무</span></li>
           </ol>
         </div>
         <div class="okb plus">
-          <div class="okt"><b>함께 갖춰야 할 성공 요인</b><span>대기환경 딥러닝에서 성능만큼 중요한 것</span></div>
+          <div class="okt"><b>함께 갖춰야 할 성공 요인</b><span>디지털 트윈 · AI 의사결정에서 성능만큼 중요한 것</span></div>
           <ul class="okplus">
-            <li><b>관측 없는 곳 · 다른 해 검증</b><span>학습에 없던 지역 · 연도에서 맞아야 평가에 쓴다</span></li>
-            <li><b>불확실성 정량화</b><span>값 하나가 아니라 믿을 수 있는 범위로 낸다</span></li>
-            <li><b>물리 · 화학 일관성</b><span>통계 지표만이 아니라 과학 법칙과 맞는지 본다</span></li>
-            <li><b>재현 · 운영 체계</b><span>자료 · 모델 버전 관리와 지속 갱신</span></li>
-            <li><b>설명 · 제도 수용성</b><span>평가 지침 · 표준으로 받아들여질 근거</span></li>
+            <li><b>매체별 독립 검증</b><span>학습에 없던 지역 · 연도 · 사업지에서의 재현</span></li>
+            <li><b>불확실성 정량화</b><span>예측 범위 제시 · 대안 순위의 안정성 확인</span></li>
+            <li><b>물리 · 화학 · 생태 일관성</b><span>과학 법칙 부합 · 매체 간 예측 정합</span></li>
+            <li><b>데이터 표준 · 운영 체계</b><span>측정망 · 국가 DB 연계 규격 · 자료 · 모델 버전 관리</span></li>
+            <li><b>설명 가능한 의사결정</b><span>점수 · 가중치 근거 공개 · 평가 지침 · 제도 수용성</span></li>
           </ul>
         </div>
       </div>
     </div>
   </div>
-  <div class="foot"><span>좋은 자료 · 깊은 도메인 지식 · 정교한 설계가 맞물릴 때 — 협업이 곧 성능이다.</span>
+  <div class="foot"><span>좋은 데이터 · 깊은 도메인 지식 · 정교한 데이터 과학이 맞물릴 때 — 협업이 곧 성능이다.</span>
     <span class="r"></span></div>
 </section>
 
@@ -4543,7 +4553,7 @@
         <li><span>2</span>같은 시공간에서 영향을 평가하며</li>
         <li><span>3</span>기후 고위험 지역 식별로 넓힌다</li>
       </ol>
-      <div class="thx-sign"><img src="image/logo-kunhwa-header-retina-en-2.png" alt="kunhwa Engineering &amp; Consulting"><span><b class="kh">(주)건화 환경평가부</b> 정필수 상무</span></div>
+      <div class="thx-sign"><img fetchpriority="low" decoding="async" src="image/logo-kunhwa-header-retina-en-2.png" alt="kunhwa Engineering &amp; Consulting"><span><b class="kh">(주)건화 환경평가부</b> 정필수 상무</span></div>
     </div>
   </div>
   <div class="foot"><span></span>
@@ -4864,10 +4874,10 @@
      ⚠ 장을 끼우거나 빼면 키 · preloadAt 을 함께 고친다(종전 키 이동 이력은 git log 에 있다). */
   /* 2026-11-09 — 학회 판에서 6 · 8–13 · 18 · 27 · 27-2–27-6장을 지우고 27-1 · 27-7장을 정식 장으로 올려 키를 다시 셌다(39장, 아래 주석의 장 번호는 옛 판 기준) */
   const FILMS = {
-    12: { src: 'graph/03-arch_compare_anim.html',     preloadAt: 10, keepClose: true, nextClose: true }, // 11장 두 아키텍처 비교(대기학회 2026-10-30 영상, 2026-11-09 교체) — 9장부터 받는다
+    12: { src: 'graph/03-arch_compare_anim.html?v=20261116',     preloadAt: 10, keepClose: true, nextClose: true }, // 11장 두 아키텍처 비교(대기학회 2026-10-30 영상, 2026-11-09 교체) — 9장부터 받는다
     /* preloadAt 은 0-base — 큐 두 장 전(2026-10-19 점검: 종전 1 이라 2–19장 내내 숨은 iframe 이 떠 11 · 15장 WebGL 과 함께 돌았다) */
     13: { video: 'video/NO2.mp4' },                                                    // 21장 우측 NO₂ 애니메이션 전체화면 (18초 반복)
-    7: { src: 'graph/01-amr_hgn_design_concept.html', preloadAt: 7 },                 // 24장 설계 철학 다큐 (약 4분) — 그 장에 들어서면 받는다
+    7: { src: 'graph/01-amr_hgn_design_concept.html?v=20261116', preloadAt: 7 },                 // 24장 설계 철학 다큐 (약 4분) — 그 장에 들어서면 받는다
   };
   const CUES = Object.keys(FILMS).map(Number).sort((a, b) => a - b);
   let i = 0, filmOn = false, loadedSrc = '', preloadTimer = 0;
@@ -7557,19 +7567,19 @@
       el.textContent = el.dataset.oref.trim().split(/\s+/).map(k => one(k, el.dataset.ofmt === 'full')).join(' · '); });
   })();
 </script>
-<script src="graph/intro_stages.js?v=20261116"></script>
-<script src="graph/bridge_steps.js?v=20261116"></script>
-<script src="graph/gnn_steps.js?v=20261116"></script>
-<script src="graph/compute_compare.js?v=20261116"></script>
-<script src="graph/survey_simple.js?v=20261116"></script>
-<script src="graph/rsm_steps.js?v=20261116"></script>
-<script src="graph/fut/kh-icons.js?v=20261116"></script>
-<script src="graph/fut/krf_scene.js?v=20261116"></script>
-<script src="graph/fut/eco_sdm.js?v=20261116"></script>
-<script src="graph/fut/deck_link.js?v=20261116"></script>
-<script src="graph/fut/futflow.js?v=20261116"></script>
-<script src="트윈나레이션/narr.js?v=20261116"></script>
-<script src="graph/fut/narr_mix.js?v=20261116"></script>
-<script src="graph/fut/future.js?v=20261116"></script>
+<script fetchpriority="low" src="graph/intro_stages.js?v=20261116"></script>
+<script fetchpriority="low" src="graph/bridge_steps.js?v=20261116"></script>
+<script fetchpriority="low" src="graph/gnn_steps.js?v=20261116"></script>
+<script fetchpriority="low" src="graph/compute_compare.js?v=20261116"></script>
+<script fetchpriority="low" src="graph/survey_simple.js?v=20261116"></script>
+<script fetchpriority="low" src="graph/rsm_steps.js?v=20261116b"></script>
+<script fetchpriority="low" src="graph/fut/kh-icons.js?v=20261116"></script>
+<script fetchpriority="low" src="graph/fut/krf_scene.js?v=20261116"></script>
+<script fetchpriority="low" src="graph/fut/eco_sdm.js?v=20261116"></script>
+<script fetchpriority="low" src="graph/fut/deck_link.js?v=20261116"></script>
+<script fetchpriority="low" src="graph/fut/futflow.js?v=20261116"></script>
+<script fetchpriority="low" src="트윈나레이션/narr.js?v=20261116"></script>
+<script fetchpriority="low" src="graph/fut/narr_mix.js?v=20261116"></script>
+<script fetchpriority="low" src="graph/fut/future.js?v=20261116"></script>
 </body>
 </html>
