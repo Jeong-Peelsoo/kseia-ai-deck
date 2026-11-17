@@ -41,7 +41,7 @@
      투사용 타입 스케일 (원본에서 그대로 물려받았다 — 실측으로 맞춰 둔 값이라 손대지 말 것)
        1600px 설계폭에서 본문 23px · 부연 20px 이 하한이다.
        vw 계수는 목표치÷16 이다(1600px 에서 1vw = 16px). -->
-<!-- 발표 · 게시 덱(34장, 2026-11-17 사용자 지시로 27장 #pv-limit 재현도 · 한계를 cut 으로 빼고 31장 뒤에 32장 #s-roadmap 현업화 추진 체계를 끼웠다) — 2026-11-16 사용자 지시로 원본 45장 덱(정필수-AI  발표 full.html)을 지우고 축약본(_축약.html)을 이 이름으로 올렸다. 이제 이 파일이 정본이다 — 직접 고친다.
+<!-- 발표 · 게시 덱(33장, 2026-11-17 사용자 지시로 27장 #pv-limit 재현도 · 한계를 빼고 #s-roadmap 현업화 추진 체계를 끼운 뒤, 같은 날 그 앞 장 #s-wp 현업화 실증 연구 기획안을 지웠다) — 2026-11-16 사용자 지시로 원본 45장 덱(정필수-AI  발표 full.html)을 지우고 축약본(_축약.html)을 이 이름으로 올렸다. 이제 이 파일이 정본이다 — 직접 고친다.
      scripts/build_short_deck.py 는 원본이 없어 더 돌지 않는다(이 파일을 만든 기록으로 남긴다). parts/ 조각도 기록이다 — 고칠 때 이 파일을 고친다. 아래는 마지막 빌드 때의 설명이다.
      원본에서 뺀 장(1-base): 5, 7, 12, 18, 21, 23, 25, 27, 29, 30, 32, 35, 36, 38, 39. 끼운 장: 17장 뒤 parts/s-compute.html, 20장 뒤 parts/s-survey.html, 41장 뒤 parts/s-future.html. 갈아 끼운 장: 6장 → parts/s-intro.html, 8장 → parts/s-bridge.html, 10장 → parts/s-gnn.html, 20장 → parts/s-rsm.html. 1쪽 표지 지구본은 가벼운 인자(그래프망 없음 · assets=bare · fps=30)로 돈다. 절 2 · 3 을 맞바꿨다(설계 철학이 2절, AMR-HGN 이 3절). 아래 주석의 절 · 장 번호는 원본 기준이다. -->
 <html lang="ko">
@@ -781,7 +781,7 @@
   .agenda.five.six{grid-template-columns:repeat(6,minmax(0,1fr));gap:12px}
   .agenda.six .ag{padding:16px 13px} .agenda.six .ag h3{font-size:21px} .agenda.six .ag h3 .en{font-size:16px} .agenda.six .ag p{font-size:17px}
   .agenda.six .ag p{box-sizing:border-box;min-height:calc(4 * 1.45em + 14px)}   /* (축약본) 설명 글 첫 줄 맞춤 */
-  .agenda.six .ag.a6 .th img{background:#fff;object-fit:contain}
+  .agenda.six .ag.a6 .th img{background:#0F1620;object-fit:contain}   /* 2026-11-17 — 30쪽 절 6 갑지 그림(어두운 바탕)을 통째로 */
 
   /* ── 22장 위성 FNR 그림 위를 오가는 위성 두 대(2026-09-25 지시) ─────────
      그림 두 칸(a GEMS · b TROPOMI)의 제목 오른쪽 빈자리에서 좌우로 천천히 오간다. 투명 PNG(module/image/)다.
@@ -940,21 +940,6 @@
 
 
 
-  /* ── 44장 현업화 연구 제안 — 연구 질문 · 연구 묶음 표 · 협력 분야(안) ───── */
-  .body.ch5{min-height:0;overflow:hidden}
-  .ch5 h2.htop{margin-bottom:16px}
-  .c5wrap{display:grid;grid-template-columns:minmax(0,.8fr) minmax(0,1.2fr);gap:28px;align-items:start}
-  .c5q{display:flex;flex-direction:column;gap:12px}
-  .c5q .q{display:grid;grid-template-columns:auto minmax(0,1fr);column-gap:14px;row-gap:3px;background:var(--soft);padding:12px 16px}
-  .c5q .q .n{grid-row:1/3;width:36px;height:36px;display:grid;place-items:center;background:var(--blue);color:#fff;font-weight:700;font-size:20px}
-  .c5q .q b{font-size:23px;letter-spacing:-.02em}
-  .c5q .q span{font-size:19.5px;color:var(--mut);line-height:1.42}
-  .c5qh{font-size:18px;font-weight:700;letter-spacing:.12em;color:var(--dim);padding-bottom:6px;border-bottom:2px solid var(--rule);margin-bottom:4px}
-  table.wp{width:100%;border-collapse:collapse;font-size:19px;line-height:1.36}
-  table.wp th{text-align:left;font-size:17px;letter-spacing:.06em;color:var(--dim);font-weight:700;padding:4px 10px;border-bottom:2px solid var(--rule)}
-  table.wp td{padding:8px 10px;border-bottom:1px solid var(--hair);vertical-align:top;color:var(--mut)}
-  table.wp td:first-child{white-space:nowrap;color:var(--ink);font-weight:700}
-  table.wp td:first-child i{font-style:normal;color:var(--blue);margin-right:6px}
   /* ── 46장 맺음 · 감사합니다 (2026-09-27) ───────────────────────────────
      머리 없이 표지와 짝. .thx 는 기본 2열 골격이고, 지금 판은 아래 .thx3c(3열)와 장 전체 배경 지구본(.thx-bg)이다. */
   .thx{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);grid-template-rows:minmax(0,1fr);gap:clamp(28px,calc(3.6 * var(--vw)),64px);align-items:center}
@@ -1046,22 +1031,7 @@
   @keyframes capIn{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:none}}
   @media (prefers-reduced-motion: reduce){ .thx-cap, .thx-cap.swap .hd, .thx-cap.swap p{transition:none;animation:none} }
   @media (prefers-reduced-motion: reduce){ .thxs.on .thx-l > *, .thxs.on .thx-r{animation:none} }
-  /* 44장 하단 추진 4단계(기초연구 → 실증연구 → 제도화 → 실무 활용, 2026-09-27) — 화살표 띠, 뒤로 갈수록 진하게 */
-  .c5step{margin-top:16px;display:grid;grid-template-columns:auto minmax(0,1fr);gap:12px;align-items:stretch}
-  .c5step > b{display:grid;place-items:center;padding:0 16px;background:var(--blue);color:#fff;font-size:19px;line-height:1.3;text-align:center}
-  .c5step ol{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:6px}
-  .c5step li{position:relative;padding:8px 30px 9px 36px;display:grid;grid-template-columns:auto 1fr;column-gap:10px;align-items:center;
-    clip-path:polygon(0 0,calc(100% - 22px) 0,100% 50%,calc(100% - 22px) 100%,0 100%,22px 50%);background:#e6edf6}
-  .c5step li:first-child{clip-path:polygon(0 0,calc(100% - 22px) 0,100% 50%,calc(100% - 22px) 100%,0 100%);padding-left:18px}
-  .c5step li:nth-child(2){background:#c9d8ec} .c5step li:nth-child(3){background:#9fbadd}
-  .c5step li:nth-child(4){background:var(--blue);color:#fff}
-  .c5step li em{grid-row:span 2;font-style:normal;font-family:'Inter',var(--f);font-size:30px;font-weight:700;color:var(--blue);line-height:1}
-  .c5step li:nth-child(4) em{color:#fff}
-  .c5step li b{font-size:22px;letter-spacing:-.02em;line-height:1.25}
-  .c5step li span{font-size:17px;color:var(--mut);line-height:1.35}
-  .c5step li:nth-child(4) span{color:#e2e8f0}
-  /* ── 32장 #s-roadmap 현업화 추진 체계(2026-11-17 사용자 지시) — 31장 하단 추진 4단계가 확대되며 이 장의 네 단계가 된다(아래 '31 → 32 확대 전환' 스크립트).
-     색은 31장 .c5step 네 칸과 같다 — 확대 복제본이 그 색 그대로 이 장의 칸 위에 내려앉는다. 띠 달린 상자 대신 큰 번호 · 가는 줄 목록(디자인 규율). */
+  /* ── 31장 #s-roadmap 현업화 추진 체계(2026-11-17 사용자 지시) — 네 단계. 띠 달린 상자 대신 큰 번호 · 가는 줄 목록(디자인 규율). */
   #s-roadmap .htop{margin-bottom:clamp(10px,calc(1.8 * var(--vh)),22px)}
   .rm{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));column-gap:14px;row-gap:12px;align-items:start}
   .rm-gov{grid-column:2/4;grid-row:1;position:relative;height:38px;margin:0 30px}
@@ -1099,14 +1069,6 @@
   .rm-loop .ah{fill:var(--blue)}
   .rm-loop text{font-family:var(--f);font-size:23px;font-weight:700;fill:var(--blue);letter-spacing:-.03em}
   .rm-loop text tspan{fill:var(--mut);font-weight:600;font-size:21px}
-  /* 31 → 32 확대 전환 — 31장의 나머지는 걷히고, 네 화살표 복제본(.rm-zc)이 무대 위에서 32장 네 칸 자리로 커진다 */
-  #s-wp.zoom .head, #s-wp.zoom .htop, #s-wp.zoom .c5wrap, #s-wp.zoom .foot, #s-wp.zoom .c5step > b{opacity:0;transition:opacity .3s ease}
-  #s-wp.zoom .c5step li > *{opacity:0;transition:opacity .18s ease}
-  #s-wp .c5step.gone{visibility:hidden}
-  .rm-zoom{position:absolute;inset:0;z-index:40;pointer-events:none}
-  .rm-zc{position:absolute;background:#e6edf6;
-    transition:left .7s cubic-bezier(.22,.8,.24,1),top .7s cubic-bezier(.22,.8,.24,1),width .7s cubic-bezier(.22,.8,.24,1),height .7s cubic-bezier(.22,.8,.24,1),clip-path .7s cubic-bezier(.22,.8,.24,1),opacity .3s ease}
-  .rm-zc.z2{background:#c9d8ec} .rm-zc.z3{background:#9fbadd} .rm-zc.z4{background:var(--blue)}
 
   /* ── 43장 기술 로드맵 — 좌 AMR-HGN 고도화 · 우 FGNO 개발 ────────────
      AMR-HGN 후속 과제는 선행 연구의 향후 연구 항목에서, FGNO 방향은 22 연구계획서·발표 가이드에서 가져왔다(sources.md).
@@ -1173,6 +1135,7 @@
   #film{position:fixed;inset:0;width:100%;height:100%;border:0;z-index:-1;
     opacity:0;pointer-events:none;transition:opacity .5s ease;background:#000}
   #film.on{opacity:1;pointer-events:auto;z-index:60}
+  #film.out{z-index:60;transition:opacity .8s ease}   /* 2026-11-17 — 다음 키로 나갈 때: 앞에 둔 채 흐려 걷는다(closeFilm soft · FILM_FADE 와 같은 길이) */
   #film-close{position:fixed;right:24px;top:20px;z-index:61;display:none;opacity:1;
     transition:opacity .45s ease;border:1px solid rgba(255,255,255,.35);background:rgba(0,0,0,.55);
     color:#fff;font-family:var(--f);font-size:17px;font-weight:700;letter-spacing:.06em;
@@ -1512,7 +1475,7 @@
       </div>
       <div class="ag a6">
         <span class="n">6</span>
-        <span class="th"><img fetchpriority="low" decoding="async" src="image/agenda_thumb_6.jpg" alt="33쪽 세 원 도안 — 데이터 · 환경과학 · 데이터 과학이 맞물린 곳이 AI 성능"></span>
+        <span class="th"><img fetchpriority="low" decoding="async" src="image/agenda_thumb_6.jpg" alt="30쪽 절 6 갑지 그림 — 기초연구 · 실증연구 · 제도화 · 실무 활용 네 단계 계단"></span>
         <h3>현업화 연구 제안<span class="en">기초연구 → 실증연구 →<br>제도화 → 실무 활용</span></h3>
         <p>평가용 AI의 <b>현업화 실증</b>과 성공 요인 · 협업을 제안한다.</p>
       </div>
@@ -2965,51 +2928,8 @@
 </section>
 
 
-<!-- 44장 현업화 연구 제안 (EIA 판, 2026-09-25 지시) — 기후에너지환경부 · 한국환경연구원 · 국립환경과학원에 제안한다.
-     2026-09-27 지시 — 머리 우측의 세 기관 이름과 하단 기관별 역할을 걷었다(화면에 기관명 없음).
-     과제 구성(가칭 · 연구 질문 셋 · 연구 묶음 WP1–5)은 발표 가이드 부록 F·14장에서 가져왔다(sources.md).
-     ⚠ 특정 공고 · 예산 · 채택을 확인한 것이 아닌 **기획안**이다. 하단 추진 4단계도 (안)이다. -->
-<section class="slide" id="s-wp">
-  <div class="head"><span class="rh"><span class="n c6">6</span>현업화 연구 제안</span>
-    <span class="r">현업화 실증 연구 — 기획(안)</span></div>
-  <div class="body ch5">
-    <h2 class="htop">공개자료 기반 평가용 AI, <em>현업화 실증 연구</em>
-      <span class="sub">가칭 — 공개 지구환경자료 기반 고해상도 기후 · 대기환경장 재구성 및 시공간 정합형 영향평가 실증</span></h2>
-    <div class="c5wrap">
-      <div class="c5q">
-        <div class="c5qh">실증으로 답할 세 질문</div>
-        <div class="q"><span class="n">1</span><b>대표성</b><span>제한된 현황조사와 공개자료를 결합하면 사업지의 연중 현황을 얼마나 더 잘 설명하는가</span></div>
-        <div class="q"><span class="n">2</span><b>운용성</b><span>고해상도 자료동화장 없이 어떤 정확도 · 지연 · 비용을 달성하는가</span></div>
-        <div class="q"><span class="n">3</span><b>평가 적합성</b><span>시공간 정합형 결합은 어떤 물질 · 사업 · 기상 조건에서 타당하고, 언제 기존 방식이 필요한가</span></div>
-      </div>
-      <div>
-        <table class="wp">
-          <thead><tr><th>연구 묶음</th><th>검증할 질문</th><th>산출물</th></tr></thead>
-          <tbody>
-            <tr><td><i>1</i>데이터 · 대표성</td><td>조사 표본과 국가 관측 · 모델 자료를 어떻게 결합하나</td><td>시공간 정합 자료 규격 · 재표집 벤치마크</td></tr>
-            <tr><td><i>2</i>배경 · 다중규모 AI</td><td>공개 입력에서 배경 · 국지 정보를 얼마나 회수하나</td><td>CMAQ 에뮬레이터 · AMR-HGN E2E / Two-Stage 통제 비교</td></tr>
-            <tr><td><i>3</i>확률 · 검증</td><td>관측 공백과 극값의 불확실성을 제대로 표현하나</td><td>공간 · 연도 차단 시험 · 조건별 교정</td></tr>
-            <tr><td><i>4</i>평가 실증</td><td>시간별 정합 방식은 언제 유효하고 언제 실패하나</td><td>기존 방식과 같은 조건의 사업지 비교</td></tr>
-            <tr><td><i>5</i>운용 · 확장</td><td>저비용 추론 · 예보 · 폭염 확장이 가능한가</td><td>추론 패키지 · 지연 · 비용 시험 · 폭염 시범모델</td></tr>
-          </tbody>
-        </table>
-      </div>
-    </div>
-    <!-- 협력 분야(기관별 역할) → 추진 4단계(2026-09-27 지시). 기관 역할 문구는 지시로 지웠다. -->
-    <div class="c5step"><b>추진 단계<br>(안)</b>
-      <ol>
-        <li><em>1</em><b>기초연구</b><span>공개자료 AI · 검증 체계<br>연구 묶음 1~3</span></li>
-        <li><em>2</em><b>실증연구</b><span>기존 방식과 사업지 비교<br>연구 묶음 4</span></li>
-        <li><em>3</em><b>제도화</b><span>평가 제도 · 자료 규격<br>반영 검토</span></li>
-        <li><em>4</em><b>실무 활용</b><span>추론 패키지 · 예보 · 폭염<br>연구 묶음 5</span></li>
-      </ol></div>
-  </div>
-  <div class="foot"><span>특정 아키텍처의 채택이 아니라, 공통 자료 · 계산 · 검증 기반에서 연구 질문을 시험한다</span>
-    <span class="r"></span></div>
-</section>
-
-<!-- 32장 #s-roadmap 현업화 추진 체계 (2026-11-17 사용자 지시) — 31장 하단 추진 4단계(기초연구 · 실증연구 · 제도화 · 실무 활용)를 펼친 장.
-     31장에서 '다음'을 누르면 그 네 화살표가 커지며 이 장의 네 칸이 된다(맨 아래 '31 → 32 확대 전환' 스크립트).
+<!-- 31장 #s-roadmap 현업화 추진 체계 (2026-11-17 사용자 지시) — 추진 4단계(기초연구 · 실증연구 · 제도화 · 실무 활용)를 펼친 장.
+     같은 날 사용자 지시로 앞 장(#s-wp 현업화 실증 연구 기획안)과 그 장에서 이 장으로 넘어오던 확대 전환을 지웠다(옛 내용은 git 기록).
      문안은 사용자 구술을 개조식으로 다듬은 **발표자 제안(안)** 이다 — 문헌 근거 · 수치 없음(sources.md).
      요지 — 기초연구: 대기 · 수 · 생활 · 자연환경 매체별 기초과학, 다수 연구실에서 분야별로 활발 / 실증연구: 현업화 연구, 현장 적용 단계, 정부 · 국책연구기관이 유망 기초 성과를 발굴 /
        제도화: 실증연구와 병행, 정부 · 연구기관 · 업계 전문가 · 시민단체 거버넌스, 정부 주도 / 실무 활용: 적용 결과를 환류해 초기의 불완전함을 개선 · 보완. -->
@@ -3216,12 +3136,12 @@
   /* video — iframe 이 아니라 영상 파일 하나를 #bigvid 로 화면 가득 튼다(14쪽).
        장 안에서 이미 작게 돌고 있는 그 파일이라 예열하지 않는다. 열면 처음부터 소리 없이 반복 재생, Enter 는 일시정지/재생이다.
      ⚠ 장을 끼우거나 빼면 키 · preloadAt 을 함께 고친다(종전 키 이동 이력은 git log 에 있다). */
-  /* 아래 주석의 쪽 번호는 이 축약본(34쪽) 기준이다 */
+  /* 아래 주석의 쪽 번호는 이 축약본(33쪽) 기준이다 */
   const FILMS = {
-    12: { src: 'graph/03-arch_compare_anim.html?v=20261116',     preloadAt: 10, keepClose: true, nextClose: true }, // 13쪽 두 아키텍처 비교(대기학회 2026-10-30 영상, 2026-11-09 교체) — 11쪽부터 받는다
+    12: { src: 'graph/03-arch_compare_anim.html?v=20261117',     preloadAt: 10, keepClose: true, nextClose: true, softClose: true }, // 13쪽 두 아키텍처 비교(대기학회 2026-10-30 영상, 2026-11-09 교체) — 11쪽부터 받는다
     /* preloadAt 은 0-base — 큐 두 장 전 */
     13: { video: 'video/NO2.mp4', nextOpen: true, nextClose: true },                                                    // 14쪽 우측 NO₂ 애니메이션 전체화면 (18초 반복)
-    7: { src: 'graph/01-amr_hgn_design_concept.html?v=20261116', preloadAt: 7 },                 // 8쪽 설계 철학 다큐 (약 4분) — 그 장에 들어서면 받는다
+    7: { src: 'graph/01-amr_hgn_design_concept.html?v=20261117', preloadAt: 7, nextClose: true, softClose: true },   // 8쪽 설계 철학 다큐 (약 4분) — 그 장에 들어서면 받는다. 재생 중 다음 키는 13쪽처럼 흐려 걷으며 그 장으로(2026-11-17 사용자 지시)
   };
   const CUES = Object.keys(FILMS).map(Number).sort((a, b) => a - b);
   let i = 0, filmOn = false, loadedSrc = '', preloadTimer = 0;
@@ -3230,7 +3150,7 @@
   /* nextOpen — 그 장에서 처음 '다음'을 누르면 장을 넘기지 않고 영상을 화면 가득 연다. 한 번 더 누르면(nextClose) 닫고 그 장으로 돌아오며, 그다음 '다음'에 장을 넘긴다(14장 NO₂ 영상, 2026-11-17 사용자 지시) */
   let opened = -1;   // 이번에 들어와 nextOpen 으로 이미 연 장
   function advance(d){
-    if (filmOn && d > 0 && FILMS[i] && FILMS[i].nextClose) { closeFilm(); return; }
+    if (filmOn && d > 0 && FILMS[i] && FILMS[i].nextClose) { closeFilm(!!FILMS[i].softClose); return; }   // softClose — 흐려 걷기(13쪽), 없으면 Esc 처럼 바로
     if (!filmOn && d > 0 && FILMS[i] && FILMS[i].nextOpen && opened !== i) { opened = i; openFilm(); return; }
     const cs = !filmOn && window.conceptSteppers && window.conceptSteppers[i]; if (cs && cs.step(d)) return;   // 내레이션 장(conceptStep) — 단계부터 넘긴다
     go(i + d);
@@ -3320,7 +3240,8 @@
     if (filmOn) return;
     const f = FILMS[i];
     if (!f) return;
-    opened = i;   // Enter · 단추로 열어도 같다 — 닫은 뒤 '다음'은 장을 넘긴다
+    if (fadeTimer) endFilm();   // 흐려 걷는 중에 다시 열면 먼저 끝내고 새로 받는다
+    opened = i;  // Enter · 단추로 열어도 같다 — 닫은 뒤 '다음'은 장을 넘긴다
     if (f.video) {                   // 14쪽 — 영상 파일을 화면 가득. 포커스는 덱에 남으므로 Esc·Enter 를 덱이 그대로 받는다
       if (bigvid.getAttribute('src') !== f.video) bigvid.src = f.video;
       bigvid.muted = true; bigvid.loop = true;   // 영상 파일 큐는 모두 소리 없이 반복한다
@@ -3358,8 +3279,19 @@
          2 about:blank 로 비운다 — 문서가 확실히 파괴된다.
      ⚠ 닫은 뒤 **다시 데우지 않는다**(2026-09-25). 예전에는 곧바로 다시 받았는데, 발표자는 닫자마자 다음 장으로
        넘기므로 그 전환이 재적재에 물려 멎었다(당시 설계 철학 다큐 닫기 직후 1.9초, 실측). 같은 편을 다시 열면 그때 받는다. */
-  function closeFilm(){
-    if (!filmOn) return;
+  /* soft(2026-11-17 사용자 지시 — 13쪽 영상 재생 중 다음 키) — 뚝 끊지 않는다. 영상 층을 앞에 둔 채 FILM_FADE 동안 흐려 걷고
+     영상에는 { film:'fade' } 로 소리를 내리게 한 뒤, 다 걷히면 endFilm 이 위 두 겹으로 끝낸다. Esc · 닫기 단추는 종전대로 바로 닫는다. */
+  let fadeTimer = 0; const FILM_FADE = 800;
+  function endFilm(){
+    clearTimeout(fadeTimer); fadeTimer = 0;
+    film.classList.remove('out');
+    try { film.contentWindow.postMessage({ film: 'stop' }, '*'); } catch (e) {}
+    clearTimeout(preloadTimer);            // 열기 전에 걸어 둔 예열 예약이 닫은 뒤에 되살리지 않게
+    film.src = 'about:blank';
+    loadedSrc = '';
+  }
+  function closeFilm(soft){
+    if (!filmOn) { if (fadeTimer && !soft) endFilm(); return; }   // 흐려 걷는 중의 Esc · 닫기 — 바로 끝낸다
     filmOn = false;
     if (bigvid.classList.contains('on')) {   // 영상 파일(14쪽) — 멈추고 걷기만 한다(iframe 리셋 불필요)
       bigvid.pause();
@@ -3369,11 +3301,14 @@
     }
     film.classList.remove('on');
     closeBtn.classList.remove('on', 'idle');
-    try { film.contentWindow.postMessage({ film: 'stop' }, '*'); } catch (e) {}
-    clearTimeout(preloadTimer);            // 열기 전에 걸어 둔 예열 예약이 닫은 뒤에 되살리지 않게
-    film.src = 'about:blank';
-    loadedSrc = '';
     window.focus();
+    if (soft === true) {
+      film.classList.add('out');
+      try { film.contentWindow.postMessage({ film: 'fade' }, '*'); } catch (e) {}
+      fadeTimer = setTimeout(endFilm, FILM_FADE + 60);
+      return;
+    }
+    endFilm();
   }
   /* 재생 버튼 둘(8쪽 다큐 · 13쪽 비교 영상) — 옵셔널 체이닝으로 건다 */
   document.getElementById('latent-go')?.addEventListener('click', e => { e.stopPropagation(); openFilm(); });
@@ -3396,7 +3331,7 @@
   addEventListener('message', e => {
     const d = e.data;
     if (!d || typeof d !== 'object' || e.source !== film.contentWindow) return;   // 영상 프레임이 보낸 것만(2026-10-19 점검 — 다른 iframe 의 메시지로 닫히지 않게)
-    if (d.deck === 'film-close') closeFilm();
+    if (d.deck === 'film-close') closeFilm(d.soft === true);
     else if (d.deck === 'film-ui') closeBtn.classList.toggle('idle', !!d.idle);
   });
 
@@ -3427,7 +3362,7 @@
        그와 별개로 **명령을 직접 보낸다** — 어느 쪽이 살아 있든 재생이 걸린다.
        (영상 셋 다 `{film:'play'}` 를 안다. 01·02 는 제 안의 수신부가 받는다.) */
     if (filmOn) {
-      if (NEXT.includes(e.key) && FILMS[i] && FILMS[i].nextClose) { e.preventDefault(); closeFilm(); return; }   // nx 단추는 advance 가 같은 일을 한다   // (축약본) 다음 키로 닫는 영상 — 그 장 화면으로 돌아간다
+      if (NEXT.includes(e.key) && FILMS[i] && FILMS[i].nextClose) { e.preventDefault(); closeFilm(!!FILMS[i].softClose); return; }   // nx 단추는 advance 가 같은 일을 한다   // (축약본) 다음 키로 닫는 영상 — 그 장 화면으로 돌아간다
       if (e.key === 'Enter' && bigvid.classList.contains('on')) {   // 14쪽 전체화면 영상 — 일시정지/재생
         e.preventDefault();
         bigvid.paused ? bigvid.play().catch(() => {}) : bigvid.pause();
@@ -4450,50 +4385,6 @@
 <script fetchpriority="low" src="트윈나레이션/narr.js?v=20261116b"></script>
 <script fetchpriority="low" src="graph/fut/narr_mix.js?v=20261116"></script>
 <script fetchpriority="low" src="graph/fut/future.js?v=20261117b"></script>
-<script>
-  /* 31 → 32 확대 전환 (2026-11-17 사용자 지시) — 31장(#s-wp)에서 '다음'을 누르면 하단 추진 4단계 네 화살표가 커지며 32장(#s-roadmap) 네 칸이 된다.
-     방식 — 31장의 나머지를 걷고(.zoom), 네 화살표와 같은 색 · 모양의 복제본(.rm-zc)을 무대(#stage) 위 그 자리에 놓아
-       32장 네 칸(.rm-chev) 자리 · 크기로 키운다. 도착 무렵 32장으로 넘기고(장 교차 페이드 .45s), 복제본은 그 칸 위에서 걷힌다.
-     좌표는 무대 설계 좌표(1600×900)로 옮겨 쓴다 — #stage 는 창에 맞춰 transform 으로 키운다(fitStage).
-     뒤로 오면(32 → 31) 31장을 처음 모습으로 되돌린다. 단계 장치 규약은 window.conceptSteppers[장 index] = { step, enter }. */
-  (function(){
-    const src = document.getElementById('s-wp'), dst = document.getElementById('s-roadmap'), stage = document.getElementById('stage');
-    if (!src || !dst || !stage) return;
-    const idx = S.indexOf(src);
-    let busy = false, layer = null, T = [];
-    const box = el => { const s = stage.getBoundingClientRect(), k = s.width / 1600, r = el.getBoundingClientRect();
-      return { left: (r.left - s.left) / k, top: (r.top - s.top) / k, width: r.width / k, height: r.height / k }; };
-    const put = (el, b) => { for (const p in b) el.style[p] = b[p] + 'px'; };
-    const CP = (t, first) => `polygon(0 0,calc(100% - ${t}px) 0,100% 50%,calc(100% - ${t}px) 100%,0 100%,${first ? 0 : t}px 50%)`;
-    const unzoom = () => { src.classList.remove('zoom'); const st = src.querySelector('.c5step'); if (st) st.classList.remove('gone'); };
-    function reset(){
-      T.forEach(clearTimeout); T = [];
-      if (layer) layer.remove(); layer = null; busy = false; unzoom();
-    }
-    function zoom(){
-      busy = true;
-      const from = [...src.querySelectorAll('.c5step li')], to = [...dst.querySelectorAll('.rm-chev')];
-      if (from.length !== 4 || to.length !== 4) { busy = false; go(idx + 1); return; }
-      const A = from.map(box), B = to.map(box);
-      src.classList.add('zoom');
-      layer = document.createElement('div'); layer.className = 'rm-zoom'; stage.appendChild(layer);
-      const C = A.map((a, k) => { const c = document.createElement('div'); c.className = 'rm-zc z' + (k + 1);
-        put(c, a); c.style.clipPath = CP(22, k === 0); layer.appendChild(c); return c; });
-      T.push(setTimeout(() => {
-        src.querySelector('.c5step').classList.add('gone');
-        C.forEach((c, k) => T.push(setTimeout(() => { put(c, B[k]); c.style.clipPath = CP(30, k === 0); }, k * 60)));
-      }, 200));
-      T.push(setTimeout(() => go(idx + 1), 620));
-      T.push(setTimeout(() => C.forEach(c => { c.style.opacity = 0; }), 1180));
-      T.push(setTimeout(() => { if (layer) layer.remove(); layer = null; busy = false; unzoom(); }, 1520));
-    }
-    window.conceptSteppers = window.conceptSteppers || {};
-    window.conceptSteppers[idx] = {
-      step(d){ if (d < 0) return false; if (busy) return true; zoom(); return true; },
-      enter(now){ if (now === idx) reset(); }
-    };
-  })();
-</script>
 <script>
   /* 27장(#pv-outlook) 비교 그림 (2026-11-17 사용자 지시) — 왼쪽 격자(4×4 · 8×8)를 그리고, 오른쪽 점 1,000개(1개 = 1,000회)를 빠르게 채운 뒤 27%를 걷어 73%만 남긴다.
      막대(×1 · ×약 10)는 CSS 애니메이션(.run — 들어설 때 스크립트가 붙인다. 붙지 않은 정지 캡처 · 인쇄에서는 다 자란 막대)이 천천히 키운다 — 느린 물리모델과 빠른 에뮬레이터의 대비. 그 장에 들어올 때마다 처음부터, 떠나면 멈춘다. */

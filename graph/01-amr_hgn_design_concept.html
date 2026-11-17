@@ -7492,10 +7492,28 @@
     //  캡처 단계라 introSkip(인트로 건너뛰기)보다 먼저 잡고 끊는다 — 어차피 곧 프레임이 버려진다.
     if (window.parent !== window) {
         window.addEventListener('keydown', e => {
-            if (e.key !== 'Escape') return;
+            // 2026-11-17 사용자 지시(KSEIA 8쪽) — 재생 중(끝나기 전) 다음 키(리모컨 PageDown · → · ↓)도 덱의 그 장으로 돌아간다.
+            //   Esc 는 바로 닫고, 다음 키는 뚝 끊지 않는다 — 소리를 내리며(softLeave) 덱에 흐려 걷기를 청한다({ soft:true }). 화면은 그동안 계속 흐른다.
+            //   Space 는 재생/일시정지라 넣지 않는다. 끝난 뒤의 다음 키는 아래 leaveToDeck(검게 덮으며 나가기)가 맡는다.
+            const soft = ['PageDown', 'ArrowRight', 'ArrowDown'].includes(e.key) && !showEnded();
+            if (e.key !== 'Escape' && !soft) return;
             e.preventDefault(); e.stopPropagation();
-            try { window.parent.postMessage({ deck: 'film-close' }, '*'); } catch (err) {}
+            if (soft) softLeave();
+            try { window.parent.postMessage(soft ? { deck: 'film-close', soft: true } : { deck: 'film-close' }, '*'); } catch (err) {}
         }, true);
+    }
+    /* 나가는 동안 소리 내리기 — 덱이 영상 층을 흐려 걷는 SOFT_MS(덱 FILM_FADE 와 같은 길이) 동안 배경음악 데크와 울리는 나레이션을 0 으로 내린다.
+       멈추지는 않는다 — 다 걷힌 뒤 덱이 { film:'stop' } 을 보내고 프레임을 비운다. 포커스가 덱에 남은 때는 덱이 { film:'fade' } 로 부른다. */
+    const SOFT_MS = 800; let softLeaving = false;
+    function softLeave() {
+        if (softLeaving) return;
+        softLeaving = true;
+        [bgmA, bgmB, idleBgm].forEach(el => { try { if (!el.paused) fadeEl(el, 0, SOFT_MS, false, true); } catch (err) {} });
+        const ns = [];
+        Object.values(clips).forEach(a => a.forEach(el => { if (el && !el.paused) ns.push([el, el.volume]); }));
+        const t0 = performance.now();
+        const iv = setInterval(() => { const k = Math.max(0, 1 - (performance.now() - t0) / SOFT_MS);
+            ns.forEach(([el, v]) => { el.volume = v * k; }); if (k <= 0) clearInterval(iv); }, 30);
     }
     /* 끝난 뒤 '다음' 으로 덱에 돌아가기(2026-11-15 사용자 지시 — '마지막 씬 뒤에 다음을 누르면 자연스럽게 그 장으로 나가도록').
          · 마지막 씬이 끝나 앰비언트 홀드('감사합니다' 화면)에 들어선 뒤에만 듣는다 — 재생 중 · 시작 전 화면에서는 종전 그대로다.
@@ -7541,6 +7559,7 @@
         if (d.film === 'play') { if (!playing) togglePlay(); }
         else if (d.film === 'stop') { try { if (playing) togglePlay(); } catch (err) {} }
         else if (d.film === 'wake') { uiShow(); }
+        else if (d.film === 'fade') { softLeave(); }
         else if (d.film === 'next') { if (showEnded() && window.parent !== window) leaveToDeck(); }
     });
     // (UI 자동 숨김 블록은 startIdle() 호출 **앞**으로 옮겼다 — 그 자리의 ⚠ 주석 참조. 2026-08-17)
