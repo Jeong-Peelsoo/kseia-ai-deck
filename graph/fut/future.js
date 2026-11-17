@@ -1,5 +1,5 @@
-/* KSEIA 축약본 사본(2026-11-15) — 원본 ../../../ppt-건화ai-tft-20261208/발표덱/assets/js/kh-future.js(건화 덱 26쪽 통합 환경 디지털 트윈 · 자동 재생 · 진행 막대).
-   바꾼 것 — 1 장 목록 main.deck > .slide → .slide(숨긴 .cut 은 빠진다)  2 받을 파일 경로(three.js → graph/vendor, fut_*.js → graph/fut)  3 계기판 왼쪽 위 절 번호 4 → 5(이 덱 5 전망).
+/* KSEIA 덱 사본(2026-11-15 · 2026-11-16 · 2026-11-17 건화 26쪽 최종판으로 다시 복사 — 11-17: 3단계 측정소 기둥 제거 · 펄스 약화 · 굴뚝 연기, 4단계 확대 장면 3차원 도시 모형 kh-future-city.js) — 원본 ../../../ppt-건화ai-tft-20261208/발표덱/assets/js/kh-future.js(건화 덱 26쪽 통합 환경 디지털 트윈 · 자동 재생 · 진행 막대).
+   바꾼 것 — 1 장 목록 main.deck > .slide → .slide(숨긴 .cut 은 빠진다)  2 받을 파일 경로(three.js → graph/vendor, fut_*.js · kh-future-city.js → graph/fut)  3 계기판 왼쪽 위 절 번호 4 → 5(이 덱 5 전망).
    지금 장(.is-active) · 단계(data-step-now) · KHDeck(next · prev · go · slides)는 deck_link.js 가 이 덱에 맞춰 대 준다. 나레이션 · 배경음악은 ../../트윈나레이션/(건화 덱 사본, narr.js 의 경로 그대로).
    원본을 고치면 다시 복사하고 위 셋을 다시 바꾼다. ── 아래는 원본 그대로 ── */
 /* 4장 현업 응용 — 미래상 '통합 환경 디지털 트윈' 화면 (2026-11-12 전면 재작성, 사용자 지시 — "실제 지도와 실제 확보되어 있는 데이터 … 최첨단 하이테크 느낌으로")
@@ -11,7 +11,7 @@
                         → 종전 뷰로 확대 → 아래 층 1 km 격자 → 두 층이 지형으로 내려앉으며 Two-Stage 1 km 농도장 → 사업지구 근접(1 km 칸) → 종전 뷰. 종전의 '측정소 → 사업지구' 호는 그래프로 바꿨다
      3 대기질 · 건강영향  배치 대안 1,000개를 돌려 농도장 · 파레토 전선 · 최적안 · 위해도(2026-11-12 사용자 지시로 건강영향을 대기 쪽에 묶었다)
                         2026-11-13 사용자 지시 — 대안을 돌리는 동안은 가까이 · 낮은 고도각으로 굴뚝 자리와 연기 방향을 보이고, 최적안이 서면 물러나 Two-Stage 1 km 배경 농도장에 대안 기여분(가상)을 더한 예측 농도장 한 장으로 합친다(시간표 S3)
-     4 오존 고농도 · 폭염  Two-Stage 1 km O₃(사례 구간 칸별 최고값, 실제)로 오존 핫스팟 → 폭염 격자(가상)와 겹치는 칸 → 그 칸을 확대해 가상 건물 · 수목 · 그림자 · 지표면 온도 → 중첩 지도(2026-11-13 사용자 지시로 새로 넣었다 — 뒤 단계 번호가 하나씩 밀렸다. 시간표 TL4)
+     4 오존 고농도 · 폭염  Two-Stage 1 km O₃(2023-07-20 실제 고농도일의 칸별 일 최고값 — 2026-11-16 사용자 지시로 3월 사례 구간에서 바꿨다. 그날 측정소 실측 최고도 함께 보인다)로 오존 핫스팟 → 폭염 격자(가상)와 겹치는 칸 → 그 칸을 확대해 가상 건물 · 수목 · 그림자 · 지표면 온도 → 중첩 지도(2026-11-13 사용자 지시로 새로 넣었다 — 뒤 단계 번호가 하나씩 밀렸다. 시간표 TL4)
      5 수질 · 목표수질   소하천 → 본류 KRF 노드를 따라 하류로 퍼지는 BOD · TOC · SS 와 목표수질 판정(같은 날 지시 — 종전 PEC/PNEC · 위해도 판정을 걷었다)
                          2026-11-15 사용자 지시 — 수리 · 수질 모델 AI 에뮬레이터가 유량 · 부하 · 수온 조건을 바꾼 시나리오 500건을 돌리는 형태로(표 = 시나리오 중앙값, 초과 시나리오 비율). 시나리오 수 · 시간 · 초과 비율은 가상
                         2026-11-13 사용자 지시 — 동쪽 소하천에 더해 서쪽 소하천(→ 본류 30110213 → 합류점)도 함께 흘리고, 선은 배출구 빨강에서 하류 맑은 물색으로 칠한다. 2 · 3 · 5단계에서는 하천 흐름(입자 · 점선)을 움직이지 않는다
@@ -273,13 +273,17 @@
     for (const q of ["el", "az", "ox"]) o[q] = lerp(A[q], B[q], k);
     o.d = Math.exp(lerp(Math.log(A.d), Math.log(B.d), k)); o.f = [0, 1].map(i => lerp(A.f[i], B.f[i], k)); return o; };
   // 4단계 시간표(오존 고농도 · 폭염, 2026-11-13 사용자 지시) — o3 1 km 오존 농도 · hotO 오존 핫스팟 · hotH 폭염 격자 · both 중첩 격자 · zoom 중첩 격자로 확대 · bld 가상 건물 · therm 표면온도 · back 물러남 · map 중첩 지도
-  const TL4 = { o3: .5, hotO: 1.8, heat: 5.2, hotH: 6.4, both: 9.8, zoom: 13.4, bld: 15.8, therm: 17.6, hotz: 20.4 };      // o3 오존 격자 · heat 고온 격자 · both 중첩(위치만) · zoom 사업지구 안팎으로 확대 · bld 가상 건물 · therm 지표면 온도 · hotz 고온지역 · 저감방안 제안
+  const TL4 = { o3: .5, hotO: 1.8, heat: 5.2, hotH: 6.4, both: 9.8, zoom: 13.4, bld: 15.8, near: 18.8, far: 26.6, therm: 28.4, hotz: 31.2 };      // o3 오존 격자 · heat 고온 격자 · both 중첩(위치만) · zoom 사업지구 안팎으로 확대 · bld 가상 건물 · therm 지표면 온도 · hotz 고온지역 · 저감방안 제안   // near – far 근접 장면(2026-11-17 사용자 지시 — 건물 · 거리 · 그림자를 가까이서 훑는다. 그만큼 therm · hotz 가 10.8초 늦어졌다)
   const MREG = [488, 376, 590, 444];             // 4단계 확대 구역(지도 틀 px, 서 · 북 · 동 · 남) — 사업지구 동쪽 안(산업단지)과 바깥(완충 녹지 · 주거지)을 함께 담는다. 약 2.2 × 1.5 km
   const cam4 = tau => { const k1 = seg(tau, TL4.zoom, 2.6), A = CAMS[4], B = { f: [(MREG[0] + MREG[2]) / 2 + 2, (MREG[1] + MREG[3]) / 2 + 5], d: 4.5, el: 41, az: 44, ox: 290 }, o = {};      // 남동쪽에서 본다 — 오후 그림자가 건물에 가리지 않게
     for (const q of ["el", "az", "ox"]) o[q] = lerp(A[q], B[q], k1);
-    o.d = Math.exp(lerp(Math.log(A.d), Math.log(B.d), k1)); o.f = [0, 1].map(i => lerp(A.f[i], B.f[i], k1)); return o; };
-  // 폭염 시간대의 태양(8월 1일 · 북위 36.9° 근사) — KST 시각 → 고도각 · 방위각(남쪽에서 서쪽으로 +). 그림자 방향 · 길이에 쓴다
-  const sunAt = kst => { const R = Math.PI / 180, ph = 36.9 * R, de = 18 * R, H = 15 * (kst - .6 - 12) * R;
+    o.d = Math.exp(lerp(Math.log(A.d), Math.log(B.d), k1)); o.f = [0, 1].map(i => lerp(A.f[i], B.f[i], k1));
+    const k2 = seg(tau, TL4.near, 2.6) - seg(tau, TL4.far, 2.4); if (k2 > 0) { const gl = ease((tau - TL4.near - 1) / (TL4.far - TL4.near - 1.4)), [P, Q] = CL4, C = { f: [0, 1].map(i => lerp(P.f[i], Q.f[i], gl)) };      // 근접 장면 — 야적장에서 간선을 따라 공동주택 단지까지 미끄러진다
+      for (const q of ["d", "el", "az"]) C[q] = lerp(P[q], Q[q], gl); for (const q of ["el", "az"]) o[q] = lerp(o[q], C[q], k2); o.d = Math.exp(lerp(Math.log(o.d), Math.log(C.d), k2)); o.f = [0, 1].map(i => lerp(o.f[i], C.f[i], k2)); }
+    return o; };
+  const CL4 = [{ f: [513, 417], d: 1.15, el: 27, az: -42 }, { f: [571, 419], d: 1.0, el: 24, az: -22 }];      // 근접 장면의 처음 · 끝(지도 틀 px · km · °) — 남서쪽에서 본다(오후 볕이 드는 서쪽 면이 보이게)
+  // 폭염 시간대의 태양(7월 20일 · 북위 36.9° · 적위 20.6° 근사 — 2026-11-16 오존 사례일에 맞췄다. 종전 8월 1일 · 18°) — KST 시각 → 고도각 · 방위각(남쪽에서 서쪽으로 +). 그림자 방향 · 길이에 쓴다
+  const sunAt = kst => { const R = Math.PI / 180, ph = 36.9 * R, de = 20.6 * R, H = 15 * (kst - .6 - 12) * R;
     return { el: Math.asin(Math.sin(ph) * Math.sin(de) + Math.cos(ph) * Math.cos(de) * Math.cos(H)), az: Math.atan2(Math.sin(H), Math.cos(H) * Math.sin(ph) - Math.tan(de) * Math.cos(ph)) }; };
   const STV = { road: .97, pave: .9, res: .74, grass: .52, shade: .42, tree: .26 }, stT = v => 30 + 24 * v;      // 지표면 온도(가상) — 색 눈금 값 · °C 환산
   const camNow = { x: 0, z: 0, d: 47, el: 40, az: -16, ox: 290 };
@@ -301,6 +305,7 @@
 
     const R = new THREE.WebGLRenderer({ canvas: glc, antialias: true, alpha: false, powerPreference: "high-performance", preserveDrawingBuffer: PRINT });
     R.setPixelRatio(1); R.setSize(W, H, false); R.setClearColor(0x03070f, 1);
+    R.shadowMap.enabled = true; R.shadowMap.type = QS.has("cpcf") ? THREE.PCFShadowMap : THREE.PCFSoftShadowMap; R.shadowMap.autoUpdate = false;      // 4단계 도시 모형의 태양 그림자 — 그 장면이 보일 때만 다시 굽는다(kh-future-city.js)
     const scene = new THREE.Scene();
     const cam = new THREE.PerspectiveCamera(36, W / H, .2, 400);
 
@@ -468,7 +473,7 @@
 
     // 굴뚝(가상) 3기 + 연기 입자
     const stacks = [0, 1, 2].map(() => { const m = new THREE.Mesh(new THREE.CylinderGeometry(.035, .05, .5, 8), new THREE.MeshBasicMaterial({ color: 0xfff2d8 })); scene.add(m); return m; });
-    const NPL = 1400, plume = points(NPL, 0xffa040, .3, 0), prs = (() => { const r = rng(20261208); return Array.from({ length: NPL }, () => [r(), r(), r(), r()]); })();
+    const NPL = 3000, plume = points(NPL, 0xffb060, .4, 0), prs = (() => { const r = rng(20261208); return Array.from({ length: NPL }, () => [r(), r(), r(), r()]); })();
     // 하천 흐름 입자(실제 본류 선형 — 표고가 낮아지는 쪽으로 흐른다)
     const RIV = MAIN.map(m => { const v = m.p.map(p => fh(p[0], p[1], .06)); if (v[0].y < v[v.length - 1].y) v.reverse(); const cl = [0]; for (let i = 1; i < v.length; i++) cl.push(cl[i - 1] + v[i].distanceTo(v[i - 1])); return { v, cl, L: cl[cl.length - 1] }; });
     const RTOT = RIV.reduce((s, r) => s + r.L, 0), NRV = 520, rivP = points(NRV, 0x8fd8ff, .34, .9);
@@ -486,9 +491,9 @@
       NROAD = seg; roadGrid(); }
 
     /* ── 4단계 오존 고농도 · 폭염 ──
-       오존 = Two-Stage 1 km 추론 O₃ 의 사례 구간(2023-03-11 ~ 13) 칸별 최고값(fut_air.js field.o3max — 실제 자료). 사업지구 둘레 7.5 km 안에서 높은 칸을 핫스팟으로 표시한다.
-       폭염 격자 · 건물 · 수목 · 지표면 온도는 모두 가상이다(표고가 낮을수록 · 사업지구에 가까울수록 높게 준 화면용 값). 그림자 방향 · 길이만 8월 1일 태양 위치 근사식을 따른다(건물 높이는 BEX 배 과장) */
-    const OZR = 7.5, BEX = 2.2;
+       오존 = Two-Stage 1 km 추론 O₃ 의 2023-07-20(7–8월 중 이 일대 AirKorea 실측 O₃ 가 가장 높았던 날) 칸별 일 최고값(fut_air.js field.o3max — 실제 자료, date · sta 에 날짜와 그날 측정소 실측 최고가 있다). 사업지구 둘레 7.5 km 안에서 높은 칸을 핫스팟으로 표시한다.
+       폭염 격자 · 건물 · 수목 · 지표면 온도는 모두 가상이다(표고가 낮을수록 · 사업지구에 가까울수록 높게 준 화면용 값). 그림자 방향 · 길이만 7월 20일 태양 위치 근사식을 따른다(건물 높이는 과장하지 않는다 — 2026-11-17 3차원 도시 모형 kh-future-city.js 로 바꾸며 BEX 2.2 → 1) */
+    const OZR = 7.5, BEX = 1;
     D3.oz = (() => { const o = FLD.o3max; if (!o) return null; const ob = atob(o.b64), cells = [];
       for (let j = 0; j < FLD.ny; j++) for (let i = 0; i < FLD.nx; i++) { if (!fmk.charCodeAt(j * FLD.nx + i)) continue;
         const lon = FLD.lon0 + i * FLD.dl, lat = FLD.lat0 - j * FLD.dl, [wx, wz] = ll2w(lon, lat), dist = Math.hypot(wx - SCW[0], wz - SCW[1]); if (dist > OZR) continue;
@@ -503,26 +508,29 @@
       cells.forEach(c => c.both = !!(c.hotO && c.hotH));
       const target = cells.filter(c => c.both).sort((a, b) => a.dist - b.dist)[0], os = cells.map(c => c.o3), hs = cells.map(c => c.heat);
       return { cells, lo: Math.min(...os), hi: Math.max(...os), hlo: Math.min(...hs), hhi: Math.max(...hs), target, tf: [(target.x0 + target.x1) / 2, (target.y0 + target.y1) / 2], nO: cells.filter(c => c.hotO).length, nH: cells.filter(c => c.hotH).length, nB: cells.filter(c => c.both).length,
-        hmin: Math.min(...cells.filter(c => c.hotH).map(c => c.heat)), tags: [], sun: null, kst: 14 }; })();
+        hmin: Math.min(...cells.filter(c => c.hotH).map(c => c.heat)), tags: [], sun: null, kst: 14, date: o.date || "",
+        obs: (o.sta || []).map(s => { const [fx, fy] = ll2f(s.lon, s.lat), [wx, wz] = ll2w(s.lon, s.lat); return { ...s, x0: fx, x1: fx, y0: fy, y1: fy, dist: Math.hypot(wx - SCW[0], wz - SCW[1]) }; }).filter(s => s.dist <= OZR + 1).sort((a, b) => a.dist - b.dist) }; })();      // obs — 보는 반경 안팎 측정소의 그날 실측 1시간 최고(실제)
     const MIC = !D3.oz ? null : (() => { const Z = D3.oz, grp = new THREE.Group(); grp.visible = false; scene.add(grp);
       const [ax, az] = f2w(MREG[0], MREG[1]), [bx, bz] = f2w(MREG[2], MREG[3]), Wk = bx - ax, Hk = bz - az, Wm = Wk * 1000, Hm = Hk * 1000;
       let Y = -9; for (let a = 0; a <= 10; a++) for (let b = 0; b <= 10; b++) Y = Math.max(Y, hAt(ax + Wk * a / 10, az + Hk * b / 10)); Y += .008;
       const m2f = (x, y) => [MREG[0] + x / Wm * (MREG[2] - MREG[0]), MREG[1] + y / Hm * (MREG[3] - MREG[1])], f2m = (x, y) => [(x - MREG[0]) / (MREG[2] - MREG[0]) * Wm, (y - MREG[1]) / (MREG[3] - MREG[1]) * Hm];
       const dEdge = (x, y) => { let d = 1e9; SITE.forEach((a, i) => { const b = SITE[(i + 1) % SITE.length], [ma, na] = f2m(...a), [mb, nb] = f2m(...b), vx = mb - ma, vy = nb - na, f = clamp(((x - ma) * vx + (y - na) * vy) / (vx * vx + vy * vy)); d = Math.min(d, Math.hypot(x - ma - f * vx, y - na - f * vy)); }); return d; };   // 사업지구 경계까지 m
       const BUF = 170, zone = (x, y) => inSite(...m2f(x, y)) ? "ind" : dEdge(x, y) < BUF ? "buf" : y < .5 * Hm ? "det" : "apt";       // 산업단지 · 완충 녹지 · 단독주택 · 공동주택
-      const TS = 512, TH = Math.round(TS * Hm / Wm), k = TS / Wm, mk = () => { const c = off(TS, TH); return [c, c.getContext("2d")]; }, [tc, tx] = mk(), [sc, sx] = mk(), [pc, px] = mk(), [hc, hx] = mk();
+      const TS = 1024, TH = Math.round(TS * Hm / Wm), k = TS / Wm, mk = () => { const c = off(TS, TH); return [c, c.getContext("2d")]; }, [tc, tx] = mk(), [hc, hx] = mk();      // tc 덧그림(경계 · 저감 구역 표시, 투명 바탕) · hc 지표면 온도 바탕
       const tex = new THREE.CanvasTexture(tc); tex.colorSpace = THREE.SRGBColorSpace; tex.anisotropy = 8;      // 기본 재질이 출력 때 sRGB 로 바꾸므로 그림도 sRGB 로 알려 색이 바래지 않게 한다
-      const ground = new THREE.Mesh(new THREE.PlaneGeometry(Wk, Hk).rotateX(-Math.PI / 2), new THREE.MeshBasicMaterial({ map: tex, transparent: true, opacity: 0 })); ground.position.set(ax + Wk / 2, Y, az + Hk / 2); ground.renderOrder = 10; grp.add(ground);
+      const ground = new THREE.Mesh(new THREE.PlaneGeometry(Wk, Hk).rotateX(-Math.PI / 2), new THREE.MeshBasicMaterial({ map: tex, transparent: true, opacity: 0, depthWrite: false })); ground.position.set(ax + Wk / 2, Y + .0009, az + Hk / 2); ground.renderOrder = 10; grp.add(ground);
       // 가상 배치(m — x 동 · y 남). RDH 동서 간선(산업단지 정문 → 완충 녹지 → 주거지) · 건물 [x, y, 폭, 깊이, 높이] · 수목 [x, y, 수관 반지름, 높이]
       const r = rng(20261113), RDH = .5 * Hm, B = [], TR = [], free = (x, y, w, d, pad = 10) => !B.some(b => x < b[0] + b[2] + pad && x + w > b[0] - pad && y < b[1] + b[3] + pad && y + d > b[1] - pad) && Math.abs(y + d / 2 - RDH) > d / 2 + 16;
       const YARD = [.20 * Wm, .57 * Hm, .22 * Wm, .22 * Hm], PLAZA = [.80 * Wm, .60 * Hm, .15 * Wm, .17 * Hm], WAY = [.42 * Wm, RDH - 34, .58 * Wm, 68];      // 고온 · 저감 대상 — 산업단지 포장 야적장 · 공동주택 광장(보행로) · 바람길 축
+      const VX = .775 * Wm;                                                                                  // 남북 간선(2차로)의 x
       const inR = (R, x, y, w, d) => x < R[0] + R[2] && x + w > R[0] && y < R[1] + R[3] && y + d > R[1];
       for (let y = 30; y < Hm - 90; y += 118) for (let x = 24; x < Wm - 110; x += 150) { const w = 96 + r() * 34, d = 62 + r() * 24;                       // 산업단지 — 넓고 낮은 공장동
         if ([[x, y], [x + w, y], [x, y + d], [x + w, y + d]].every(q => zone(...q) === "ind" && dEdge(...q) > 46) && !inR(YARD, x, y, w, d) && free(x, y, w, d)) B.push([x, y, w, d, 11 + r() * 8, "ind"]); }
       for (let y = 18; y < .5 * Hm - 40; y += 35) for (let x = .55 * Wm; x < Wm - 22; x += 37) { if (zone(x + 6, y + 5) === "det" && dEdge(x + 6, y + 5) > BUF + 26 && r() > .16 && free(x, y, 13, 11, 4)) B.push([x + r() * 4, y + r() * 4, 13, 11, 6.5 + r() * 2.5, "det"]); }      // 단독주택 — 작은 집이 촘촘히
-      for (let y = .5 * Hm + 50; y < Hm - 110; y += 132) for (let x = .55 * Wm; x < Wm - 30; x += 70) { if (zone(x + 9, y + 45) === "apt" && dEdge(x + 9, y + 45) > BUF + 30 && !inR(PLAZA, x, y, 18, 92) && free(x, y, 18, 92, 12)) B.push([x, y + r() * 12, 18, 92, 46 + r() * 20, "apt"]); }   // 공동주택 — 남북으로 긴 판상형
-      for (let q = 0; q < 2600 && TR.length < 110; q++) { const x = r() * Wm, y = r() * Hm; if (zone(x, y) === "buf" && dEdge(x, y) > 14 && Math.abs(y - RDH) > 20) TR.push([x, y, 7 + r() * 5, 11 + r() * 7]); }        // 완충 녹지 수림대
-      for (let x = .56 * Wm; x < Wm - 16; x += 44) { if (dEdge(x, RDH) > BUF) TR.push([x, RDH - 22, 6, 10], [x + 18, RDH + 22, 6, 10]); }
+      for (let y = .5 * Hm + 50; y < Hm - 110; y += 132) for (let x = .55 * Wm; x < Wm - 30; x += 70) { if (zone(x + 9, y + 45) === "apt" && dEdge(x + 9, y + 45) > BUF + 30 && !inR(PLAZA, x, y, 18, 92) && free(x, y, 18, 92, 12)) B.push([x, y + r() * 12, 18, 92, 58 + r() * 26, "apt"]); }   // 공동주택 — 남북으로 긴 판상형
+      for (let i = B.length - 1; i >= 0; i--) if (B[i][0] < VX + 12 && B[i][0] + B[i][2] > VX - 12) B.splice(i, 1);          // 남북 간선 자리의 건물은 뺀다
+      for (let q = 0; q < 12000 && TR.length < 440; q++) { const x = r() * Wm, y = r() * Hm; if (zone(x, y) === "buf" && dEdge(x, y) > 14 && Math.abs(y - RDH) > 20 && Math.abs(x - VX) > 12) TR.push([x, y, 7 + r() * 5, 11 + r() * 7]); }        // 완충 녹지 수림대
+      for (let x = .56 * Wm; x < Wm - 16; x += 44) { if (dEdge(x, RDH) > BUF) if (Math.abs(x - VX) > 14) TR.push([x, RDH - 10.2, 3, 8], [x + 18, RDH + 10.2, 3, 8]); }
       const col = (v, a = 1) => { const q = ramp(v, a); return `rgba(${q[0] | 0},${q[1] | 0},${q[2] | 0},${a})`; };
       const sitePath = c => { c.beginPath(); SITE.forEach((q, i) => { const [x, y] = f2m(...q); i ? c.lineTo(x, y) : c.moveTo(x, y); }); c.closePath(); };
       // 바뀌지 않는 바탕 둘 — 평면도(pc) · 지표면 온도(hc). 그림자 · 깜빡이는 표시는 프레임마다 그 위에 얹는다
@@ -534,29 +542,18 @@
         c.fillStyle = th ? col(STV.road) : "#27334a"; c.fillRect(0, RDH - 10, Wm, 20); c.fillRect(.775 * Wm - 7, 0, 14, Hm);
         if (th) TR.forEach(([x, y, rad]) => { const gr = c.createRadialGradient(x, y, rad * .5, x, y, rad * 2.6); gr.addColorStop(0, col(STV.tree)); gr.addColorStop(.45, col(STV.tree + .08, .85)); gr.addColorStop(1, col(STV.tree + .2, 0)); c.fillStyle = gr; c.beginPath(); c.arc(x, y, rad * 2.6, 0, TAU); c.fill(); });
         else { c.fillStyle = "rgba(60,200,140,.5)"; TR.forEach(([x, y, rad]) => { c.beginPath(); c.arc(x, y, rad, 0, TAU); c.fill(); }); } };
-      base(px, false); base(hx, true);
-      const bM = new THREE.ShaderMaterial({ uniforms: { uSun: { value: new THREE.Vector3(0, 1, 0) }, uA: { value: 0 }, uHot: { value: new THREE.Color(...ramp(.93, 1).slice(0, 3).map(v => v / 255)) } }, transparent: true,
-        vertexShader: "varying vec3 vN; varying vec2 vUv; void main(){ vN = normal; vUv = uv; gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.); }",
-        fragmentShader: "uniform vec3 uSun, uHot; uniform float uA; varying vec3 vN; varying vec2 vUv; void main(){ float lit = max(dot(normalize(vN), uSun), 0.); vec3 wall = mix(vec3(.05, .09, .17), vec3(.62, .68, .78), lit); float win = step(.5, fract(vUv.y * 7.)) * step(.3, fract(vUv.x * 5.)) * .12; vec3 c = vN.y > .9 ? mix(vec3(.2, .22, .26), uHot, .35 + .5 * lit) : wall + vec3(.3, .55, .8) * win; gl_FragColor = vec4(c, uA); }" });
-      const eM = new THREE.LineBasicMaterial({ color: 0x9fd8ff, transparent: true, opacity: 0 });
-      const bl = B.map(([x, y, w, d, h, kind]) => { const hk = h * BEX / 1000, geo = new THREE.BoxGeometry(w / 1000, hk, d / 1000), m = new THREE.Mesh(geo, bM); m.renderOrder = 11;
-        if (kind !== "det") { const e = new THREE.LineSegments(new THREE.EdgesGeometry(geo), eM); e.renderOrder = 12; m.add(e); } grp.add(m); return { m, hk, cx: ax + (x + w / 2) / 1000, cz: az + (y + d / 2) / 1000 }; });
-      const tM = new THREE.MeshBasicMaterial({ color: 0x35c98a, transparent: true, opacity: 0 }), tG = new THREE.ConeGeometry(1, 1, 6);
-      const tl = TR.map(([x, y, rad, h]) => { const m = new THREE.Mesh(tG, tM); m.renderOrder = 11; grp.add(m); return { m, rad: rad / 1000, hk: h * BEX / 1000, cx: ax + x / 1000, cz: az + y / 1000 }; });
+      base(hx, true);
+      const hTex = new THREE.CanvasTexture(hc); hTex.colorSpace = THREE.SRGBColorSpace;
+      // 3차원 도시 모형(kh-future-city.js) — 건물 · 거리 · 수목 · 태양 그림자. m 단위 모형을 1/1000 로 줄여 놓는다
+      const city = window.KH_FUT_CITY({ THREE, R, scene, off, rng, Wm, Hm, B, TR, YARD, PLAZA, RDH, VX, BUF, zone, dEdge, site: SITE.map(q => f2m(...q)), STV, col, thermTex: hTex });
+      city.root.scale.setScalar(.001); city.root.position.set(ax, Y, az); grp.add(city.root);
       const W3 = (x, y, up = .012) => [ax + x / 1000, Y + up, az + y / 1000], mid = R => [R[0] + R[2] / 2, R[1] + R[3] / 2];
-      Z.zones = [{ nm: "산업단지", p: W3(.2 * Wm, .22 * Hm, .09) }, { nm: "완충 녹지", p: W3(...(() => { const q = TR[Math.floor(TR.length * .3)]; return [q[0], q[1]]; })(), .07) }, { nm: "단독주택", p: W3(.84 * Wm, .2 * Hm, .05) }, { nm: "공동주택", p: W3(.66 * Wm, .9 * Hm, .22) }];
+      Z.zones = [{ nm: "산업단지", p: W3(.2 * Wm, .22 * Hm, .034) }, { nm: "완충 녹지", p: W3(...(() => { const q = TR[Math.floor(TR.length * .3)]; return [q[0], q[1]]; })(), .03) }, { nm: "단독주택", p: W3(.84 * Wm, .2 * Hm, .022) }, { nm: "공동주택", p: W3(.66 * Wm, .9 * Hm, .105) }];
       Z.fix = [{ nm: "그늘막 · 무더위 쉼터 필요 지역", p: W3(...mid(YARD)), col: "rgba(255,120,96,.98)" }, { nm: "쿨링포그 필요 지역", p: W3(...mid(PLAZA)), col: "rgba(120,220,255,.98)" }, { nm: "바람길 조성 필요 지역", p: W3(WAY[0] + WAY[2] * .3, RDH), col: "rgba(150,255,200,.98)" }];
-      Z.tf = [(MREG[0] + MREG[2]) / 2, (MREG[1] + MREG[3]) / 2]; Z.nBld = B.length; Z.nTree = TR.length;
-      const paint = (t, tau, sun, kt, kz) => { const S = [Math.sin(sun.az) / Math.tan(sun.el), -Math.cos(sun.az) / Math.tan(sun.el)];       // 그림자 벡터(높이 1 m 당 m — 동 · 남)
-        tx.setTransform(1, 0, 0, 1, 0, 0); tx.globalAlpha = 1; tx.drawImage(pc, 0, 0); if (kt > 0) { tx.globalAlpha = kt; tx.drawImage(hc, 0, 0); }
-        // 그림자 — 건물은 바닥 사각형을 그림자 벡터만큼 끌어 덮고, 수목은 수관 원을 끈다. 한 판에 모아 한 번에 얹는다(겹친 곳이 더 진해지지 않게)
-        sx.setTransform(k, 0, 0, k, 0, 0); sx.globalCompositeOperation = "source-over"; sx.clearRect(0, 0, Wm, Hm); sx.fillStyle = "#000"; sx.strokeStyle = "#000"; sx.lineCap = "round";
-        B.forEach(([x, y, w, d, h]) => { const vx = S[0] * h * BEX, vy = S[1] * h * BEX, P = [[x, y], [x + w, y], [x + w, y + d], [x, y + d]];
-          P.forEach((a, q) => { const b = P[(q + 1) % 4]; sx.beginPath(); sx.moveTo(a[0], a[1]); sx.lineTo(b[0], b[1]); sx.lineTo(b[0] + vx, b[1] + vy); sx.lineTo(a[0] + vx, a[1] + vy); sx.closePath(); sx.fill(); }); sx.fillRect(x + vx, y + vy, w, d); });
-        TR.forEach(([x, y, rad, h]) => { sx.lineWidth = rad * 2.3; sx.beginPath(); sx.moveTo(x, y); sx.lineTo(x + S[0] * h * BEX * .8, y + S[1] * h * BEX * .8); sx.stroke(); });
-        sx.globalCompositeOperation = "source-in"; sx.fillStyle = kt > .02 ? col(STV.shade) : "#02060e"; sx.fillRect(0, 0, Wm, Hm);
-        tx.globalAlpha = kt > .02 ? .5 + .42 * kt : .55; tx.drawImage(sc, 0, 0); tx.setTransform(k, 0, 0, k, 0, 0);
-        tx.globalAlpha = 1; tx.fillStyle = "#0a1220"; B.forEach(([x, y, w, d]) => tx.fillRect(x, y, w, d));
+      Z.tf = [(MREG[0] + MREG[2]) / 2, (MREG[1] + MREG[3]) / 2]; Z.nBld = B.length; Z.nTree = city.nTree; Z.Y = Y;
+      // 덧그림 — 사업지구 경계 · 고온 구역 테두리 · 바람길 꺾쇠 · 구역 틀. 바닥 · 건물 · 그림자는 도시 모형이 그린다
+      let still = false; const paint = (t, tau, kz) => { if (kz <= 0 && still) return; still = kz <= 0;       // 깜빡이는 표시가 없는 동안은 한 번만 그린다
+        tx.setTransform(1, 0, 0, 1, 0, 0); tx.globalAlpha = 1; tx.clearRect(0, 0, TS, TH); tx.setTransform(k, 0, 0, k, 0, 0);
         sitePath(tx); tx.strokeStyle = "rgba(255,211,106,.95)"; tx.lineWidth = 5; tx.setLineDash([22, 12]); tx.stroke(); tx.setLineDash([]);                 // 사업지구 경계(가상)
         if (kz > 0) { const bk = .3 + .7 * Math.abs(Math.sin(t * 3.2));                                                                                         // 고온 · 저감 대상 구역 — 깜빡이는 테두리
           tx.lineWidth = 6; tx.setLineDash([16, 9]); tx.globalAlpha = kz * bk; tx.strokeStyle = "#ffffff"; tx.strokeRect(...YARD); tx.strokeRect(...PLAZA);
@@ -565,11 +562,10 @@
           tx.globalAlpha = 1; }
         tx.strokeStyle = "rgba(255,255,255,.85)"; tx.lineWidth = 5; tx.strokeRect(2.5, 2.5, Wm - 5, Hm - 5); tex.needsUpdate = true; };
       return { update(t, tau, on) { const kg = on ? seg(tau, TL4.zoom + 1.0, 1.2) : 0; grp.visible = kg > .004; Z.kg = kg; if (!grp.visible) return;
-          const kb = seg(tau, TL4.bld, 1.8), kt = seg(tau, TL4.therm, 1.5), kz = seg(tau, TL4.hotz, .8), ph = Math.max(0, tau - TL4.therm - 1) / 9, kst = 13 + 4.5 * (1 - Math.abs(1 - (ph % 2))), sun = sunAt(kst); Z.kst = kst; Z.sun = sun; Z.kt = kt; Z.kz = kz;
-          ground.material.opacity = kg; paint(t, tau, sun, kt, kz);
-          bM.uniforms.uSun.value.set(-Math.sin(sun.az) * Math.cos(sun.el), Math.sin(sun.el), Math.cos(sun.az) * Math.cos(sun.el)); bM.uniforms.uA.value = kg; eM.opacity = .5 * kg; tM.opacity = .95 * kg;
-          bl.forEach((b, q) => { const s2 = Math.max(.001, ease(kb * 1.5 - (q % 9) * .055)); b.m.scale.y = s2; b.m.position.set(b.cx, Y + b.hk * s2 / 2, b.cz); });
-          tl.forEach((b, q) => { const s2 = Math.max(.001, ease(kb * 1.5 - (q % 9) * .05)); b.m.scale.set(b.rad * 1.5, b.hk * s2, b.rad * 1.5); b.m.position.set(b.cx, Y + b.hk * s2 / 2, b.cz); }); } }; })();
+          const kb = seg(tau, TL4.bld, 2.6), kt = seg(tau, TL4.therm, 1.5), kz = seg(tau, TL4.hotz, .8), ph = Math.max(0, tau - TL4.bld - 1.5) / 9, kst = 13 + 4.5 * (1 - Math.abs(1 - (ph % 2))), sun = sunAt(kst); Z.kst = kst; Z.sun = sun; Z.kt = kt; Z.kz = kz;      // 해는 건물이 선 뒤부터 13시 – 17시 30분을 오간다
+          Z.kn = seg(tau, TL4.near, 2.6) - seg(tau, TL4.far, 2.4);                                                              // 근접 장면 — 카메라가 보는 높이를 모형 바닥으로 옮긴다
+          ground.material.opacity = kg; paint(t, tau, kz);
+          city.set(kg, ease(kb * 1.6), ease(kb * 1.6 - .3), ease(kb * 1.6 - .6), kt); city.sun(sun); } }; })();
 
     /* ── 후처리 — 빛 번짐 ── */
     let composer = null;
@@ -584,7 +580,7 @@
       // 카메라 — 단계 사이를 부드럽게 옮기고, 선 자리에서 천천히 돈다
       const cf = ease((t - camT0) / 2.4), tg = step === 1 ? cam1(tau) : step === 2 ? cam2(tau) : step === 3 ? cam3(tau) : step === 4 ? cam4(tau) : CAMS[step], [tx, tz] = f2w(...tg.f);   // 2 · 3단계는 시간표를 따라 스스로 움직인다
       camNow.x = lerp(camFrom.x, tx, cf); camNow.z = lerp(camFrom.z, tz, cf); camNow.d = lerp(camFrom.d, tg.d, cf); camNow.el = lerp(camFrom.el, tg.el, cf); camNow.az = lerp(camFrom.az, tg.az, cf); camNow.ox = lerp(camFrom.ox, tg.ox, cf);
-      const az = (camNow.az + (step === 9 ? t * 2.2 : 7 * Math.sin(t * .11))) * Math.PI / 180, el = (camNow.el + 1.5 * Math.sin(t * .17)) * Math.PI / 180, ty = hAt(camNow.x, camNow.z);
+      const az = (camNow.az + (step === 9 ? t * 2.2 : 7 * Math.sin(t * .11))) * Math.PI / 180, el = (camNow.el + 1.5 * Math.sin(t * .17)) * Math.PI / 180, ty = lerp(hAt(camNow.x, camNow.z), step === 4 && D3.oz && D3.oz.Y != null ? D3.oz.Y : 0, step === 4 && D3.oz ? D3.oz.kn || 0 : 0);
       cam.position.set(camNow.x + camNow.d * Math.cos(el) * Math.sin(az), ty + camNow.d * Math.sin(el), camNow.z + camNow.d * Math.cos(el) * Math.cos(az));
       cam.lookAt(camNow.x, ty, camNow.z);
       cam.setViewOffset(W + 2 * camNow.ox, H, 2 * camNow.ox, 0, W, H);
@@ -608,8 +604,8 @@
 
       // 측정소 빛기둥 — 실측 NO₂ 가 높을수록 밝다
       beams.forEach((o, i) => { const v = o.no2[hi], k = isNaN(v) ? .25 : clamp(v / 30, .2, 1), on = step === 2 || step === 3 ? 1 : step === 0 ? .55 : step === 1 ? .25 : 0;   // 대기 측정망이라 수질 · 소음 · 생태 단계(4–7)와 8단계에서는 끈다(2026-11-12 사용자 지시)
-        o.beam.material.uniforms.uA.value = lerp(o.beam.material.uniforms.uA.value, on * (.5 + .7 * k) * (step === 2 ? .35 : 1), .08); o.beam.material.uniforms.uT.value = t + i;
-        const pu = (t * .6 + i * .17) % 1; o.ring.scale.setScalar((step === 2 ? 1.05 : .5 + 2.2 * pu) * clamp(camNow.d / 47, .2, 1.2)); o.ring.material.opacity = step === 2 ? .42 * on : (1 - pu) * .6 * on; });   // 2단계 — 퍼지는 고리 대신 고정 고리(스팟)
+        o.beam.material.uniforms.uA.value = lerp(o.beam.material.uniforms.uA.value, step === 3 ? 0 : on * (.5 + .7 * k) * (step === 2 ? .35 : 1), .08);      // 3단계는 기둥을 세우지 않는다(2026-11-17 사용자 지시 — 주인공은 굴뚝 연기다) o.beam.material.uniforms.uT.value = t + i;
+        const pu = (t * .6 + i * .17) % 1; o.ring.scale.setScalar((step === 2 ? 1.05 : step === 3 ? .5 + .9 * pu : .5 + 2.2 * pu) * clamp(camNow.d / 47, .2, 1.2)); o.ring.material.opacity = step === 2 ? .42 * on : (1 - pu) * (step === 3 ? .13 : .6) * on; });      // 3단계 — 고리는 작고 아주 흐리게   // 2단계 — 퍼지는 고리 대신 고정 고리(스팟)
       // 측정망 그래프 · 측정소 점(2단계) — 띠 굵기는 멀리서 굵게, 가까이서 가늘게
       { const gu = graph.material.uniforms; gu.uA.value = lerp(gu.uA.value, s2 ? 1 : 0, .1); gu.uT.value = t; gu.uW.value = .00048 * Math.pow(camNow.d, 1.27); if (s2) gu.uTau.value = tau; graph.visible = gu.uA.value > .004;
         staPts.material.opacity = lerp(staPts.material.opacity, s2 ? .95 * ease(tau / 1.4) : 0, .12); staPts.material.size = camNow.d * .03; staPts.visible = staPts.material.opacity > .004; }
@@ -626,7 +622,7 @@
       // 굴뚝 · 연기
       const sOn = step >= 3 && step < 9 && step !== 4 && stk;
       stacks.forEach((m, i) => { m.visible = !!sOn; if (sOn) { const v = fh(stk[i][0], stk[i][1]); m.position.set(v.x, v.y + .25, v.z); } });
-      plume.material.opacity = lerp(plume.material.opacity, step === 3 ? .34 : 0, .08);
+      plume.material.opacity = lerp(plume.material.opacity, step === 3 ? .46 : 0, .08);      // 2026-11-17 연기를 또렷하게 — 입자 1,400 → 3,000 · 크기 .3 → .4 · 불투명도 .34 → .46
       if (plume.material.opacity > .01 && stk) { const p = plume.geometry.attributes.position, ux = Math.cos(wind), uz = Math.sin(wind);
         for (let i = 0; i < NPL; i++) { const [a, b, c, d] = prs[i], s = stk[i % 3], age = (t * (.1 + .08 * a) + b) % 1, v = fh(s[0], s[1]), dist = age * 15, sp = .15 + dist * .1;
           p.setXYZ(i, v.x + ux * dist + (c - .5) * sp * 2 * -uz, v.y + .5 + age * 1.1 + (d - .5) * sp * .8, v.z + uz * dist + (c - .5) * sp * 2 * ux); }
@@ -797,7 +793,7 @@
     g.fillStyle = gr; g.fillRect(0, 0, W, 190);
     g.fillStyle = "#0F243E"; g.fillRect(0, 0, 104, 104); g.fillStyle = "#76A9ED"; g.fillRect(0, 100, 104, 4); T("5", 52, 72, 56, "#fff", { a: "center", w: 800, f: FD });
     T("환경영향평가의 미래 · 디지털 트윈과 AI 기반 전수 시뮬레이션 의사결정", 130, 46, 32, "#ffffff", { w: 800, f: FD });   // 24쪽 머리와 같은 글(2026-11-13 사용자 지시 — 종전 "환경평가의 미래 · 통합 환경 평가")
-    T("통합 환경 디지털 트윈 — 구역 하나로 대기 · 수질 · 소음진동 · 생태 동시 검토", 130, 80, 20, "#9fc0ea", { w: 500 });
+    // 2026-11-16 사용자 지시 — 머리 제목 아래 부제("통합 환경 디지털 트윈 — 구역 하나로 … 동시 검토")를 걷었다
     const air = step <= 3, chips = air ? [["● 대기 측정망 연계 · 사례 재생", "#7fe0a8"], [D3.clock ? `${D3.clock} KST` : "자료 불러오는 중", "#dfe9ff"], ["GPU 서로게이트 가동", "#76A9ED"]] : [["● 통합 모델 가동", "#7fe0a8"], ["GPU 서로게이트 가동", "#76A9ED"]];   // 대기 측정망 · 사례 시계는 대기 단계(0–3)에만
     let x = W - 40; g.font = `700 17px ${FS}`;
     for (let i = chips.length - 1; i >= 0; i--) { const [s, c] = chips[i], w = g.measureText(s).width + 30; x -= w;
@@ -856,8 +852,9 @@
         const put = (c, txt, k, dx, dy, colr) => { if (!c || k < .02) return; const [sx, sy, ok] = cen(c); if (!ok || !inMap(sx, sy) || sy > H - 200) return; if (sx > PX - 360) dx = -Math.abs(dx); g.globalAlpha = clamp(k) * clamp(far); leader(sx, sy, sx + dx * .25, sy + dy * .6, colr); tag(txt, sx + (dx < 0 ? dx - 270 : dx), sy + dy, "rgba(6,12,28,.9)", "#ffffff", 19, colr); g.globalAlpha = 1; };
         const head = (txt, k, colr) => { if (k < .02) return; g.globalAlpha = clamp(k) * clamp(far); tag(txt, MX, MY + 50, "rgba(6,12,28,.92)", "#ffffff", 22, colr); g.globalAlpha = 1; };
         const kA = seg(tau, TL4.o3 + .4, .8) * (1 - seg(tau, TL4.heat - .6, .6)), kH = seg(tau, TL4.heat + .3, .8) * (1 - seg(tau, TL4.both - .6, .6)), kC = seg(tau, TL4.both + .3, .8);
-        head("1  오존 고농도 격자 · Two-Stage 1 km 추론", kA, "rgba(200,165,255,.95)"); head("2  고온 격자 · 일 최고기온(가상)", kH, "rgba(255,190,80,.95)"); head("3  고농도 오존 + 폭염 중첩", kC, "rgba(255,80,92,.98)");
+        head(`1  오존 고농도 격자 · ${Z.date} · Two-Stage 1 km 추론`, kA, "rgba(200,165,255,.95)"); head("2  고온 격자 · 일 최고기온(가상)", kH, "rgba(255,190,80,.95)"); head("3  고농도 오존 + 폭염 중첩", kC, "rgba(255,80,92,.98)");
         put(top, `오존 핫스팟  ${top.o3.toFixed(0)} ppb`, seg(tau, TL4.hotO, .8) * (1 - seg(tau, TL4.heat - .6, .6)), -40, -44, "rgba(200,165,255,.95)");
+        Z.obs.slice(0, 2).forEach((s, i) => put(s, `${s.nm} 측정소 실측  ${s.max.toFixed(0)} ppb`, seg(tau, TL4.hotO + .5 + i * .3, .8) * (1 - seg(tau, TL4.heat - .6, .6)), i ? -44 : 44, i ? 56 : 60, "rgba(102,240,176,.95)"));      // 그날 측정소 실측 1시간 최고(실제)
         put(hh, `고온 격자(가상)  ${hh.heat.toFixed(1)} °C`, seg(tau, TL4.hotH, .8) * (1 - seg(tau, TL4.both - .6, .6)), 44, 50, "rgba(255,190,80,.95)");
         put(Z.target, "고농도 오존 + 폭염 중첩 위치", seg(tau, TL4.both + .8, .8), 46, -40, "rgba(255,80,92,.98)"); }
       if (zin > .5) { const kb = seg(tau, TL4.bld + .8, .8), kz = Z.kz || 0;
@@ -897,7 +894,7 @@
       glass(x, y, 470, 96);
       if (ph === 2) { T("고농도 오존 + 폭염 중첩 지도", x + 18, y + 30, 16, "#dfe9ff", { w: 700 }); T("폭염 가상", x + 452, y + 30, 13, "#7f93b8", { w: 600, a: "right" });
         [["rgba(168,112,255,.9)", "오존 핫스팟"], ["rgba(255,170,56,.9)", "고온 격자"], ["rgba(255,56,72,.95)", "중첩"]].forEach(([c, nm], i) => { g.fillStyle = c; g.fillRect(x + 18 + i * 150, y + 52, 26, 14); T(nm, x + 52 + i * 150, y + 65, 15, "#dfe9ff", { w: 600 }); }); }
-      else { T(["Two-Stage 1 km 추론 O₃ · 사례 구간 최고값", "고온 격자 · 일 최고기온(가상)", "", "지표면 온도 · 폭염 시간대(가상)"][ph], x + 18, y + 30, 16, "#dfe9ff", { w: 700 }); if (ph === 0) T("2023-03", x + 452, y + 30, 13, "#7f93b8", { w: 600, a: "right", f: FM });
+      else { T(["Two-Stage 1 km 추론 O₃ · 일 최고값", "고온 격자 · 일 최고기온(가상)", "", "지표면 온도 · 폭염 시간대(가상)"][ph], x + 18, y + 30, 16, "#dfe9ff", { w: 700 }); if (ph === 0) T(Z.date, x + 452, y + 30, 13, "#7f93b8", { w: 600, a: "right", f: FM });
         for (let i = 0; i < 60; i++) { const c = ramp(i / 59, 1); g.fillStyle = `rgb(${c[0] | 0},${c[1] | 0},${c[2] | 0})`; g.fillRect(x + 18 + i * 7, y + 44, 7, 12); }
         T([`${Z.lo.toFixed(0)}`, `${Z.hlo.toFixed(1)}`, "", `${stT(0).toFixed(0)} °C`][ph], x + 18, y + 78, 13, "#9fb3d6", { w: 600 }); T([`${Z.hi.toFixed(0)} ppb`, `${Z.hhi.toFixed(1)} °C`, "", `${stT(1).toFixed(0)} °C`][ph], x + 438, y + 78, 13, "#9fb3d6", { w: 600, a: "right" }); }
     } else if (step === 7) {
@@ -923,7 +920,7 @@
     const y = H - 30; g.fillStyle = "rgba(3,7,16,.74)"; g.fillRect(0, H - 56, PX - 10, 56);
     const real = "실제 자료  위성영상 국토교통부 VWorld · 표고 Terrain Tiles(AWS Open Data, 높이 과장) · 도로 © OpenStreetMap contributors · 하천 KRF · 측정망 AirKorea · 농도장 Two-Stage 1 km · CMAQ-DA 5 km · 바람 ERA5";
     T(real, MX, y - 6, 13.5, "rgba(170,205,245,.82)", { w: 500 });
-    T("가상  사업지구 위치 · 대안 · 대기 · 수질 · 소음 · 생태 영향 수치 · 폭염 · 건물 · 지표면 온도 · 위성 · 기상청 API 수신 연출(홍보용 개념 화면)   사례 구간 2023-03-11 ~ 13 재생 — 실시간 아님", MX, y + 14, 13.5, "rgba(255,214,150,.78)", { w: 500 });
+    T("가상  사업지구 위치 · 대안 · 대기 · 수질 · 소음 · 생태 영향 수치 · 폭염 · 건물 · 지표면 온도 · 위성 · 기상청 API 수신 연출(홍보용 개념 화면)   사례 구간 2023-03-11 ~ 13 재생(오존 2023-07-20) — 실시간 아님", MX, y + 14, 13.5, "rgba(255,214,150,.78)", { w: 500 });
   }
 
   /* ---------- 오른쪽 판 ---------- */
@@ -1035,7 +1032,7 @@
       [["그늘막 · 무더위 쉼터", "산업단지 포장 야적장 · 작업 동선", "rgba(255,120,96,.98)"], ["쿨링포그", "공동주택 광장 · 보행로", "rgba(120,220,255,.98)"], ["바람길 조성", "주거지 – 완충 녹지 – 산업단지 축", "rgba(150,255,200,.98)"]].forEach(([a, b, c], i) => { const yy = y3 + 14 + i * 36; g.globalAlpha = kz * seg(tau, TL4.hotz + .3 + i * .25, .5);
         g.fillStyle = c; g.globalAlpha *= bk; g.beginPath(); g.arc(x + 8, yy + 15, 6, 0, TAU); g.fill(); g.globalAlpha = kz * seg(tau, TL4.hotz + .3 + i * .25, .5);
         T(a, x + 24, yy + 21, 18, "#ffffff", { w: 800 }); T(b, x + w, yy + 21, 15, "#9fb3d6", { w: 600, a: "right" }); });
-      g.globalAlpha = seg(tau, TL4.o3 + .6, .8); T("오존 — Two-Stage 1 km 추론(2023-03 사례 구간 최고값)", x, y3 + 14 + 3 * 36 + 22, 14, "#7fd0ff", { w: 600 }); T("고온 격자 · 건물 · 녹지 · 지표면 온도 · 저감 구역은 가상 · 건물 높이 과장", x, y3 + 14 + 3 * 36 + 42, 14, "#ffd9a0", { w: 600 });
+      g.globalAlpha = seg(tau, TL4.o3 + .6, .8); T(`오존 — ${Z.date} 실제 고농도일 · Two-Stage 1 km 추론 일 최고값 · 측정소 실측`, x, y3 + 14 + 3 * 36 + 22, 14, "#7fd0ff", { w: 600 }); T("고온 격자 · 건물 · 녹지 · 지표면 온도 · 저감 구역은 가상", x, y3 + 14 + 3 * 36 + 42, 14, "#ffd9a0", { w: 600 });
       g.globalAlpha = 1; consoleBox(t, 0); return;
     }
     if (step === 5) {
@@ -1329,7 +1326,7 @@
 
   /* ---------- 자료 · three.js 받기 — 이 장 두 쪽 앞에 닿으면 차례로 ---------- */
   const SL = [...document.querySelectorAll(".slide")], ME = SL.indexOf(slide);
-  const NEED = [["graph/vendor/three-r170.iife.js", () => !!window.THREE], ["graph/fut/fut_dem.js", () => !!window.FUT_DEM], ["graph/fut/fut_roads.js", () => !!window.FUT_ROADS], ["graph/fut/fut_air.js", () => !!window.FUT_AIR], ["graph/fut/fut_wind.js", () => !!window.FUT_WIND], ["graph/fut/fut_sat.js", () => !!window.FUT_SAT]];
+  const NEED = [["graph/vendor/three-r170.iife.js", () => !!window.THREE], ["graph/fut/fut_dem.js", () => !!window.FUT_DEM], ["graph/fut/fut_roads.js", () => !!window.FUT_ROADS], ["graph/fut/fut_air.js?v=20261116", () => !!window.FUT_AIR], ["graph/fut/fut_wind.js", () => !!window.FUT_WIND], ["graph/fut/fut_sat.js", () => !!window.FUT_SAT], ["graph/fut/kh-future-city.js?v=20261117", () => !!window.KH_FUT_CITY]];
   let loading = false;
   function load() { if (loading || G3) return; loading = true;
     const next = i => { if (i >= NEED.length) { try { boot(); } catch (e) { console.error("kh-future 3D", e); } return; }
@@ -1397,7 +1394,7 @@
     if (!auto) return;
     if (!slide.classList.contains("is-active")) return stop();                     // 장을 떠났다
     const s = readStep();
-    if (auto.paused) { if (s !== auto.s) { pauseSet(false, true); bgResume(); return scene(s); } return; }   // (KSEIA) 일시정지 중 — 키로 장면을 옮기면 풀고 그 씬으로
+    if (auto.paused) { if (s !== auto.s) { pauseSet(false, true); bgResume(); return scene(s); } return; }   // 일시정지 중 — 키로 장면을 옮기면 풀고 그 씬으로
     if (s !== auto.s) return scene(s);                                              // 다음 · 이전 키 · 발표자 화면에서 넘겼다 — 그 씬의 나레이션으로 맞춘다
     if (auto.bi === 0 && !auto.tail && bg[0].duration && bg[0].currentTime > bg[0].duration - F_OUT) { auto.tail = true; fade(bg[0], 0, F_OUT); }   // 첫 곡이 끝나 간다 — 줄여 가며 끝내고 5단계까지 음악 없이 간다(곡 끝에 물러나는 부분이 없다)
     if (auto.next || !auto.done || step !== s || (performance.now() - t0) / 1000 - stepT0 < SCENE_END[s]) return;
@@ -1429,7 +1426,7 @@
   const sk = document.createElement("div"); sk.className = "fut-seek"; sk.hidden = true;
   sk.innerHTML = `<div class="tr"><div class="rail"></div><div class="fill"></div>${ST.slice(1, -1).map(v => `<i class="tk" style="left:${v / TOT * 100}%"></i>`).join("")}`
     + `${ST.slice(0, -1).map((v, i) => `<b class="tn" style="left:${v / TOT * 100}%">${String(i).padStart(2, "0")}</b>`).join("")}<div class="knob"></div><div class="tip" hidden></div></div>`
-    + `<button type="button" class="pp" aria-label="일시정지" title="일시정지 / 재생"><i></i></button><span class="nm"></span><span class="tm"></span>`;   // (KSEIA 2026-11-15) 일시정지 · 재생 단추
+    + `<button type="button" class="pp" aria-label="일시정지" title="일시정지 / 재생"><i></i></button><span class="nm"></span><span class="tm"></span>`;   // 2026-11-15 일시정지 · 재생 단추
   slide.appendChild(sk);
   const tr = sk.querySelector(".tr"), fill = sk.querySelector(".fill"), knob = sk.querySelector(".knob"), tip = sk.querySelector(".tip"), TN = [...sk.querySelectorAll(".tn")];
   let drag = -1, idleT = 0, raf = 0;
@@ -1441,7 +1438,7 @@
   const wake = () => { if (sk.hidden) return; sk.classList.remove("idle"); clearTimeout(idleT);
     idleT = setTimeout(() => { if (drag < 0 && !sk.matches(":hover")) sk.classList.add("idle"); else wake(); }, IDLE); };
   function seekBar(on) { sk.hidden = !on; clearTimeout(idleT); tip.hidden = true; drag = -1; cancelAnimationFrame(raf); raf = 0; if (on) { wake(); frame(); } }
-  /* (KSEIA 2026-11-15 사용자 지시 "플레이 bar 에 일시중지, 재생 버튼") — 멈추면 나레이션 · 배경음악을 세우고, 장면 시각(stepT0 · camT0)을 흐른 만큼 늦춰 화면도 그 자리에 선다.
+  /* (2026-11-15 사용자 지시 "플레이 bar 에 일시중지, 재생 버튼" — KSEIA 축약본 30쪽에서 먼저 넣고 옮겼다) — 멈추면 나레이션 · 배경음악을 세우고, 장면 시각(stepT0 · camT0)을 흐른 만큼 늦춰 화면도 그 자리에 선다.
      다시 누르면 이어 간다. 일시정지 중에 막대로 옮기거나 키로 장면을 넘기면 풀린다 */
   const ppb = sk.querySelector(".pp");
   function pauseSet(on, quiet) {

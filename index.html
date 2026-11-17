@@ -41,7 +41,7 @@
      투사용 타입 스케일 (원본에서 그대로 물려받았다 — 실측으로 맞춰 둔 값이라 손대지 말 것)
        1600px 설계폭에서 본문 23px · 부연 20px 이 하한이다.
        vw 계수는 목표치÷16 이다(1600px 에서 1vw = 16px). -->
-<!-- 발표 · 게시 덱(34장) — 2026-11-16 사용자 지시로 원본 45장 덱(정필수-AI  발표 full.html)을 지우고 축약본(_축약.html)을 이 이름으로 올렸다. 이제 이 파일이 정본이다 — 직접 고친다.
+<!-- 발표 · 게시 덱(34장, 2026-11-17 사용자 지시로 27장 #pv-limit 재현도 · 한계를 cut 으로 빼고 31장 뒤에 32장 #s-roadmap 현업화 추진 체계를 끼웠다) — 2026-11-16 사용자 지시로 원본 45장 덱(정필수-AI  발표 full.html)을 지우고 축약본(_축약.html)을 이 이름으로 올렸다. 이제 이 파일이 정본이다 — 직접 고친다.
      scripts/build_short_deck.py 는 원본이 없어 더 돌지 않는다(이 파일을 만든 기록으로 남긴다). parts/ 조각도 기록이다 — 고칠 때 이 파일을 고친다. 아래는 마지막 빌드 때의 설명이다.
      원본에서 뺀 장(1-base): 5, 7, 12, 18, 21, 23, 25, 27, 29, 30, 32, 35, 36, 38, 39. 끼운 장: 17장 뒤 parts/s-compute.html, 20장 뒤 parts/s-survey.html, 41장 뒤 parts/s-future.html. 갈아 끼운 장: 6장 → parts/s-intro.html, 8장 → parts/s-bridge.html, 10장 → parts/s-gnn.html, 20장 → parts/s-rsm.html. 1쪽 표지 지구본은 가벼운 인자(그래프망 없음 · assets=bare · fps=30)로 돈다. 절 2 · 3 을 맞바꿨다(설계 철학이 2절, AMR-HGN 이 3절). 아래 주석의 절 · 장 번호는 원본 기준이다. -->
 <html lang="ko">
@@ -1422,6 +1422,53 @@
   .c5step li b{font-size:22px;letter-spacing:-.02em;line-height:1.25}
   .c5step li span{font-size:17px;color:var(--mut);line-height:1.35}
   .c5step li:nth-child(4) span{color:#e2e8f0}
+  /* ── 32장 #s-roadmap 현업화 추진 체계(2026-11-17 사용자 지시) — 31장 하단 추진 4단계가 확대되며 이 장의 네 단계가 된다(아래 '31 → 32 확대 전환' 스크립트).
+     색은 31장 .c5step 네 칸과 같다 — 확대 복제본이 그 색 그대로 이 장의 칸 위에 내려앉는다. 띠 달린 상자 대신 큰 번호 · 가는 줄 목록(디자인 규율). */
+  #s-roadmap .htop{margin-bottom:clamp(10px,calc(1.8 * var(--vh)),22px)}
+  .rm{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));column-gap:14px;row-gap:12px;align-items:start}
+  .rm-gov{grid-column:2/4;grid-row:1;position:relative;height:38px;margin:0 30px}
+  .rm-gov::before{content:"";position:absolute;left:0;right:0;bottom:0;height:12px;border:2px solid var(--blue);border-bottom:0}
+  .rm-gov span{position:absolute;left:50%;top:0;transform:translateX(-50%);padding:0 14px;background:var(--paper);color:var(--blue);font-size:21px;font-weight:700;white-space:nowrap;line-height:1.2}
+  .rm-chev{grid-row:2;height:132px;padding:0 40px 0 46px;display:grid;grid-template-columns:auto 1fr;column-gap:14px;align-content:center;align-items:center;
+    clip-path:polygon(0 0,calc(100% - 30px) 0,100% 50%,calc(100% - 30px) 100%,0 100%,30px 50%);background:#e6edf6}
+  .rm-chev.c1{padding-left:24px;clip-path:polygon(0 0,calc(100% - 30px) 0,100% 50%,calc(100% - 30px) 100%,0 100%,0 50%)}
+  .rm-chev.c2{background:#c9d8ec} .rm-chev.c3{background:#9fbadd} .rm-chev.c4{background:var(--blue);color:#fff}
+  .rm-chev em{grid-row:span 2;font-style:normal;font-family:'Inter',var(--f);font-size:48px;font-weight:700;color:var(--blue);line-height:1}
+  .rm-chev b{font-size:31px;letter-spacing:-.03em;line-height:1.2}
+  .rm-chev span{font-size:20px;color:var(--mut);line-height:1.3;letter-spacing:-.02em}
+  .rm-chev.c3 span{color:#24384f} .rm-chev.c4 em{color:#fff} .rm-chev.c4 span{color:#e2e8f0}
+  .rm-key{grid-row:3;margin:4px 14px 0 4px}
+  .rm-key.ch{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+  .rm-key.ch i{font-style:normal;font-size:21px;font-weight:600;text-align:center;padding:9px 4px;background:#eef3f9;color:var(--ink);letter-spacing:-.02em}
+  .rm-key.tx{display:flex;flex-direction:column;justify-content:center;min-height:98px;border-top:1px solid #c9d8ec;border-bottom:1px solid #c9d8ec;padding:6px 0}
+  .rm-key.tx b{font-size:24px;color:var(--blue);letter-spacing:-.03em;line-height:1.3}
+  .rm-key.tx span{font-size:20px;color:var(--mut);line-height:1.35;letter-spacing:-.02em}
+  /* 2026-11-17 사용자 지시 — 실증연구의 추진 주체(정부 · 국책연구기관)를 강조: 파랑 사각 테두리(면은 비움) · 큰 활자 · 약한 동적 강조.
+     동적 강조 — 장에 들어서면 테두리가 한 번 또렷해지고(rmIn), 이어서 바깥으로 번지는 파랑 고리가 천천히 되풀이된다(rmRing). 그 장에 있을 때만 돈다. */
+  .rm-key.tx.hl{position:relative;background:var(--paper);border:3px solid var(--blue);padding:10px 18px;min-height:98px}
+  .rm-key.tx.hl b{font-size:29px;color:var(--blue);letter-spacing:-.035em;line-height:1.25;margin-bottom:2px}
+  .rm-key.tx.hl span{font-size:21px;color:var(--ink);font-weight:600;line-height:1.4}
+  .rm-key.tx.hl::after{content:"";position:absolute;inset:-3px;border:3px solid var(--blue);pointer-events:none;opacity:0}
+  #s-roadmap.on .rm-key.tx.hl{animation:rmIn .9s ease-out .5s both}
+  #s-roadmap.on .rm-key.tx.hl::after{animation:rmRing 2.6s ease-out 1.4s infinite}
+  @keyframes rmIn{0%{transform:scale(1);box-shadow:0 0 0 0 rgba(21,101,192,0)}45%{transform:scale(1.045);box-shadow:0 8px 24px rgba(21,101,192,.28)}100%{transform:scale(1);box-shadow:0 4px 14px rgba(21,101,192,.14)}}
+  @keyframes rmRing{0%{inset:-3px;opacity:.55}70%{inset:-13px;opacity:0}100%{inset:-13px;opacity:0}}
+  .rm-li{grid-row:4;list-style:none;margin:0 14px 0 4px;padding:0}
+  .rm-li li{font-size:21.5px;line-height:1.38;letter-spacing:-.025em;padding:8px 0 8px 18px;border-bottom:1px solid #dfe5ec;position:relative}
+  .rm-li li::before{content:"";position:absolute;left:2px;top:19px;width:7px;height:7px;border-radius:50%;background:var(--blue)}
+  .rm-loop{grid-column:1/-1;grid-row:5;width:100%;height:auto;display:block;overflow:visible}
+  .rm-loop .ln{fill:none;stroke:var(--blue);stroke-width:3}
+  .rm-loop .ah{fill:var(--blue)}
+  .rm-loop text{font-family:var(--f);font-size:23px;font-weight:700;fill:var(--blue);letter-spacing:-.03em}
+  .rm-loop text tspan{fill:var(--mut);font-weight:600;font-size:21px}
+  /* 31 → 32 확대 전환 — 31장의 나머지는 걷히고, 네 화살표 복제본(.rm-zc)이 무대 위에서 32장 네 칸 자리로 커진다 */
+  #s-wp.zoom .head, #s-wp.zoom .htop, #s-wp.zoom .c5wrap, #s-wp.zoom .foot, #s-wp.zoom .c5step > b{opacity:0;transition:opacity .3s ease}
+  #s-wp.zoom .c5step li > *{opacity:0;transition:opacity .18s ease}
+  #s-wp .c5step.gone{visibility:hidden}
+  .rm-zoom{position:absolute;inset:0;z-index:40;pointer-events:none}
+  .rm-zc{position:absolute;background:#e6edf6;
+    transition:left .7s cubic-bezier(.22,.8,.24,1),top .7s cubic-bezier(.22,.8,.24,1),width .7s cubic-bezier(.22,.8,.24,1),height .7s cubic-bezier(.22,.8,.24,1),clip-path .7s cubic-bezier(.22,.8,.24,1),opacity .3s ease}
+  .rm-zc.z2{background:#c9d8ec} .rm-zc.z3{background:#9fbadd} .rm-zc.z4{background:var(--blue)}
 
   /* ── 43장 기술 로드맵 — 좌 AMR-HGN 고도화 · 우 FGNO 개발 ────────────
      AMR-HGN 후속 과제는 선행 연구의 향후 연구 항목에서, FGNO 방향은 22 연구계획서·발표 가이드에서 가져왔다(sources.md).
@@ -2192,7 +2239,7 @@
       </div>
       <div class="ag a5">
         <span class="n">5</span>
-        <span class="th"><img fetchpriority="low" decoding="async" src="image/agenda_thumb_5.jpg" alt="30쪽 통합 환경 디지털 트윈 화면"><i aria-hidden="true">▶</i></span>
+        <span class="th"><img fetchpriority="low" decoding="async" src="image/agenda_thumb_5.jpg" alt="29쪽 통합 환경 디지털 트윈 화면"><i aria-hidden="true">▶</i></span>
         <h3>전망<span class="en">AI 에뮬레이터 ·<br>통합 환경 디지털 트윈</span></h3>
         <p>에뮬레이터의 흐름 · 현주소 · 한계와 <b>디지털 트윈 · AI 전수 시뮬레이션</b> 의사결정을 그린다.</p>
       </div>
@@ -4160,7 +4207,7 @@
      좌 — 재현도 점그림: x = 270 + (R² − 0.5) × 920. R² 는 모두 '원모델 출력 대비'다(관측 대비 아님).
        FastCTM 여섯 물질(A02 p1) · InMAP(A04 p1) · 가우시안 과정(A03 p4) · SWAT 대리(C13 p1, 0.9975 · 0.9981 → 0.998) · NAME 발자국(A06 p1) · Samudra → Samudra 2(C15 p1).
      우 — 한계 넷: 학습자료(D12 p5) · 새 조건(C12 p2) · 보급(B14 p5, 60칸 중 2칸) · 계산 자원(C08 p16). -->
-<section class="slide pv" id="pv-limit">
+<section class="cut pv" id="pv-limit">
   <div class="head"><span class="rh"><span class="n c5">5</span>전망</span>
     <span class="r">현주소 · 재현도와 한계</span></div>
   <div class="body">
@@ -4433,7 +4480,7 @@
      2026-09-27 지시 — 머리 우측의 세 기관 이름과 하단 기관별 역할을 걷었다(화면에 기관명 없음).
      과제 구성(가칭 · 연구 질문 셋 · 연구 묶음 WP1–5)은 발표 가이드 부록 F·14장에서 가져왔다(sources.md).
      ⚠ 특정 공고 · 예산 · 채택을 확인한 것이 아닌 **기획안**이다. 하단 추진 4단계도 (안)이다. -->
-<section class="slide">
+<section class="slide" id="s-wp">
   <div class="head"><span class="rh"><span class="n c6">6</span>현업화 연구 제안</span>
     <span class="r">현업화 실증 연구 — 기획(안)</span></div>
   <div class="body ch5">
@@ -4469,6 +4516,42 @@
       </ol></div>
   </div>
   <div class="foot"><span>특정 아키텍처의 채택이 아니라, 공통 자료 · 계산 · 검증 기반에서 연구 질문을 시험한다</span>
+    <span class="r"></span></div>
+</section>
+
+<!-- 32장 #s-roadmap 현업화 추진 체계 (2026-11-17 사용자 지시) — 31장 하단 추진 4단계(기초연구 · 실증연구 · 제도화 · 실무 활용)를 펼친 장.
+     31장에서 '다음'을 누르면 그 네 화살표가 커지며 이 장의 네 칸이 된다(맨 아래 '31 → 32 확대 전환' 스크립트).
+     문안은 사용자 구술을 개조식으로 다듬은 **발표자 제안(안)** 이다 — 문헌 근거 · 수치 없음(sources.md).
+     요지 — 기초연구: 대기 · 수 · 생활 · 자연환경 매체별 기초과학, 다수 연구실에서 분야별로 활발 / 실증연구: 현업화 연구, 현장 적용 단계, 정부 · 국책연구기관이 유망 기초 성과를 발굴 /
+       제도화: 실증연구와 병행, 정부 · 연구기관 · 업계 전문가 · 시민단체 거버넌스, 정부 주도 / 실무 활용: 적용 결과를 환류해 초기의 불완전함을 개선 · 보완. -->
+<section class="slide" id="s-roadmap">
+  <div class="head"><span class="rh"><span class="n c6">6</span>현업화 연구 제안</span>
+    <span class="r">추진 체계 — 단계 · 주체 · 환류 (안)</span></div>
+  <div class="body">
+    <h2 class="htop">AI 기반 환경영향평가 <em>현업화 추진 체계</em>
+      <span class="sub">단계별 성격 · 추진 주체 · 실무 환류 기반 단계적 고도화 (안)</span></h2>
+    <div class="rm">
+      <div class="rm-gov"><span>정부 주도 · 병행 추진</span></div>
+      <div class="rm-chev c1"><em>1</em><b>기초연구</b><span>매체별 기초과학 연구</span></div>
+      <div class="rm-chev c2"><em>2</em><b>실증연구</b><span>현장 적용 현업화 연구</span></div>
+      <div class="rm-chev c3"><em>3</em><b>제도화</b><span>평가 제도 · 자료 규격 정비</span></div>
+      <div class="rm-chev c4"><em>4</em><b>실무 활용</b><span>환경영향평가 현장 적용</span></div>
+      <div class="rm-key ch"><i>대기환경</i><i>수환경</i><i>생활환경</i><i>자연환경</i></div>
+      <div class="rm-key tx hl"><b>정부 · 국책연구기관</b><span>유망 기초연구 성과 발굴</span><span>현업화 연구 추진</span></div>
+      <div class="rm-key ch"><i>정부</i><i>연구기관</i><i>업계 전문가</i><i>시민단체</i></div>
+      <div class="rm-key tx"><b>적용 → 환류 → 개선</b><span>현장 적용 결과의 순환 반영</span></div>
+      <ul class="rm-li"><li>대학 · 연구실 중심 분야별 연구 활발</li><li>현업화 후보 성과의 원천</li></ul>
+      <ul class="rm-li"><li>현장 적용을 위한 연구 단계</li><li>유망 성과 발굴 · 선별 · 실증</li></ul>
+      <ul class="rm-li"><li>실증연구와 병행 추진</li><li>다자 참여 거버넌스 — 정부 주도</li></ul>
+      <ul class="rm-li"><li>초기 불완전성 전제의 단계적 도입</li><li>실무 경험 기반 개선 · 보완</li></ul>
+      <svg class="rm-loop" viewBox="0 0 1444 76" role="img" aria-label="실무 환류 — 실무 활용에서 기초연구 · 실증연구 · 제도화로 되돌아가 개선 · 보완">
+        <path class="ln" d="M1263 2 V30 H180 V14 M541 30 V14 M902 30 V14"/>
+        <path class="ah" d="M180 2l-9 15h18Z M541 2l-9 15h18Z M902 2l-9 15h18Z"/>
+        <text x="722" y="68" text-anchor="middle">실무 환류 <tspan>— 적용 결과 기반 초기 한계 개선 · 보완</tspan></text>
+      </svg>
+    </div>
+  </div>
+  <div class="foot"><span>완결된 기술의 일괄 도입이 아니라, 실무 환류로 초기 한계를 보완해 가는 순환 체계</span>
     <span class="r"></span></div>
 </section>
 
@@ -7578,8 +7661,52 @@
 <script fetchpriority="low" src="graph/fut/eco_sdm.js?v=20261116"></script>
 <script fetchpriority="low" src="graph/fut/deck_link.js?v=20261116"></script>
 <script fetchpriority="low" src="graph/fut/futflow.js?v=20261116"></script>
-<script fetchpriority="low" src="트윈나레이션/narr.js?v=20261116"></script>
+<script fetchpriority="low" src="트윈나레이션/narr.js?v=20261116b"></script>
 <script fetchpriority="low" src="graph/fut/narr_mix.js?v=20261116"></script>
-<script fetchpriority="low" src="graph/fut/future.js?v=20261116"></script>
+<script fetchpriority="low" src="graph/fut/future.js?v=20261117"></script>
+<script>
+  /* 31 → 32 확대 전환 (2026-11-17 사용자 지시) — 31장(#s-wp)에서 '다음'을 누르면 하단 추진 4단계 네 화살표가 커지며 32장(#s-roadmap) 네 칸이 된다.
+     방식 — 31장의 나머지를 걷고(.zoom), 네 화살표와 같은 색 · 모양의 복제본(.rm-zc)을 무대(#stage) 위 그 자리에 놓아
+       32장 네 칸(.rm-chev) 자리 · 크기로 키운다. 도착 무렵 32장으로 넘기고(장 교차 페이드 .45s), 복제본은 그 칸 위에서 걷힌다.
+     좌표는 무대 설계 좌표(1600×900)로 옮겨 쓴다 — #stage 는 창에 맞춰 transform 으로 키운다(fitStage).
+     뒤로 오면(32 → 31) 31장을 처음 모습으로 되돌린다. 단계 장치 규약은 window.conceptSteppers[장 index] = { step, enter }. */
+  (function(){
+    const src = document.getElementById('s-wp'), dst = document.getElementById('s-roadmap'), stage = document.getElementById('stage');
+    if (!src || !dst || !stage) return;
+    const idx = S.indexOf(src);
+    let busy = false, layer = null, T = [];
+    const box = el => { const s = stage.getBoundingClientRect(), k = s.width / 1600, r = el.getBoundingClientRect();
+      return { left: (r.left - s.left) / k, top: (r.top - s.top) / k, width: r.width / k, height: r.height / k }; };
+    const put = (el, b) => { for (const p in b) el.style[p] = b[p] + 'px'; };
+    const CP = (t, first) => `polygon(0 0,calc(100% - ${t}px) 0,100% 50%,calc(100% - ${t}px) 100%,0 100%,${first ? 0 : t}px 50%)`;
+    const unzoom = () => { src.classList.remove('zoom'); const st = src.querySelector('.c5step'); if (st) st.classList.remove('gone'); };
+    function reset(){
+      T.forEach(clearTimeout); T = [];
+      if (layer) layer.remove(); layer = null; busy = false; unzoom();
+    }
+    function zoom(){
+      busy = true;
+      const from = [...src.querySelectorAll('.c5step li')], to = [...dst.querySelectorAll('.rm-chev')];
+      if (from.length !== 4 || to.length !== 4) { busy = false; go(idx + 1); return; }
+      const A = from.map(box), B = to.map(box);
+      src.classList.add('zoom');
+      layer = document.createElement('div'); layer.className = 'rm-zoom'; stage.appendChild(layer);
+      const C = A.map((a, k) => { const c = document.createElement('div'); c.className = 'rm-zc z' + (k + 1);
+        put(c, a); c.style.clipPath = CP(22, k === 0); layer.appendChild(c); return c; });
+      T.push(setTimeout(() => {
+        src.querySelector('.c5step').classList.add('gone');
+        C.forEach((c, k) => T.push(setTimeout(() => { put(c, B[k]); c.style.clipPath = CP(30, k === 0); }, k * 60)));
+      }, 200));
+      T.push(setTimeout(() => go(idx + 1), 620));
+      T.push(setTimeout(() => C.forEach(c => { c.style.opacity = 0; }), 1180));
+      T.push(setTimeout(() => { if (layer) layer.remove(); layer = null; busy = false; unzoom(); }, 1520));
+    }
+    window.conceptSteppers = window.conceptSteppers || {};
+    window.conceptSteppers[idx] = {
+      step(d){ if (d < 0) return false; if (busy) return true; zoom(); return true; },
+      enter(now){ if (now === idx) reset(); }
+    };
+  })();
+</script>
 </body>
 </html>
