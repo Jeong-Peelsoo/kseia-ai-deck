@@ -62,7 +62,7 @@
 <link href="graph/vendor/fonts.css" rel="stylesheet">
 <script src="graph/survey_limits_2023.js?v=20261116"></script>
 <script src="graph/design_cases_refs.js?v=20261116"></script>
-<script src="graph/outlook_refs.js?v=20261116"></script>
+<script src="graph/outlook_refs.js?v=20261117"></script>
 <script src="graph/emu_layers.js?v=20261116"></script>
 <script src="graph/cmaq_job.js?v=20261116"></script>
 <script src="graph/res_layers.js?v=20261116"></script>
@@ -649,32 +649,62 @@
   .lm-c > span{font-size:15px;line-height:1.4;color:var(--mut)}
   .lm-c > em{font-style:normal;font-size:13px;color:var(--dim)}
   .lm-v .d34 circle{fill:#c2410c} .lm-v .w60 rect{fill:#d7dcdf} .lm-v .w60 rect.on{fill:#c2410c}
-  .ol-flow{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:0}
-  .ol-st{position:relative;background:var(--soft);padding:14px 26px 14px 30px;display:flex;flex-direction:column;gap:7px;
-    clip-path:polygon(0 0,calc(100% - 18px) 0,100% 50%,calc(100% - 18px) 100%,0 100%,18px 50%);margin-right:-12px}
-  .ol-st:first-child{clip-path:polygon(0 0,calc(100% - 18px) 0,100% 50%,calc(100% - 18px) 100%,0 100%);padding-left:18px}
-  .ol-st:nth-child(even){background:#e8f1f0}
-  .ol-st > i{font-style:normal;font-family:'Inter',var(--f);font-weight:800;font-size:26px;color:var(--teal);line-height:1}
-  .ol-st > b{font-size:21px;color:var(--ink);letter-spacing:-.02em}
-  .ol-st > p{margin:0;font-size:16px;line-height:1.45;color:var(--mut)}
-  .ol-st > em{font-style:normal;font-size:13px;line-height:1.35;color:var(--dim)}
-  .mt{align-self:flex-start;font-size:13px;font-weight:800;color:#fff;padding:2px 9px;border-radius:3px}
-  .mt.m2{background:#3f9d97} .mt.m3{background:#7fbcb7} .mt.m0{background:var(--gray-d)}
-  .ol-low{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.1fr);gap:18px;margin-top:14px}
-  .ol-num,.ol-chk{background:var(--soft);padding:12px 18px 14px;display:flex;flex-direction:column;gap:10px}
-  .ol-n svg{display:block;width:100%;height:auto;font-family:var(--f)}
-  .ol-n .all{fill:#d7dcdf} .ol-n .ok{fill:var(--teal)} .ol-n text{font-size:17px;font-weight:700;fill:var(--ink)}
-  .ol-n em,.ol-chk > em{font-style:normal;font-size:13px;color:var(--dim)}
-  .ol-n.two{display:grid;grid-template-columns:auto auto 1fr;align-items:center;column-gap:16px;border-top:1px solid var(--hair);padding-top:10px}
-  .ol-n.two > div{display:flex;flex-direction:column} .ol-n.two b{font-family:'Inter',var(--f);font-size:30px;font-weight:800;color:var(--teal);line-height:1.1}
-  .ol-n.two > div span{font-size:15px;color:var(--mut)} .ol-n.two > i{font-style:normal;font-size:28px;color:var(--teal);font-weight:800}
-  .ol-n.two > em{grid-column:1 / -1;margin-top:4px}
-  .ol-chk ul{margin:0;padding:0;list-style:none;display:grid;grid-template-columns:1fr 1fr;gap:8px}
-  .ol-chk li{background:#fff;border-left:4px solid var(--deep);padding:8px 12px;display:flex;flex-direction:column;gap:2px}
-  .ol-chk li b{font-size:18px;color:var(--deep)} .ol-chk li > span{font-size:15px;line-height:1.35;color:var(--mut)}
+  /* ── 27장(#pv-outlook) 다시 짬(2026-11-17 사용자 지시 — "멘트에 맞게 심플하게: 해상도 2배 → 연산 10배, 에뮬레이터 100만 회 실험이 보이게 · 수용 조건 칸 삭제 · 평가 단계는 아래 큰 글씨")
+     위 — 기존 물리모델(느림: 막대가 천천히 자란다) | AI 에뮬레이터(빠름: 점 1,000개가 순식간에 차고 73%만 남는다). 아래 — 평가 단계 넷의 '종전 → 앞으로'. 움직임은 아래 '27장 비교 그림' 스크립트 */
+  #pv-outlook .htop{margin-bottom:clamp(10px,calc(1.6 * var(--vh)),18px)}
+  .ev-cmp{display:grid;grid-template-columns:minmax(0,1fr) 64px minmax(0,1fr);align-items:stretch}
+  .ev-p{background:var(--soft);padding:12px 22px 10px;display:flex;flex-direction:column;gap:6px}
+  .ev-p > b{font-size:28px;letter-spacing:-.03em;line-height:1.15;color:var(--ink)}
+  .ev-p > b small{font-size:21px;font-weight:600;color:var(--mut);margin-left:10px;letter-spacing:-.02em}
+  .ev-p.ai > b{color:var(--teal)}
+  .ev-p > em{font-style:normal;font-size:15px;color:var(--dim);margin-top:auto}
+  .ev-vs{display:grid;place-items:center;font-family:'Inter',var(--f);font-size:22px;font-weight:800;color:var(--dim)}
+  .ev-row{display:grid;grid-template-columns:118px 56px minmax(0,1fr);align-items:center;column-gap:16px}
+  .ev-row > span{font-size:21px;font-weight:700;color:var(--mut);letter-spacing:-.02em}
+  .ev-row svg{width:56px;height:56px;display:block}
+  .ev-row svg rect{fill:#fff;stroke:#9aa5ae;stroke-width:1}
+  .ev-bar{position:relative;height:34px;display:flex;align-items:center}
+  .ev-bar i{display:block;height:100%;background:#9aa5ae;transform-origin:0 50%}
+  .ev-bar b{margin-left:12px;font-family:'Inter',var(--f);font-size:30px;font-weight:800;color:var(--ink);white-space:nowrap;letter-spacing:-.02em}
+  .ev-bar.slow i{width:calc(100% - 150px);background:#6f7a84}
+  .ev-bar.fast i{width:28px}
+  .ev-cap{font-size:20px;color:var(--mut);letter-spacing:-.02em}
+  .ev-cap b{color:var(--ink)}
+  #pv-outlook.run .ev-bar.fast i{animation:evGrow .35s ease-out .5s both}
+  #pv-outlook.run .ev-bar.slow i{animation:evGrow 3.2s linear .9s both}
+  #pv-outlook.run .ev-bar b{animation:evFade .3s ease-out both} #pv-outlook.run .ev-bar.slow b{animation-delay:4.1s} #pv-outlook.run .ev-bar.fast b{animation-delay:.85s}
+  @keyframes evGrow{from{transform:scaleX(0)}to{transform:scaleX(1)}}
+  @keyframes evFade{from{opacity:0}to{opacity:1}}
+  .ev-dots{display:grid;grid-template-columns:auto minmax(0,1fr);column-gap:18px;align-items:center}
+  .ev-dots canvas{width:300px;height:120px;display:block}
+  .ev-num{display:flex;flex-direction:column;gap:4px}
+  .ev-num b{font-family:'Inter',var(--f);font-size:40px;font-weight:800;color:var(--teal);line-height:1;letter-spacing:-.02em;font-variant-numeric:tabular-nums}
+  .ev-num b small{font-family:var(--f);font-size:24px;margin-left:4px}
+  .ev-num span{font-size:21px;color:var(--mut);letter-spacing:-.02em;line-height:1.35}
+  .ev-num .ok{font-size:22px;font-weight:700;color:var(--ink);opacity:0}
+  #pv-outlook.run .ev-num .ok{transition:opacity .5s}
+  .ev-num .ok.on{opacity:1}
+  .ev-num .ok em{font-style:normal;color:var(--teal)}
+  .ev-head{margin:12px 0 6px;font-size:27px;font-weight:800;letter-spacing:-.03em;color:var(--ink)}
+  .ev-head em{font-style:normal;color:var(--teal)}
+  .ev-st{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));column-gap:22px}
+  .ev-st > div{border-top:2px solid var(--teal);padding-top:8px;display:flex;flex-direction:column;gap:4px}
+  .ev-st i{font-style:normal;font-family:'Inter',var(--f);font-size:30px;font-weight:800;color:var(--teal);line-height:1}
+  .ev-st b{font-size:26px;letter-spacing:-.03em;color:var(--ink);line-height:1.2}
+  .ev-st s{text-decoration:none;font-size:20px;color:var(--dim);letter-spacing:-.02em;line-height:1.35}
+  .ev-st s::after{content:" →";color:var(--teal);font-weight:800}
+  .ev-st strong{font-size:23px;color:var(--teal);letter-spacing:-.03em;line-height:1.35}
+  .ev-st small{font-size:19px;color:var(--mut);letter-spacing:-.02em;line-height:1.35}
+  /* VESTAP · MOTIVE 에뮬레이터 연구 강조(2026-11-17 사용자 지시) — 청록 사각 테두리 · 큰 활자, 장에 들어서면 테두리 바깥 고리가 천천히 번진다(25 · 32쪽 강조와 같은 결) */
+  .ev-hl{position:relative;align-self:flex-start;margin-top:4px;padding:3px 10px 4px;border:1.5px solid var(--teal);background:#fff;font-size:18px;font-weight:600;color:var(--ink);letter-spacing:-.03em;line-height:1.3;white-space:nowrap}
+  .ev-hl b{font-family:'Inter',var(--f);font-size:18px;font-weight:800;color:var(--teal)}
+  .ev-hl em{font-style:normal;color:var(--mut);font-weight:500}
+  .ev-hl::after{content:"";position:absolute;inset:-2px;border:1.5px solid var(--teal);opacity:0;pointer-events:none}
+  #pv-outlook.on .ev-hl::after{animation:evRing 2.6s ease-out 1.2s infinite}
+  @keyframes evRing{0%{inset:-2px;opacity:.35}70%{inset:-8px;opacity:0}100%{inset:-8px;opacity:0}}
   /* ── 34장(#pv-flow) 연혁 마일스톤(2026-11-09 사용자 지시) — 가운데 축 위아래로 번갈아. 연도는 사건 연도 ── */
   #pv-flow .pv-era{padding:14px 20px 16px;gap:8px} #pv-flow .pv-era p{border-bottom:0;padding-bottom:0}
-  .pv-tl{position:relative;display:grid;grid-template-columns:repeat(13,minmax(0,1fr));grid-template-rows:150px 150px;margin-top:22px}
+  .pv-tl{position:relative;display:grid;grid-template-columns:repeat(14,minmax(0,1fr));grid-template-rows:150px 150px;margin-top:22px}
   .pv-tl::before{content:"";position:absolute;left:0;right:0;top:150px;height:4px;margin-top:-2px;background:#bcd9d6}
   .tl-m{position:relative;display:flex;flex-direction:column;gap:3px;padding:0 4px;text-align:center;align-items:center}
   .tl-m.up{grid-row:1;justify-content:flex-end;padding-bottom:18px}
@@ -686,14 +716,30 @@
   .tl-m.up::before{bottom:7px;height:12px} .tl-m.dn::before{top:7px;height:12px}
   .tl-m:nth-child(1){grid-column:1} .tl-m:nth-child(2){grid-column:2} .tl-m:nth-child(3){grid-column:3} .tl-m:nth-child(4){grid-column:4}
   .tl-m:nth-child(5){grid-column:5} .tl-m:nth-child(6){grid-column:6} .tl-m:nth-child(7){grid-column:7} .tl-m:nth-child(8){grid-column:8}
-  .tl-m:nth-child(9){grid-column:9} .tl-m:nth-child(10){grid-column:10} .tl-m:nth-child(11){grid-column:11} .tl-m:nth-child(12){grid-column:12} .tl-m:nth-child(13){grid-column:13}
+  .tl-m:nth-child(9){grid-column:9} .tl-m:nth-child(10){grid-column:10} .tl-m:nth-child(11){grid-column:11} .tl-m:nth-child(12){grid-column:12} .tl-m:nth-child(13){grid-column:13} .tl-m:nth-child(14){grid-column:14}
   .tl-m i{font-style:normal;font-family:'Inter',var(--f);font-weight:800;font-size:19px;color:var(--ink)}
   .tl-m.e3 i{color:var(--teal)}
   .tl-m b{font-size:14.5px;line-height:1.3;font-weight:700;color:var(--ink);letter-spacing:-.02em}
   .tl-m em{font-style:normal;font-size:12px;line-height:1.25;color:var(--dim)}
+  /* 2025.02 ECMWF AIFS 현업 운영 강조(2026-11-17 사용자 지시) — 청록 사각 테두리 · 큰 활자 · 큰 표지점, 장에 들어서면 표지점에서 고리가 천천히 번진다 */
+  .tl-m.hot{z-index:2}
+  .tl-m.hot .hb{display:flex;flex-direction:column;align-items:center;gap:2px;padding:8px 14px 9px;background:#fff;border:3px solid var(--teal);white-space:nowrap;box-shadow:0 6px 18px rgba(11,122,117,.18)}
+  .tl-m.hot i{font-size:27px}
+  .tl-m.hot b{font-size:20px;color:var(--ink)}
+  .tl-m.hot strong{font-size:22px;font-weight:800;color:var(--teal);letter-spacing:-.03em;line-height:1.25}
+  .tl-m.hot::after{width:24px;height:24px;margin-left:-12px;bottom:-12px;border-width:4px}
+  #pv-flow.on .tl-m.hot::after{animation:tlHot 2.4s ease-out .6s infinite}
+  @keyframes tlHot{0%{box-shadow:0 0 0 0 rgba(11,122,117,.55)}70%{box-shadow:0 0 0 16px rgba(11,122,117,0)}100%{box-shadow:0 0 0 16px rgba(11,122,117,0)}}
   .tl-leg{grid-column:1 / -1;grid-row:3;justify-self:start;display:flex;gap:16px;font-size:13px;color:var(--mut);margin-top:4px}
   .tl-leg span::before{content:"";display:inline-block;width:10px;height:10px;border-radius:50%;margin-right:5px;vertical-align:-1px;border:2.5px solid var(--gray-d)}
   .tl-leg .e2::before{border-color:#3f9d97} .tl-leg .e3::before{border-color:var(--teal);background:var(--teal)}
+  /* Nature · Science 게재 표시(2026-11-17 사용자 지시) — 검은 가는 테두리 + 위 가운데 학술지 이름 표 */
+  .tl-m.ns .nb{position:relative;display:flex;flex-direction:column;align-items:center;gap:3px;padding:12px 6px 7px;border:1.5px solid var(--ink);background:#fff}
+  .tl-m.ns .nb::before{content:attr(data-j);position:absolute;top:-12px;left:50%;transform:translateX(-50%);padding:1px 9px;background:var(--ink);color:#fff;font:italic 700 15px/1.3 Georgia,"Times New Roman",serif;white-space:nowrap}
+  .tl-m.ns .org{font-size:14px;font-weight:600;color:var(--mut);line-height:1.2}
+  .tl-m.ns b{font-size:15.5px;white-space:nowrap}
+  .tl-m.ns .dom{font-size:15px;font-weight:700;color:var(--teal);line-height:1.2;white-space:nowrap}   /* 대상 — 논문 제목의 global weather forecasting · Earth system(2026-11-17 사용자 지시) */
+  .tl-leg .ns::before{border-radius:0;border:1.5px solid var(--ink);background:#fff}
   /* ── 11장(#s-film) 두 아키텍처 비교 영상 큐 — 대기학회 덱(ppt-kosae-20261030) 7쪽 규칙 사본(2026-11-09). 우측은 영상 대표 장면 4개(2 × 2) ── */
   #s-film .cuewrap{grid-template-columns:minmax(0,1fr) minmax(0,1.12fr);align-items:center}
   #s-film .cue{gap:clamp(12px,calc(1.8 * var(--vh)),20px)}
@@ -4000,20 +4046,23 @@
         <p>모델 전체를 대체, 운영 기관이 채택</p></div>
     </div>
     <div class="pv-tl" aria-label="물리모델 에뮬레이터 연혁 2012 – 2026">
+        <!-- 2026-11-17 사용자 지시 — 팡구 · 그래프캐스트 · 오로라를 넣고 Nature · Science 게재 넷(Bi 2023 · Lam 2023 · Nearing 2024 · Bodnar 2025)을 검은 테두리 · 학술지 표지로 따로 표시.
+             칸이 빡빡해 2019 GEOS-Chem 랜덤포레스트(A05) · 2023 확산 발자국(A06)을 뺐다. 위 · 아래는 차례대로 번갈아 놓는다. 서지는 graph/outlook_refs.js(Crossref 기계 생성) -->
         <div class="tl-m e1 up"><i>2012</i><b>수자원 대리모델 리뷰</b><em><span data-oref="C10"></span></em></div>
         <div class="tl-m e1 dn"><i>2017</i><b>정책용 축약모델 InMAP</b><em><span data-oref="A04"></span></em></div>
         <div class="tl-m e2 up"><i>2018</i><b>대기화학 신경망 — 250배</b><em><span data-oref="A11"></span></em></div>
-        <div class="tl-m e2 dn"><i>2019</i><b>GEOS-Chem 화학 랜덤포레스트</b><em><span data-oref="A05"></span></em></div>
-        <div class="tl-m e1 up"><i>2021</i><b>가우시안 과정 PM₂.₅ 배출 응답 — 모의 50회 학습</b><em><span data-oref="A03"></span></em></div>
-        <div class="tl-m e3 dn"><i>2021</i><b>홍수 경보 현업 — 인도 · 방글라데시 1억 건 이상</b><em><span data-oref="C03"></span></em></div>
-        <div class="tl-m e2 up"><i>2022</i><b>지역기후모델(RCM) 에뮬레이터</b><em><span data-oref="B09"></span></em></div>
-        <div class="tl-m e2 dn"><i>2023</i><b>확산 발자국 10분 → 10 ms</b><em><span data-oref="A06"></span></em></div>
-        <div class="tl-m e3 up"><i>2023</i><b>기후모델 ACE — 10년을 1시간</b><em><span data-oref="B07"></span></em></div>
-        <div class="tl-m e3 dn"><i>2024</i><b>홍수예보 80개국 이상 공개</b><em><span data-oref="C02"></span></em></div>
-        <div class="tl-m e3 up"><i>2025.02</i><b>ECMWF AIFS 현업 운영</b><em><span data-oref="B16"></span></em></div>
-        <div class="tl-m e3 dn"><i>2025</i><b>CMAQ 에뮬레이터 FastCTM · 해양 Samudra</b><em><span data-oref="A02 C12"></span></em></div>
-        <div class="tl-m e3 up"><i>2026</i><b>SWAT 대리모델 · 지역기후 다운스케일링 벤치마크</b><em><span data-oref="C13 B12"></span></em></div>
-      <div class="tl-leg"><span class="e1">통계 에뮬레이터 · 축약모델</span><span class="e2">딥러닝 과정 대체</span><span class="e3">대형 학습형 모델 · 현업</span></div>
+        <div class="tl-m e1 dn"><i>2021</i><b>가우시안 과정 PM₂.₅ 배출 응답 — 모의 50회 학습</b><em><span data-oref="A03"></span></em></div>
+        <div class="tl-m e3 up"><i>2021</i><b>홍수 경보 현업 — 인도 · 방글라데시 1억 건 이상</b><em><span data-oref="C03"></span></em></div>
+        <div class="tl-m e2 dn"><i>2022</i><b>지역기후모델(RCM) 에뮬레이터</b><em><span data-oref="B09"></span></em></div>
+        <div class="tl-m e3 up ns"><div class="nb" data-j="Nature"><i>2023.07</i><b>Pangu-Weather</b><span class="org">Huawei</span><span class="dom">전지구 기상예보</span><em><span data-oref="W01"></span></em></div></div>
+        <div class="tl-m e3 dn"><i>2023</i><b>기후모델 ACE — 10년을 1시간</b><em><span data-oref="B07"></span></em></div>
+        <div class="tl-m e3 up ns"><div class="nb" data-j="Science"><i>2023.11</i><b>GraphCast</b><span class="org">Google</span><span class="dom">전지구 기상예보</span><em><span data-oref="W02"></span></em></div></div>
+        <div class="tl-m e3 dn ns"><div class="nb" data-j="Nature"><i>2024</i><b>홍수예보 80개국 이상</b><em><span data-oref="C02"></span></em></div></div>
+        <div class="tl-m e3 up hot"><div class="hb"><i>2025.02</i><b>ECMWF AIFS</b><strong>현업 운영</strong><em><span data-oref="B16"></span></em></div></div>
+        <div class="tl-m e3 dn ns"><div class="nb" data-j="Nature"><i>2025.05</i><b>Aurora</b><span class="org">Microsoft</span><span class="dom">지구시스템</span><em><span data-oref="W03"></span></em></div></div>
+        <div class="tl-m e3 up"><i>2025</i><b>CMAQ 에뮬레이터 FastCTM · 해양 Samudra</b><em><span data-oref="A02 C12"></span></em></div>
+        <div class="tl-m e3 dn"><i>2026</i><b>SWAT 대리모델 · 지역기후 다운스케일링 벤치마크</b><em><span data-oref="C13 B12"></span></em></div>
+      <div class="tl-leg"><span class="e1">통계 에뮬레이터 · 축약모델</span><span class="e2">딥러닝 과정 대체</span><span class="e3">대형 학습형 모델 · 현업</span><span class="ns">Nature · Science 게재</span></div>
     </div>
   </div>
   <div class="foot"><span>통계 응답면 → 딥러닝 과정 대체 → 모델 전체 대체 · 현업 운영</span><span class="r"></span></div>
@@ -4261,40 +4310,40 @@
   <div class="foot"><span>영향평가 적용 전 확인 — 관측 대비 정확도 · 학습 범위 밖 성능 · 물질별 편차</span><span class="r"></span></div>
 </section>
 
-<!-- 전망 6 — 영향평가 전망(2026-11-09 다시 짬). 발표자 해석 — 화면에 밝힌다. 단계별 근거는 통계추출.md, '평가 근거 기준' 넷은 발표 초록(초록 v2)의 제안.
-     성숙도 표지는 39장(현업 운영 · 초기 응용 · 연구 · 개발 · 문헌 미확인)과 같은 색. 사후조사 칸은 발표자 제안(초록)이라 '제안' 표지. -->
+<!-- 전망 6 — 영향평가 전망(2026-11-09 짬 · 2026-11-17 사용자 지시로 다시 짬 — 30초 멘트에 맞춘 단순한 그림). 발표자 해석 — 화면에 밝힌다.
+     위 — 기존 지역기후모델: 해상도 2배 → 연산 약 10배(B12 p3, 프리프린트) | AI 에뮬레이터: 100만 회 표집 → 관측과 양립 729,474(73%)(D12 p7, 에어로졸 기후모델 보정 사례).
+       점 1,000개 = 1,000회씩. 막대 길이(×1 · ×약 10)는 B12 의 비율, 막대가 자라는 속도는 연출이다.
+     아래 — 평가 단계 넷의 '종전 → 앞으로'는 발표자 전망. 4 기후변화영향평가 문안은 2026-11-17 사용자 지시 두 번째 판(기존 취약성 · 영향 평가 → 위성 · 고해상도 자료 연계 및 AI 에뮬레이터 기반 다중 시나리오 평가 — MOTIVE 는 이미 1 km 격자를 제공하므로 '행정구역 단위 → 초고해상도' 표현을 걷었다)으로, 근거 문헌을 이 레포에서 확인하지 않은 발표자 제안이다(sources.md).
+     종전의 '평가 근거가 되기 위한 기준(수용 조건 넷)' 칸과 5 사후환경영향조사 칸은 같은 지시로 지웠다. -->
 <section class="slide pv" id="pv-outlook">
   <div class="head"><span class="rh"><span class="n c5">5</span>전망</span>
     <span class="r">전망 · 환경영향평가에 주는 시사점</span></div>
   <div class="body">
-    <h2 class="htop">AI 에뮬레이터 기반 <em>환경영향평가 전망</em><span class="sub">평가 단계별 활용 가능성 — 발표자 해석 · 근거 사례와 성숙도는 문헌 조사(2026-11-09) 기준</span></h2>
-    <div class="ol-flow">
-      <div class="ol-st"><i>1</i><b>현황조사</b><p>측정 공백 · 조사 기간 밖을 시간별 고해상도 농도장으로 보완</p><span class="mt m3">연구 · 개발</span><em>본 발표 사례 — AMR-HGN 전국 1 km 시간별</em></div>
-      <div class="ol-st"><i>2</i><b>영향예측</b><p>CTM 배경장을 수 분 만에 — 예측 시나리오 반복 계산</p><span class="mt m3">연구 · 개발</span><em>CMAQ 재현 R² 0.70 – 0.90 · <span data-oref="A02"></span></em></div>
-      <div class="ol-st"><i>3</i><b>대안 비교 · 저감</b><p>배출 · 입지 조합을 대량 모의 → 대안별 농도 분포 비교</p><span class="mt m3">연구 · 개발</span><em>배출 변화 응답 R² 0.999 · <span data-oref="A03"></span></em></div>
-      <div class="ol-st"><i>4</i><b>기후변화영향평가</b><p>지역기후 앙상블을 사업지 규모로 — 폭염 · 강수 위험</p><span class="mt m2">초기 응용</span><em>RCM 에뮬레이터 예측 1분 미만 · <span data-oref="B09"></span></em></div>
-      <div class="ol-st"><i>5</i><b>사후환경영향조사</b><p>관측 – 추론 차이로 추가 조사 지점 선정</p><span class="mt m0">제안</span><em>본 발표 제안(초록)</em></div>
+    <h2 class="htop">AI 에뮬레이터 기반 <em>환경영향평가 전망</em><span class="sub">연산 한계 해소 — 대표 시나리오 몇 개에서 가능한 모든 경우의 평가로 (발표자 전망)</span></h2>
+    <div class="ev-cmp">
+      <div class="ev-p">
+        <b>기존 물리모델<small>지역기후모델</small></b>
+        <div class="ev-row"><span>해상도 ×1</span><svg viewBox="0 0 64 64" aria-hidden="true"><g class="g4"></g></svg><div class="ev-bar fast"><i></i><b>×1</b></div></div>
+        <div class="ev-row"><span>해상도 ×2</span><svg viewBox="0 0 64 64" aria-hidden="true"><g class="g8"></g></svg><div class="ev-bar slow"><i></i><b>×약 10</b></div></div>
+        <div class="ev-cap">연산 시간 약 10배 — <b>시나리오 몇 개</b>만 계산</div>
+        <em><span data-oref="B12"></span></em>
+      </div>
+      <div class="ev-vs">vs</div>
+      <div class="ev-p ai">
+        <b>AI 에뮬레이터<small>원모델을 학습한 대리모델</small></b>
+        <div class="ev-dots"><canvas width="660" height="264" aria-label="점 1,000개(1개 = 1,000회)가 차고 그중 73%가 관측과 양립"></canvas>
+          <div class="ev-num"><b class="cnt">1,000,000<small>회</small></b><span>조건 조합 표집 · 계산</span>
+            <span class="ok">관측과 양립 <em>729,474</em> (73%)</span></div></div>
+        <div class="ev-cap">원모델로는 어려운 <b>대량 반복 실험</b> — 점 1개 = 1,000회</div>
+        <em>에어로졸 기후모델 보정 사례 — <span data-oref="D12"></span></em>
+      </div>
     </div>
-    <div class="ol-low">
-      <div class="ol-num">
-        <p class="pv-h">숫자로 보는 '모든 경우' 의 평가</p>
-        <div class="ol-n"><svg viewBox="0 0 420 70" role="img" aria-label="에뮬레이터 표집 100만 점 중 관측과 양립하는 72만 9474점(73%)">
-            <rect class="all" x="0" y="10" width="420" height="22" rx="3"/><rect class="ok" x="0" y="10" width="306.6" height="22" rx="3"/>
-            <text x="4" y="58">1,000,000점 표집 → 관측과 양립 729,474점 (73%)</text></svg>
-          <em>원모델로는 어려운 대량 표집을 에뮬레이터가 대신 — <span data-oref="D12"></span></em></div>
-        <div class="ol-n two"><div><b>× 2</b><span>지역기후모델 해상도</span></div><i>→</i><div><b>× 약 10</b><span>계산 비용</span></div>
-          <em>앙상블이 제한되는 이유 — <span data-oref="B12"></span></em></div>
-      </div>
-      <div class="ol-chk">
-        <p class="pv-h">평가 근거가 되기 위한 기준 — 협의 · 검토 단계의 수용 조건</p>
-        <ul>
-          <li><b>학습 범위</b><span>학습 자료의 기간 · 지역 · 조건과 그 밖의 성능</span></li>
-          <li><b>불확실성 보고</b><span>추론 오차 · 물질별 편차를 결과와 함께 제시</span></li>
-          <li><b>모델 · 자료 이력</b><span>버전 · 입력 자료 품질관리 기록</span></li>
-          <li><b>적용 범위 · 실증</b><span>기존 방식과 같은 사업지 조건에서 비교</span></li>
-        </ul>
-        <em>규제기관 에뮬레이터 지침은 이번 조사에서 확인되지 않음 — 기준 마련이 과제(본 발표 초록의 제안)</em>
-      </div>
+    <p class="ev-head">강력한 연산 능력으로 바뀔 <em>환경영향평가의 모습</em></p>
+    <div class="ev-st">
+      <div><i>1</i><b>현황조사</b><s>측정소 지점 · 조사 기간</s><strong>공백 없는 시간별 1 km 농도장</strong></div>
+      <div><i>2</i><b>영향예측</b><s>대표 시나리오 몇 개</s><strong>다중 시나리오 반복 예측</strong></div>
+      <div><i>3</i><b>대안 비교</b><s>소수 대안 비교</s><strong>배출 · 입지 조합 전수 비교</strong></div>
+      <div><i>4</i><b>기후변화영향평가</b><s>기존 취약성 · 영향 평가</s><strong>위성 · 고해상도 자료 연계 및 AI 에뮬레이터 기반 다중 시나리오 평가</strong><span class="ev-hl"><b>VESTAP · MOTIVE</b> 에뮬레이터 연구</span></div>
     </div>
   </div>
   <div class="foot"><span>에뮬레이터는 물리모델을 지우는 도구가 아니라, 물리모델로 못 하던 수의 평가를 여는 도구</span><span class="r"></span></div>
@@ -4536,7 +4585,7 @@
       <div class="rm-chev c2"><em>2</em><b>실증연구</b><span>현장 적용 현업화 연구</span></div>
       <div class="rm-chev c3"><em>3</em><b>제도화</b><span>평가 제도 · 자료 규격 정비</span></div>
       <div class="rm-chev c4"><em>4</em><b>실무 활용</b><span>환경영향평가 현장 적용</span></div>
-      <div class="rm-key ch"><i>대기환경</i><i>수환경</i><i>생활환경</i><i>자연환경</i></div>
+      <div class="rm-key ch"><i>대기환경</i><i>수환경</i><i>생활환경</i><i>자연환경</i><i>건강영향</i><i>기후변화</i></div>
       <div class="rm-key tx hl"><b>정부 · 국책연구기관</b><span>유망 기초연구 성과 발굴</span><span>현업화 연구 추진</span></div>
       <div class="rm-key ch"><i>정부</i><i>연구기관</i><i>업계 전문가</i><i>시민단체</i></div>
       <div class="rm-key tx"><b>적용 → 환류 → 개선</b><span>현장 적용 결과의 순환 반영</span></div>
@@ -7706,6 +7755,45 @@
       step(d){ if (d < 0) return false; if (busy) return true; zoom(); return true; },
       enter(now){ if (now === idx) reset(); }
     };
+  })();
+</script>
+<script>
+  /* 27장(#pv-outlook) 비교 그림 (2026-11-17 사용자 지시) — 왼쪽 격자(4×4 · 8×8)를 그리고, 오른쪽 점 1,000개(1개 = 1,000회)를 빠르게 채운 뒤 27%를 걷어 73%만 남긴다.
+     막대(×1 · ×약 10)는 CSS 애니메이션(.run — 들어설 때 스크립트가 붙인다. 붙지 않은 정지 캡처 · 인쇄에서는 다 자란 막대)이 천천히 키운다 — 느린 물리모델과 빠른 에뮬레이터의 대비. 그 장에 들어올 때마다 처음부터, 떠나면 멈춘다. */
+  (function(){
+    const sec = document.getElementById('pv-outlook'); if (!sec) return;
+    const idx = S.indexOf(sec), NS = 'http://www.w3.org/2000/svg';
+    [['.g4', 4], ['.g8', 8]].forEach(([q, n]) => { const g = sec.querySelector(q), d = 64 / n;
+      for (let r = 0; r < n; r++) for (let c = 0; c < n; c++) { const e = document.createElementNS(NS, 'rect');
+        e.setAttribute('x', c * d + .5); e.setAttribute('y', r * d + .5); e.setAttribute('width', d - 1); e.setAttribute('height', d - 1); g.appendChild(e); } });
+    const cv = sec.querySelector('.ev-dots canvas'), g = cv.getContext('2d'), cnt = sec.querySelector('.ev-num .cnt'), ok = sec.querySelector('.ev-num .ok');
+    const COLS = 50, ROWS = 20, N = COLS * ROWS, W = cv.width, H = cv.height, sx = W / COLS, sy = H / ROWS, rad = Math.min(sx, sy) * .36;
+    let seed = 7; const rnd = () => (seed = (seed * 1664525 + 1013904223) >>> 0) / 4294967296;
+    const order = [...Array(N).keys()].sort(() => rnd() - .5);                       // 채우는 순서
+    const out = new Set([...Array(N).keys()].sort(() => rnd() - .5).slice(0, N - 730)); // 걷어 낼 27%(729,474 ≈ 730점)
+    const TEAL = '#0B7A75', GRAY = '#c9d0d5';
+    let raf = 0, t0 = 0;
+    const dot = (k, col, a) => { const c = k % COLS, r = (k / COLS) | 0; g.globalAlpha = a; g.fillStyle = col;
+      g.beginPath(); g.arc((c + .5) * sx, (r + .5) * sy, rad, 0, Math.PI * 2); g.fill(); };
+    const fmt = n => Math.round(n).toLocaleString('en-US');
+    function frame(now){
+      const t = (now - t0) / 1000, FILL = 1.1, START = .5, CULL = START + FILL + .5;
+      g.clearRect(0, 0, W, H);
+      const f = Math.max(0, Math.min(1, (t - START) / FILL)), shown = Math.floor(f * N);
+      const c = Math.max(0, Math.min(1, (t - CULL) / .6));
+      for (let j = 0; j < shown; j++) { const k = order[j];
+        if (out.has(k)) dot(k, c > 0 ? GRAY : TEAL, 1 - .55 * c); else dot(k, TEAL, 1); }
+      cnt.firstChild.nodeValue = fmt(f * 1e6);
+      ok.classList.toggle('on', c >= 1);
+      if (c < 1) raf = requestAnimationFrame(frame); else raf = 0;
+    }
+    function start(){ stop(); t0 = performance.now(); cnt.firstChild.nodeValue = '0'; ok.classList.remove('on'); sec.classList.remove('run'); void sec.offsetWidth; sec.classList.add('run'); raf = requestAnimationFrame(frame); }
+    function stop(){ if (raf) cancelAnimationFrame(raf); raf = 0; sec.classList.remove('run'); }
+    function still(){ stop(); t0 = performance.now() - 1e5; frame(performance.now()); }   // 끝 장면(인쇄 · 캡처용)
+    still();
+    window.conceptSteppers = window.conceptSteppers || {};
+    window.conceptSteppers[idx] = { step: () => false, enter(now, was){ if (now === idx && was !== idx) start(); else if (now !== idx) stop(); } };
+    if (sec.classList.contains('on')) start();
   })();
 </script>
 </body>
