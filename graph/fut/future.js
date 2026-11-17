@@ -1479,6 +1479,9 @@
   addEventListener("mousemove", () => { if (auto) wake(); }, { passive: true });
   btn.addEventListener("click", e => { e.stopPropagation(); btn.blur(); auto ? stop() : start(); });   // 포커스를 남기지 않는다 — Space · Enter 가 단추를 다시 누르지 않게
   addEventListener("keydown", e => { if (auto && e.key === "Escape") { e.preventDefault(); e.stopImmediatePropagation(); stop(); } }, true);
+  /* (KSEIA 사본만 — 2026-11-17 사용자 지시 "29페이지 엔터 누르면 재생") — 이 장에서 Enter = 나레이션 자동 재생 시작, 재생 중이면 일시정지 · 이어 재생 */
+  addEventListener("keydown", e => { if (e.key !== "Enter" || e.repeat || !slide.classList.contains("is-active")) return;
+    e.preventDefault(); e.stopImmediatePropagation(); auto ? pauseSet(!auto.paused) : start(); }, true);
   window.KHFutureAuto = { get on() { return !!auto; }, get scene() { return auto ? auto.s : -1; }, get music() { return auto ? auto.bi : -1; }, vo, bg };   // 점검용(덱은 쓰지 않는다)
   ui();
 })();

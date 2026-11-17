@@ -685,7 +685,7 @@
   #pv-outlook.run .ev-num .ok{transition:opacity .5s}
   .ev-num .ok.on{opacity:1}
   .ev-num .ok em{font-style:normal;color:var(--teal)}
-  .ev-head{margin:12px 0 6px;font-size:27px;font-weight:800;letter-spacing:-.03em;color:var(--ink)}
+  .ev-head{margin:12px 0 6px;font-size:36px;font-weight:800;letter-spacing:-.03em;color:var(--ink)}
   .ev-head em{font-style:normal;color:var(--teal)}
   .ev-st{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));column-gap:22px}
   .ev-st > div{border-top:2px solid var(--teal);padding-top:8px;display:flex;flex-direction:column;gap:4px}
@@ -7624,11 +7624,12 @@
       fade = setInterval(() => { const u = Math.min(1, (performance.now() - t1) / ms); bg.volume = Math.max(0, Math.min(1, from + (to - from) * u)); if (u >= 1) { clearInterval(fade); then && then(); } }, 40); };
     const bgmOn = () => { const to = window.deckBgm ? window.deckBgm.get() : .25; if (!bg.paused && bg._out) { bg._out = false; ramp(to, 600); return; } if (!bg.paused) return;   // _out — 페이드아웃 중. 그 사이 다시 켜면 페이드를 되돌리고, 끝난 페이드는 멈추지 않는다(2026-10-19 점검 — 빠르게 오가면 배경음이 빠지거나 남았다)
       bg._out = false; try { bg.currentTime = 0; } catch (e) {} bg.volume = 0; const p = bg.play(); if (p && p.catch) p.catch(() => {}); ramp(to, 1200); };
-    const bgmOff = () => { if (bg.paused || bg._out) return; bg._out = true; ramp(0, 800, () => { if (bg._out) { bg._out = false; try { bg.pause(); } catch (e) {} } }); };
+    const bgmOff = (ms = 800) => { if (bg.paused || bg._out) return; bg._out = true; ramp(0, ms, () => { if (bg._out) { bg._out = false; try { bg.pause(); } catch (e) {} } }); };
     if (window.deckBgm) window.deckBgm.on(v => { if (!bg.paused && !bg._out) { clearInterval(fade); bg.volume = v; } });
     let done = 0, raf = 0;   // done = 시작한 단계 수(0 = 대기)
     const rest = () => { A.vis = '.'; A.smile = 1; A.bow = 0; A.setAngle('c'); A.setPose('neutral'); };
     let chainT = 0; const CHAIN = .6;
+    const BGM_END = 7000;   // 마지막 단계 내레이션 · 인사가 끝나면 배경음악을 7초에 걸쳐 천천히 줄이며 멈춘다(2026-11-17 사용자 지시)
     const halt = () => { clearTimeout(chainT); chainT = 0; cancelAnimationFrame(raf); raf = 0; try { au.pause(); } catch (e) {} };
     const chainNext = () => { clearTimeout(chainT); chainT = 0; if (done > 0 && done < PLAN.length && sec.classList.contains('on'))
       chainT = setTimeout(() => { chainT = 0; if (sec.classList.contains('on') && done > 0 && done < PLAN.length) { play(done); done++; } }, CHAIN * 1000); };   // (축약본) 맺음 단계 이어 말하기
@@ -7659,7 +7660,7 @@
           A.vis = I.vis ? (I.vis[Math.floor(at * 25)] || '.') : '.'; A.smile = 0;
         }
         // 전신 재생기는 감사 인사가 끝날 때까지(busy) 기다린다 — 그 전에 rest() 로 끊지 않는다(2026-10-18)
-        if ((au.ended || (started && at > I.dur + .4)) && (A.busy === undefined ? (!A.bow || w > pre + I.dur + 1.2) : !A.busy)) { rest(); raf = 0; chainNext(); return; }   // 인사는 말이 끝나고 1초 남짓 — (축약본) 이어서 다음 단계 숙인 채 머문 뒤 편다
+        if ((au.ended || (started && at > I.dur + .4)) && (A.busy === undefined ? (!A.bow || w > pre + I.dur + 1.2) : !A.busy)) { rest(); raf = 0; chainNext(); if (done >= PLAN.length) bgmOff(BGM_END); return; }   // 인사는 말이 끝나고 1초 남짓 — (축약본) 이어서 다음 단계 숙인 채 머문 뒤 편다
         raf = requestAnimationFrame(tick);
       };
       raf = requestAnimationFrame(tick);
@@ -7679,7 +7680,7 @@
       },
       pause(){ halt(); bgmOff(); A.cancel && A.cancel(); rest(); }   // Esc — 내레이션 · 배경음악을 멈추고 미소 · 양손 내림(인사 · 마무리 동작도 멈춘다)
     };
-    window.__thx = { A, play, send, get done(){ return done; } };   // 점검용
+    window.__thx = { A, play, send, get done(){ return done; }, get bgm(){ return { on: !bg.paused, vol: +bg.volume.toFixed(2) }; } };   // 점검용
     // 이 스크립트는 문서 끝에서 늦게 준비된다 — 그 전에 이미 46장에 들어와 있었으면(열자마자 마지막 장으로 뛴 경우) 스스로 들어선다(2026-10-18)
     if (sec.classList.contains('on')) window.conceptSteppers[idx].enter(idx, -1);
   })();
@@ -7712,7 +7713,7 @@
 <script fetchpriority="low" src="graph/fut/futflow.js?v=20261116"></script>
 <script fetchpriority="low" src="트윈나레이션/narr.js?v=20261116b"></script>
 <script fetchpriority="low" src="graph/fut/narr_mix.js?v=20261116"></script>
-<script fetchpriority="low" src="graph/fut/future.js?v=20261117"></script>
+<script fetchpriority="low" src="graph/fut/future.js?v=20261117b"></script>
 <script>
   /* 31 → 32 확대 전환 (2026-11-17 사용자 지시) — 31장(#s-wp)에서 '다음'을 누르면 하단 추진 4단계 네 화살표가 커지며 32장(#s-roadmap) 네 칸이 된다.
      방식 — 31장의 나머지를 걷고(.zoom), 네 화살표와 같은 색 · 모양의 복제본(.rm-zc)을 무대(#stage) 위 그 자리에 놓아
